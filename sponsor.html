@@ -1,5 +1,5 @@
 <!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
-<title>Paramijam Sponsorships (Green)</title>
+<title>Paramijam Sponsors - In front of real buyers</title>
 <meta name="robots" content="noindex, nofollow">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -567,9 +567,41 @@ h1,h2,h3{letter-spacing:-.012em}
 #confirmDlg.sent .cf-body,#confirmDlg.sent .cf-actions .btn.solid{display:none}
 #confirmDlg.sent .cf-msg{padding:24px 28px;font-size:1.1rem;line-height:1.5}
 @media (prefers-reduced-motion:reduce){.step-arrow span.circ{animation:none}}
+/* align hero text with the nav logo (.wrap left edge) */
+.hero{container-type:inline-size}
+.hero-copy{padding-left:calc(max(0px,(100vw - 1200px)/2) + clamp(16px,4vw,40px));padding-left:calc(max(0px,(100cqw - 1200px)/2) + clamp(16px,4vw,40px))}
+@media (min-width:861px){.hero h1{font-size:min(clamp(3.2rem,8.2vw,7rem),calc((50cqw - max(0px,(100cqw - 1200px)/2) - clamp(16px,4vw,40px) - clamp(16px,4vw,48px)) / 5.1))}}
+
+/* tier benefits table */
+#tiers{background:var(--ink);color:var(--paper)}
+#tiers .tube{color:var(--sean)}
+#tiers h2 em{font-style:normal;color:var(--sean);display:block}
+.tier-scroll{overflow-x:auto;border:2px solid var(--sean);background:var(--paper);-webkit-overflow-scrolling:touch}
+.tier-scroll:focus-visible{outline:3px solid var(--cyan);outline-offset:3px}
+.tier-table{width:100%;min-width:760px;border-collapse:collapse;color:var(--ink);font-size:.98rem}
+.tier-table th,.tier-table td{padding:12px 16px;border-bottom:1px solid var(--gray2);text-align:center;vertical-align:middle}
+.tier-table td+td,.tier-table th+td,.tier-table thead th+th{border-left:1px solid var(--gray2)}
+.tier-table tbody th{text-align:left;font-weight:500;position:sticky;left:0;background:var(--paper);z-index:1;min-width:220px;border-right:2px solid var(--ink)}
+.tier-table tbody th i{font-style:normal;font-weight:700}
+.tier-table thead th{background:var(--ink);color:var(--sean);font-family:var(--f-display);font-weight:600;font-size:1.25rem;letter-spacing:-.01em;padding-block:16px;border-bottom:2px solid var(--ink)}
+.tier-table thead th:first-child{text-align:left;position:sticky;left:0;z-index:2;color:var(--paper);font-family:var(--f-mono);font-weight:400;font-size:.8rem;letter-spacing:.08em;text-transform:uppercase;border-right:2px solid var(--ink)}
+.tier-table tr.spend td,.tier-table tr.spend th{background:var(--sean);font-family:var(--f-display);font-weight:600;font-size:1.1rem;border-bottom:2px solid var(--ink);font-variant-numeric:tabular-nums}
+.tier-table tr.num td{font-family:var(--f-display);font-weight:600;font-size:1.25rem;font-variant-numeric:tabular-nums}
+.tier-table tbody tr:last-child th,.tier-table tbody tr:last-child td{border-bottom:0}
+.tier-table td:last-child{background:#ECFFF5}
+.tier-table tr.spend td:last-child{background:var(--sean)}
+.tier-table thead th:last-child{box-shadow:inset 0 -4px 0 var(--sean)}
+.tier-table td svg{width:22px;height:22px;color:var(--jamdk);display:inline-block;vertical-align:middle}
+.tier-table .no{color:var(--gray2)}
+.tier-table tbody tr:not(.spend):hover th,.tier-table tbody tr:not(.spend):hover td{background:#F2FFF8}
+.tier-foot{margin-top:20px;font-size:1rem;opacity:.9;max-width:80ch}
+.tier-foot b{color:var(--sean)}
+.tier-foot a{color:var(--sean);font-weight:700;text-decoration:none;white-space:nowrap}
+.tier-foot a:hover{text-decoration:underline}
+@media (max-width:600px){.tier-table{min-width:640px;font-size:.88rem}.tier-table tbody th{min-width:150px;max-width:150px}.tier-table th,.tier-table td{padding:10px}.tier-table thead th{font-size:1.05rem}}
 </style>
 
-<div class="draft">Draft for internal review. Pricing, inclusions, dates and attendee names are not final.</div>
+
 
 <nav class="nav" aria-label="Page">
   <div class="wrap">
@@ -732,11 +764,43 @@ h1,h2,h3{letter-spacing:-.012em}
   </div>
 </section>
 
+<section id="tiers">
+  <div class="wrap">
+    <div class="sec-head">
+      <p class="tube">05 · What every tier gets you</p>
+      <h2>Every tier, side by side. <em>Purpose-built sponsorship.</em></h2>
+    </div>
+    <div class="tier-scroll" role="region" aria-label="Benefits by sponsorship tier" tabindex="0">
+      <table class="tier-table">
+        <thead><tr><th scope="col">Benefit</th><th scope="col">Silver</th><th scope="col">Gold</th><th scope="col">Platinum</th><th scope="col">Diamond</th><th scope="col">Spotlight</th></tr></thead>
+        <tbody>
+          <tr class="spend"><th scope="row">Total spend</th><td>$8K–$24K</td><td>$25K–$49K</td><td>$50K–$99K</td><td>$100K+</td><td>$125K+</td></tr>
+          <tr class="num"><th scope="row">Paramijam tickets</th><td>2</td><td>4</td><td>6</td><td>8</td><td>10</td></tr>
+          <tr class="num"><th scope="row">VIP room passes</th><td>2</td><td>2</td><td>3</td><td>4</td><td>6</td></tr>
+          <tr class="txt"><th scope="row">Stage time in <i>Whose Business Is It Anyway?</i></th><td>Name read</td><td>Name read</td><td>30-sec pitch</td><td>1-min pitch</td><td>1-min pitch</td></tr>
+          <tr class=""><th scope="row">Website logo</th><td><svg viewBox="0 0 24 24" aria-label="Included" role="img"><path d="M5 12.5l4.5 4.5L19 7.5" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="square"/></svg></td><td><svg viewBox="0 0 24 24" aria-label="Included" role="img"><path d="M5 12.5l4.5 4.5L19 7.5" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="square"/></svg></td><td><svg viewBox="0 0 24 24" aria-label="Included" role="img"><path d="M5 12.5l4.5 4.5L19 7.5" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="square"/></svg></td><td><svg viewBox="0 0 24 24" aria-label="Included" role="img"><path d="M5 12.5l4.5 4.5L19 7.5" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="square"/></svg></td><td><svg viewBox="0 0 24 24" aria-label="Included" role="img"><path d="M5 12.5l4.5 4.5L19 7.5" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="square"/></svg></td></tr>
+          <tr class=""><th scope="row">Name in agenda notebook</th><td><svg viewBox="0 0 24 24" aria-label="Included" role="img"><path d="M5 12.5l4.5 4.5L19 7.5" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="square"/></svg></td><td><svg viewBox="0 0 24 24" aria-label="Included" role="img"><path d="M5 12.5l4.5 4.5L19 7.5" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="square"/></svg></td><td><svg viewBox="0 0 24 24" aria-label="Included" role="img"><path d="M5 12.5l4.5 4.5L19 7.5" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="square"/></svg></td><td><svg viewBox="0 0 24 24" aria-label="Included" role="img"><path d="M5 12.5l4.5 4.5L19 7.5" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="square"/></svg></td><td><svg viewBox="0 0 24 24" aria-label="Included" role="img"><path d="M5 12.5l4.5 4.5L19 7.5" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="square"/></svg></td></tr>
+          <tr class=""><th scope="row">Group sponsor social post</th><td><svg viewBox="0 0 24 24" aria-label="Included" role="img"><path d="M5 12.5l4.5 4.5L19 7.5" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="square"/></svg></td><td><svg viewBox="0 0 24 24" aria-label="Included" role="img"><path d="M5 12.5l4.5 4.5L19 7.5" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="square"/></svg></td><td><svg viewBox="0 0 24 24" aria-label="Included" role="img"><path d="M5 12.5l4.5 4.5L19 7.5" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="square"/></svg></td><td><svg viewBox="0 0 24 24" aria-label="Included" role="img"><path d="M5 12.5l4.5 4.5L19 7.5" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="square"/></svg></td><td><svg viewBox="0 0 24 24" aria-label="Included" role="img"><path d="M5 12.5l4.5 4.5L19 7.5" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="square"/></svg></td></tr>
+          <tr class=""><th scope="row">Agenda spotlight</th><td><span class="no" aria-label="Not included">–</span></td><td><svg viewBox="0 0 24 24" aria-label="Included" role="img"><path d="M5 12.5l4.5 4.5L19 7.5" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="square"/></svg></td><td><svg viewBox="0 0 24 24" aria-label="Included" role="img"><path d="M5 12.5l4.5 4.5L19 7.5" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="square"/></svg></td><td><svg viewBox="0 0 24 24" aria-label="Included" role="img"><path d="M5 12.5l4.5 4.5L19 7.5" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="square"/></svg></td><td><svg viewBox="0 0 24 24" aria-label="Included" role="img"><path d="M5 12.5l4.5 4.5L19 7.5" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="square"/></svg></td></tr>
+          <tr class=""><th scope="row">Solo social spotlight</th><td><span class="no" aria-label="Not included">–</span></td><td><svg viewBox="0 0 24 24" aria-label="Included" role="img"><path d="M5 12.5l4.5 4.5L19 7.5" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="square"/></svg></td><td><svg viewBox="0 0 24 24" aria-label="Included" role="img"><path d="M5 12.5l4.5 4.5L19 7.5" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="square"/></svg></td><td><svg viewBox="0 0 24 24" aria-label="Included" role="img"><path d="M5 12.5l4.5 4.5L19 7.5" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="square"/></svg></td><td><svg viewBox="0 0 24 24" aria-label="Included" role="img"><path d="M5 12.5l4.5 4.5L19 7.5" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="square"/></svg></td></tr>
+          <tr class=""><th scope="row">Day 3 hands-on slot</th><td><span class="no" aria-label="Not included">–</span></td><td><svg viewBox="0 0 24 24" aria-label="Included" role="img"><path d="M5 12.5l4.5 4.5L19 7.5" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="square"/></svg></td><td><svg viewBox="0 0 24 24" aria-label="Included" role="img"><path d="M5 12.5l4.5 4.5L19 7.5" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="square"/></svg></td><td><svg viewBox="0 0 24 24" aria-label="Included" role="img"><path d="M5 12.5l4.5 4.5L19 7.5" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="square"/></svg></td><td><svg viewBox="0 0 24 24" aria-label="Included" role="img"><path d="M5 12.5l4.5 4.5L19 7.5" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="square"/></svg></td></tr>
+          <tr class=""><th scope="row">Item in attendee swag bag</th><td><span class="no" aria-label="Not included">–</span></td><td><span class="no" aria-label="Not included">–</span></td><td><svg viewBox="0 0 24 24" aria-label="Included" role="img"><path d="M5 12.5l4.5 4.5L19 7.5" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="square"/></svg></td><td><svg viewBox="0 0 24 24" aria-label="Included" role="img"><path d="M5 12.5l4.5 4.5L19 7.5" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="square"/></svg></td><td><svg viewBox="0 0 24 24" aria-label="Included" role="img"><path d="M5 12.5l4.5 4.5L19 7.5" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="square"/></svg></td></tr>
+          <tr class=""><th scope="row">Paramify Podcast episode</th><td><span class="no" aria-label="Not included">–</span></td><td><span class="no" aria-label="Not included">–</span></td><td><span class="no" aria-label="Not included">–</span></td><td><svg viewBox="0 0 24 24" aria-label="Included" role="img"><path d="M5 12.5l4.5 4.5L19 7.5" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="square"/></svg></td><td><svg viewBox="0 0 24 24" aria-label="Included" role="img"><path d="M5 12.5l4.5 4.5L19 7.5" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="square"/></svg></td></tr>
+          <tr class=""><th scope="row">Attendee list for follow-up</th><td><span class="no" aria-label="Not included">–</span></td><td><span class="no" aria-label="Not included">–</span></td><td><span class="no" aria-label="Not included">–</span></td><td><svg viewBox="0 0 24 24" aria-label="Included" role="img"><path d="M5 12.5l4.5 4.5L19 7.5" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="square"/></svg></td><td><svg viewBox="0 0 24 24" aria-label="Included" role="img"><path d="M5 12.5l4.5 4.5L19 7.5" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="square"/></svg></td></tr>
+          <tr class=""><th scope="row">Pre-event VIP night, Mon Jan 25</th><td><span class="no" aria-label="Not included">–</span></td><td><span class="no" aria-label="Not included">–</span></td><td><span class="no" aria-label="Not included">–</span></td><td><span class="no" aria-label="Not included">–</span></td><td><svg viewBox="0 0 24 24" aria-label="Included" role="img"><path d="M5 12.5l4.5 4.5L19 7.5" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="square"/></svg></td></tr>
+          <tr class=""><th scope="row">VIP room branding, Days 1 + 2</th><td><span class="no" aria-label="Not included">–</span></td><td><span class="no" aria-label="Not included">–</span></td><td><span class="no" aria-label="Not included">–</span></td><td><span class="no" aria-label="Not included">–</span></td><td><svg viewBox="0 0 24 24" aria-label="Included" role="img"><path d="M5 12.5l4.5 4.5L19 7.5" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="square"/></svg></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="tier-foot">Every package counts toward your total. <b>Spotlight:</b> reach $125K+ in total spend and the VIP room on Days 1 and 2 is included. <a href="#steps">Build your sponsorship ↓</a></p>
+  </div>
+</section>
+
 <section id="drops">
   <div class="wrap">
     <div class="drops-head">
       <div class="sec-head">
-      <p class="tube">05 · Ticket drop windows</p>
+      <p class="tube">06 · Ticket drop windows</p>
       <h2>Present a day of the 12 Days of Paramijam.</h2>
       <p class="lede">Tickets release across seven drop windows from October through January, and the 12 Days is the biggest push of the season. Reach people beyond the conference before it starts: each day of the drop has its own presenting sponsor across email, social, the event website and our CRM and prospect audience.</p>
     </div>
@@ -791,7 +855,7 @@ h1,h2,h3{letter-spacing:-.012em}
   <div class="wrap">
     <div class="sec-head">
       <p class="step-big">STEP 1</p>
-      <p class="tube">06 · Build your sponsorship</p>
+      <p class="tube">07 · Build your sponsorship</p>
       <h2>Pick any packages. Your total spend sets your tier.</h2>
       <p class="lede">Every package counts toward your total. Each one goes to a single sponsor unless it says otherwise, so first requests get first pick. Commit by Nov 2 to be named in the ticket launch.</p>
     </div>
