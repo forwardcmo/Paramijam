@@ -599,6 +599,27 @@ h1,h2,h3{letter-spacing:-.012em}
 .tier-foot a{color:var(--sean);font-weight:700;text-decoration:none;white-space:nowrap}
 .tier-foot a:hover{text-decoration:underline}
 @media (max-width:600px){.tier-table{min-width:640px;font-size:.88rem}.tier-table tbody th{min-width:150px;max-width:150px}.tier-table th,.tier-table td{padding:10px}.tier-table thead th{font-size:1.05rem}}
+
+/* summary deck download */
+#deck{background:var(--sean);color:var(--ink);padding-block:clamp(48px,7vw,88px)}
+#deck .tube{color:var(--ink)}
+.deck-wrap{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:32px;align-items:end}
+.deck-copy{display:grid;gap:16px}
+#deck h2{color:var(--ink)}
+#deck .lede{max-width:56ch}
+#deck .btn.solid.deck-btn{background:var(--ink);color:var(--sean);border-color:var(--ink);font-size:1.05rem;padding:16px 22px;cursor:pointer;font-family:inherit}
+#deck .btn.deck-btn:hover{box-shadow:4px 4px 0 var(--paper)}
+.deck-btn svg{width:22px;height:22px}
+@media (max-width:760px){.deck-wrap{grid-template-columns:1fr;align-items:start}#deck .btn.deck-btn{justify-content:center}}
+#deckDlg{border:0;padding:0;width:min(520px,calc(100vw - 32px));max-height:calc(100vh - 32px);background:var(--paper);color:var(--ink);box-shadow:10px 10px 0 var(--sean)}
+#deckDlg::backdrop{background:rgba(14,15,17,.78)}
+#deckDlg .cf-head h2{font-size:clamp(1.8rem,5vw,2.6rem)}
+.deck-form{padding:24px 28px 0}
+.deck-actions{padding:8px 0 28px}
+.deck-actions .btn{cursor:pointer;font:inherit;font-weight:700}
+.deck-actions .btn.solid{background:var(--sean);color:var(--ink);border-color:var(--sean)}
+.deck-done{padding:24px 28px 0;font-size:1.05rem;line-height:1.5}
+.deck-done a{color:var(--jamdk);font-weight:700}
 </style>
 
 
@@ -895,7 +916,42 @@ h1,h2,h3{letter-spacing:-.012em}
     </form>
   </div>
 </section>
+
+<section id="deck">
+  <div class="wrap deck-wrap">
+    <div class="deck-copy">
+      <p class="tube">The summary deck · PDF</p>
+      <h2>Get the Summary Deck!</h2>
+      <p class="lede">Want to see all of this laid out so simply that you can take it to your mom, your revenue team, or your direct report? We've got you.</p>
+    </div>
+    <button class="btn solid deck-btn" type="button" id="deckOpen">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="square" aria-hidden="true"><path d="M12 3v12M6 10l6 6 6-6M4 20h16"/></svg>
+      Download the summary deck PDF
+    </button>
+  </div>
+</section>
 </main>
+<dialog id="deckDlg" aria-labelledby="dkTitle">
+  <div class="cf-head">
+    <p class="tube" style="color:var(--sean)">Summary deck · PDF</p>
+    <h2 id="dkTitle">Grab the summary deck.</h2>
+    <p>Tell us who you are and the deck opens right away in a new tab.</p>
+  </div>
+  <form class="lead deck-form" id="deckForm" novalidate>
+    <label>Name<input name="name" autocomplete="name" required></label>
+    <label>Email<input name="email" type="email" autocomplete="email" required></label>
+    <label>Company<input name="company" autocomplete="organization" required></label>
+    <p class="lead-msg" id="deckMsg" role="status"></p>
+    <div class="cf-actions deck-actions">
+      <button class="btn ghost" type="button" id="deckCancel">Cancel</button>
+      <button class="btn solid" type="submit">Get the deck</button>
+    </div>
+  </form>
+  <div class="deck-done" id="deckDone" hidden>
+    <p>Your deck is opening in a new tab. Didn't open? <a id="deckLink" href="Paramijam-2027-Sponsorship-Plan.pdf" target="_blank" rel="noopener">Open the summary deck PDF</a>.</p>
+    <div class="cf-actions deck-actions"><button class="btn ghost" type="button" id="deckClose">Close</button></div>
+  </div>
+</dialog>
 <dialog id="confirmDlg" aria-labelledby="cfTitle">
   <div class="cf-head">
     <h2 id="cfTitle">Smart move!</h2>
@@ -1103,6 +1159,40 @@ const NOTIFY_EMAIL = "paramijam@paramify.com";
       cfMsg.className = "cf-msg err";
       cfMsg.innerHTML = `We couldn't send this from here. Please email your picks to <a href="mailto:${NOTIFY_EMAIL}">${NOTIFY_EMAIL}</a> and we'll take it from there.`;
     }
+  });
+})();
+
+
+/* summary deck: gate with HubSpot form 5a86de2a-..., then open the PDF in a new tab */
+(function(){
+  const PDF = "Paramijam-2027-Sponsorship-Plan.pdf";
+  const HS = "https://api.hsforms.com/submissions/v3/integration/submit/24251729/5a86de2a-88f5-44cf-add4-1331e669f5db";
+  const dlg = document.getElementById("deckDlg"), form = document.getElementById("deckForm"), msg = document.getElementById("deckMsg"), done = document.getElementById("deckDone");
+  const show = ()=> dlg.showModal ? dlg.showModal() : dlg.setAttribute("open","");
+  const hide = ()=> dlg.close ? dlg.close() : dlg.removeAttribute("open");
+  document.getElementById("deckOpen").addEventListener("click", ()=>{ form.hidden=false; done.hidden=true; msg.textContent=""; show(); });
+  document.getElementById("deckCancel").addEventListener("click", hide);
+  document.getElementById("deckClose").addEventListener("click", hide);
+  form.addEventListener("submit", e=>{
+    e.preventDefault();
+    const f = Object.fromEntries(new FormData(form)); let bad = false;
+    for(const k of ["name","email","company"]){
+      const el = form.elements[k], v = (f[k]||"").trim();
+      const ok = v && (k!=="email" || /^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(v));
+      el.setAttribute("aria-invalid", ok?"false":"true"); if(!ok) bad = true;
+    }
+    if(bad){ msg.className="lead-msg err"; msg.textContent="Please add your name, a valid email and your company."; return; }
+    // open the PDF right away, inside the click, so pop-up blockers allow it
+    try{ window.open(PDF, "_blank", "noopener"); }catch(err){}
+    const parts = f.name.trim().split(/\s+/), first = parts.shift(), last = parts.join(" ");
+    const hutk = (document.cookie.match(/(?:^|;\s*)hubspotutk=([^;]+)/)||[])[1];
+    const send = rows => fetch(HS, { method:"POST", keepalive:true, headers:{ "Content-Type":"application/json" }, body: JSON.stringify({
+      fields: rows.filter(([,v])=>v).map(([name,value])=>({ objectTypeId:"0-1", name, value })),
+      context: { pageUri: location.href, pageName: document.title, ...(hutk?{hutk}:{}) } }) });
+    send([["firstname",first],["lastname",last],["email",f.email.trim()],["company",f.company.trim()]])
+      .then(r=> r.status===400 ? send([["email",f.email.trim()],["firstname",first]]) : r)
+      .catch(()=>{});
+    form.hidden = true; done.hidden = false; form.reset();
   });
 })();
 
