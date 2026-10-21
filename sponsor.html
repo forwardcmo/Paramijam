@@ -522,6 +522,9 @@ h1,h2,h3{letter-spacing:-.012em}
 .item:has(input:focus-visible){outline-color:var(--jamdk)}
 .lead input:focus{border-color:var(--jamdk)}
 @media (max-width:760px){.mix2-labels div{border-left-color:var(--sean)}}
+.hero{container-type:inline-size}
+.hero-copy{padding-left:max(clamp(16px,4vw,40px),calc((100cqw - 1200px)/2 + clamp(16px,4vw,40px)))}
+@media (min-width:861px){.hero h1{font-size:min(clamp(3.2rem,8.2vw,7rem),calc((50cqw - max(clamp(16px,4vw,40px),calc((100cqw - 1200px)/2 + clamp(16px,4vw,40px))) - clamp(16px,4vw,48px)) / 5.3))}}
 @media (prefers-reduced-motion:reduce){.track{animation:none;flex-wrap:wrap;width:auto}html{scroll-behavior:auto}.tile b.flip{animation:none}.btn:hover{transform:none}}
 </style>
 
