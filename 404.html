@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Paramijam</title>
+<script>
+(function () {
+  var p = location.pathname, lower = p.toLowerCase();
+  if (p !== lower) location.replace(lower + location.search + location.hash);
+})();
+</script>
+<style>
+html,body{margin:0;height:100%;background:#000;color:#fff}
+body{display:flex;flex-direction:column;justify-content:center;gap:24px;padding:0 clamp(20px,6vw,120px);font-family:'Helvetica Neue',Helvetica,Arial,sans-serif}
+a{color:#20FC8F;text-decoration-thickness:2px;text-underline-offset:4px}a:hover{color:#fff}
+</style>
+</head>
+<body>
+<div style="font-family:'IBM Plex Mono',monospace;font-size:13px;letter-spacing:.14em;color:#BFBFBF">ERROR 404 · SIGNAL LOST</div>
+<div style="font-weight:800;font-size:clamp(36px,6vw,96px);line-height:.95;letter-spacing:-.05em">This page doesn't exist.</div>
+<a href="/" style="font-family:'IBM Plex Mono',monospace;font-size:18px;letter-spacing:.14em">&gt; GO TO PARAMIJAM</a>
+</body>
+</html>
