@@ -1182,7 +1182,9 @@ const NOTIFY_EMAIL = "paramijam@paramify.com";
 
 /* summary deck: gate with HubSpot form 5a86de2a-..., then open the PDF in a new tab */
 (function(){
-  const PDF = "Paramijam-2027-Sponsorship-Plan.pdf";
+  // on paramijam.com the deck lives at the site root; anchor it so /sponsor and /sponsor/ both work
+  const PDF = /(^|\.)paramijam\.com$/.test(location.hostname) ? "/Paramijam-2027-Sponsorship-Plan.pdf" : "Paramijam-2027-Sponsorship-Plan.pdf";
+  const dl = document.getElementById("deckLink"); if(dl) dl.href = PDF;
   const HS = "https://api.hsforms.com/submissions/v3/integration/submit/24251729/5a86de2a-88f5-44cf-add4-1331e669f5db";
   const dlg = document.getElementById("deckDlg"), form = document.getElementById("deckForm"), msg = document.getElementById("deckMsg"), done = document.getElementById("deckDone");
   const show = ()=> dlg.showModal ? dlg.showModal() : dlg.setAttribute("open","");
