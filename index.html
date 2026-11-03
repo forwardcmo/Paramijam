@@ -47,6 +47,7 @@ a{color:#20FC8F;text-decoration-thickness:2px;text-underline-offset:4px}a:hover{
 input::placeholder{color:#777777}
 summary{list-style:none;cursor:pointer}summary::-webkit-details-marker{display:none}
 details[open] .pj-plus{transform:rotate(45deg)}
+@media (max-width:860px){.pj-learn-media{position:relative!important;top:auto!important;max-width:100%!important}.pj-learn-img{aspect-ratio:4/3!important;background-size:cover!important;background-position:center 18%!important}.pj-learn-img>div:first-child{background:linear-gradient(180deg,rgba(11,10,10,0) 35%,rgba(11,10,10,.85) 80%,#0B0A0A 100%)!important}}
 @keyframes crtOn{0%{transform:scale(1,.003);filter:brightness(10);opacity:0}5%{opacity:1}30%{transform:scale(1,.003);filter:brightness(10)}55%{transform:scale(1,1);filter:brightness(2.4)}100%{transform:scale(1,1);filter:brightness(1)}}
 @keyframes blink{0%,49%{opacity:1}50%,100%{opacity:0}}
 @keyframes flicker{0%{opacity:.9}7%{opacity:.7}10%{opacity:.95}31%{opacity:.82}33%{opacity:.97}61%{opacity:.8}63%{opacity:.93}82%{opacity:.75}100%{opacity:.9}}
@@ -278,8 +279,8 @@ details[open] .pj-plus{transform:rotate(45deg)}
 
 <!-- 04 LEARN / BUILD / PLAY -->
 <section id="learn" data-screen-label="04 Learn Build Play" style="max-width:1600px;margin:0 auto;padding:clamp(40px,6vw,96px) clamp(16px,3.4vw,56px) clamp(80px,10vw,160px);display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,400px),1fr));gap:clamp(32px,4vw,64px);align-items:start">
-  <div style="position:sticky;top:88px;display:flex;flex-direction:column;max-width:560px;width:100%;justify-self:center">
-    <div style="position:relative;aspect-ratio:866/1250;background:#0B0A0A url(/assets/pj-chair.png) center top/100% auto no-repeat">
+  <div class="pj-learn-media" style="position:sticky;top:88px;display:flex;flex-direction:column;max-width:560px;width:100%;justify-self:center">
+    <div class="pj-learn-img" style="position:relative;aspect-ratio:866/1250;background:#0B0A0A url(/assets/pj-chair.png) center top/100% auto no-repeat">
       <div style="position:absolute;inset:0;background:linear-gradient(180deg,rgba(11,10,10,0) 0%,rgba(11,10,10,0) 70%,#0B0A0A 84.4%)"></div>
       <div style="position:absolute;left:0;right:0;bottom:clamp(16px,2vw,28px);display:flex;flex-direction:column;align-items:center;gap:12px;text-align:center;padding:0 20px">
         <span style="font-family:'IBM Plex Mono',monospace;font-weight:700;font-size:clamp(12px,1vw,14px);letter-spacing:.08em;white-space:nowrap"><span style="color:#20FC8F">01/26 –</span> PARK CITY, UTAH</span>
