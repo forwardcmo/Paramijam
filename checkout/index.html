@@ -52,15 +52,16 @@ input::placeholder{color:#595959}
       <sc-if value="{{ advisory }}">
         <div style="background:#20FC8F;color:#000000;padding:18px 20px;display:flex;flex-direction:column;gap:6px">
           <span style="font-family:'IBM Plex Mono',monospace;font-weight:700;font-size:12px;letter-spacing:.06em">ADVISORY BOARD + CLUB 7739</span>
-          <span style="font-weight:700;font-size:17px;line-height:1.3">Your Preferred ticket is on us. Add it below, then enter your invite code on the review step. Extra tickets for your team are billed as usual.</span>
+          <span style="font-weight:700;font-size:17px;line-height:1.3">Your ticket is on us! (Unless you'd like to pay the difference to upgrade your ticket.) Your invite code covers $599: a Preferred ticket is free, or pick VIP or Black and pay only the difference. Enter the code on the review step. Extra tickets for your team are billed as usual.</span>
         </div>
       </sc-if>
       <sc-for list="{{ tiers }}" as="t" hint-placeholder-count="4">
-        <div style="position:relative;border:1px solid {{ t.bd }};background:{{ t.bg }};display:flex;flex-wrap:wrap;gap:16px 24px;padding:clamp(18px,2vw,24px);align-items:center">
+        <div style="position:relative;opacity:{{ t.op }};pointer-events:{{ t.pe }};border:1px solid {{ t.bd }};background:{{ t.bg }};display:flex;flex-wrap:wrap;gap:16px 24px;padding:clamp(18px,2vw,24px);align-items:center">
           <div style="flex:1 1 300px;min-width:0;display:flex;flex-direction:column;gap:10px">
             <div style="display:flex;flex-wrap:wrap;align-items:baseline;gap:6px 14px"><span style="font-family:'IBM Plex Mono',monospace;font-weight:700;font-size:13px;letter-spacing:.06em;color:{{ t.nameColor }}">{{ t.nameUpper }}</span><span style="font-weight:700;font-size:18px;letter-spacing:-.02em">{{ t.tag }}</span></div>
             <ul style="margin:0;padding:0;list-style:none;display:flex;flex-wrap:wrap;gap:6px 18px;font-size:14px;line-height:1.35;color:rgba(255,255,255,.72)"><sc-for list="{{ t.bullets }}" as="b"><li style="display:flex;gap:8px"><span style="color:#20FC8F;font-family:'IBM Plex Mono',monospace">&gt;</span><span>{{ b }}</span></li></sc-for></ul>
-            <sc-if value="{{ t.isGa }}"><p style="margin:4px 0 0;padding:12px 14px;border:1px dashed #595959;font-family:'IBM Plex Mono',monospace;font-size:12px;line-height:1.45;letter-spacing:.02em;color:#BFBFBF"><span style="font-weight:700;color:#FFFFFF">Please note:</span> GA tickets do not include mountain activities or workshops. Add either for $150 per person at checkout. The other three tiers DO include these add-ons for no add'l fee.</p></sc-if>
+            <sc-if value="{{ t.locked }}"><span style="font-family:'IBM Plex Mono',monospace;font-weight:700;font-size:12px;letter-spacing:.06em;color:#BFBFBF">NOT AVAILABLE WITH THE ADVISORY PASS</span></sc-if>
+            <sc-if value="{{ t.showCaveat }}"><p style="margin:4px 0 0;padding:12px 14px;border:1px dashed #595959;font-family:'IBM Plex Mono',monospace;font-size:12px;line-height:1.45;letter-spacing:.02em;color:#BFBFBF"><span style="font-weight:700;color:#FFFFFF">Please note:</span> GA tickets do not include mountain activities or workshops. Add either for $150 per person at checkout. The other three tiers DO include these add-ons for no add'l fee.</p></sc-if>
           </div>
           <div style="display:flex;align-items:center;gap:20px">
             <span style="font-family:'IBM Plex Mono',monospace;font-weight:700;font-size:30px;letter-spacing:-.04em">{{ t.priceLabel }}</span>
@@ -253,7 +254,7 @@ const KNOW = ['Partner (Club 7739 Member)', 'Evaluating Paramify', 'Current Cust
 const FW = ['FedRAMP Rev5', 'FedRAMP 20x', 'FISMA', 'DoD ATO', 'CMMC', 'Other'];
 const ADDON = 150, MAXQ = 10, KEY = 'pj-checkout-v1';
 const EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-const DEMO = { kennyeatworld: { label: 'Drop 1: $300 off every ticket', perTicket: 300 }, cab2027: { label: 'Advisory + partner pass: 1 Preferred ticket on us', freeTickets: 1, tiers: ['preferred'] } };
+const DEMO = { kennyeatworld: { label: 'Drop 1: $300 off every ticket', perTicket: 300 }, cab2027: { label: 'Advisory + partner pass', capOne: 599, tiers: ['preferred', 'vip', 'black'] } };
 const money = n => (n < 0 ? '-' : '') + '$' + Math.abs(Math.round(n)).toLocaleString('en-US');
 const blank = t => ({ tier: t, first: '', last: '', email: '', title: '', company: '', phone: '', diet: '', access: '', fit: '', size: '', know: '', fw: [], fwOther: '', wType: '', sport: '', lesson: '', equip: '', tue: '', wed: '', ws: [], addW: false, addK: false });
 const tierOf = id => TIERS.find(t => t.id === id);
@@ -267,7 +268,8 @@ class Component extends DCLogic {
     if (q.get('from') === 'advisory') s.advisory = true;
     const oid = q.get('order');
     if (!oid) { try { const v = JSON.parse(localStorage.getItem(KEY) || 'null'); if (v && Array.isArray(v.att)) Object.assign(s, { qty: v.qty, att: v.att, fill: v.fill || '', buyer: v.buyer || 0, pos: v.pos || 0, codeIn: v.codeIn || '' }); } catch (e) {} }
-    const t = q.get('tier') || (s.advisory ? 'preferred' : null);
+    let t = q.get('tier') || (s.advisory ? 'preferred' : null);
+    if (s.advisory && t === 'ga') t = 'preferred';
     if (!oid && tierOf(t) && !(s.att && s.att.length)) { s.qty = { ga: 0, preferred: 0, vip: 0, black: 0, [t]: 1 }; s.att = [blank(t)]; s.pos = 0; }
     if (q.get('code')) s.codeIn = q.get('code');
     this.setState(s, () => { if (oid) this.loadOrder(oid, q.get('finish') === '1', 0); });
@@ -330,6 +332,7 @@ class Component extends DCLogic {
       const r = disc.rule;
       if (!r) d = disc.amount || 0;
       else if (r.perTicket) d = r.perTicket * att.length;
+      else if (r.capOne) d = Math.min(r.capOne, Math.max(0, ...att.filter(a => !r.tiers || r.tiers.includes(a.tier)).map(a => tierOf(a.tier).price)));
       else if (r.freeTickets) d = att.filter(a => !r.tiers || r.tiers.includes(a.tier)).map(a => tierOf(a.tier).price).sort((x, y) => y - x).slice(0, r.freeTickets).reduce((x, y) => x + y, 0);
     }
     d = Math.min(sub, d);
@@ -337,6 +340,7 @@ class Component extends DCLogic {
   }
 
   setQty(id, dlt) {
+    if (this.state.advisory && id === 'ga' && dlt > 0) return;
     this.setState(st => {
       const qty = { ...st.qty }, n = Object.values(qty).reduce((x, y) => x + y, 0);
       if (dlt > 0 && n >= MAXQ) return { err: 'Max ' + MAXQ + ' tickets per order.' };
@@ -351,7 +355,7 @@ class Component extends DCLogic {
   invalid(sc) {
     const { att, left, advisory, buyer } = this.state, n = att.length;
     if (!sc) return '';
-    if (sc.k === 'tickets') { if (!n) return 'Add at least one ticket.'; if (left != null && !advisory && n > left) return 'Only ' + left + ' tickets left in Drop 1.'; }
+    if (sc.k === 'tickets') { if (!n) return 'Add at least one ticket.'; if (advisory && this.state.qty.ga) return "General Admission isn't available with the advisory pass. Remove it to continue."; if (left != null && !advisory && n > left) return 'Only ' + left + ' tickets left in Drop 1.'; }
     if (sc.k === 'mode' && !this.state.fill) return "Pick how you want to handle everyone's details.";
     if (sc.k === 'info') { const a = att[sc.i]; if (['first', 'last', 'email', 'title', 'company'].some(k => !String(a[k]).trim())) return 'Fill in all required fields.'; if (!EMAIL.test(a.email.trim())) return 'Enter a valid email.'; if (!a.fit || !a.size) return 'Pick a shirt fit and size.'; if (!a.know) return 'Tell us how you know Paramify.'; if (!(a.fw || []).length) return 'Pick at least one framework.'; }
     if (sc.k === 'winter') { const a = att[sc.i]; if (!a.wType) return 'Pick an option.'; if (a.wType === 'ski' && (!a.sport || !a.lesson || !a.equip)) return 'Answer all three questions.'; if (a.wType === 'other' && (!a.tue || !a.wed)) return 'Pick an activity for both days.'; }
@@ -526,7 +530,7 @@ class Component extends DCLogic {
       eyebrow, title, sub, hasSub: !!sub, tagLine, tagColor, hasTagLine: !!tagLine,
       isTickets: sc.k === 'tickets', isMode: sc.k === 'mode', isInfo: sc.k === 'info', isWinter: sc.k === 'winter', isWorkshops: sc.k === 'workshops', isGuests: sc.k === 'guests', isReview: sc.k === 'review', isDone: done || fin,
       advisory: st.advisory,
-      tiers: TIERS.map(t => { const q = st.qty[t.id]; return { isGa: t.id === 'ga', nameUpper: t.name.toUpperCase() + (t.pop ? ' · MOST POPULAR' : ''), tag: t.tag, bullets: t.bullets, priceLabel: money(t.price), qty: String(q), qtyColor: q ? '#20FC8F' : '#8C8C8C', nameColor: t.pop ? '#20FC8F' : '#BFBFBF', bd: q ? '#20FC8F' : '#343434', bg: q ? 'rgba(32,252,143,.06)' : '#0B0A0A', inc: () => this.setQty(t.id, 1), dec: () => this.setQty(t.id, -1) }; }),
+      tiers: TIERS.map(t => { const q = st.qty[t.id]; const locked = st.advisory && t.id === 'ga'; return { showCaveat: t.id === 'ga' && !locked, locked, op: locked ? '0.4' : '1', pe: locked ? 'none' : 'auto', nameUpper: t.name.toUpperCase() + (t.pop ? ' · MOST POPULAR' : ''), tag: t.tag, bullets: t.bullets, priceLabel: money(t.price), qty: String(q), qtyColor: q ? '#20FC8F' : '#8C8C8C', nameColor: t.pop ? '#20FC8F' : '#BFBFBF', bd: q ? '#20FC8F' : '#343434', bg: q ? 'rgba(32,252,143,.06)' : '#0B0A0A', inc: () => this.setQty(t.id, 1), dec: () => this.setQty(t.id, -1) }; }),
       modeOpts, showBuyerPick, buyerOpts, fields, infoGroups, showFwOther: sc.k === 'info' && (a.fw || []).includes('Other'), fwOther: a ? a.fwOther || '' : '', setFwOther: e => this.setAtt(sc.i, 'fwOther', e.target.value), wOpts, qRows, hasRows: qRows.length > 0, wsOpts, guests, reviewRows, nextSteps,
       codeIn: st.codeIn, setCode: e => this.setState({ codeIn: e.target.value }), applyCode: e => this.applyCode(e),
       hasCodeMsg: !!st.codeMsg, codeMsg: String(st.codeMsg).toUpperCase(), codeMsgColor: st.codeOk ? '#20FC8F' : '#FF273B',
