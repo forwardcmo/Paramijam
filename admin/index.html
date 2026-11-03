@@ -82,6 +82,30 @@ input::placeholder{color:#595959}
     </sc-for>
   </div>
 
+  <section data-screen-label="04 Sales by SDR" style="display:flex;flex-direction:column;gap:14px">
+    <div style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:baseline;gap:8px 20px"><h2 style="margin:0;font-weight:700;font-size:clamp(24px,2.4vw,34px);letter-spacing:-.03em">Sales by SDR</h2><span style="font-family:'IBM Plex Mono',monospace;font-weight:700;font-size:12px;letter-spacing:.06em;color:#8C8C8C">ACCOUNTS = UNIQUE COMPANIES · MOST RECENT LINK WINS</span></div>
+    <div style="overflow-x:auto;border:1px solid #2A2A2A">
+      <table style="width:100%;min-width:760px;border-collapse:collapse;font-size:15px;line-height:1.35">
+        <thead><tr style="text-align:left;font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.06em;color:#8C8C8C;background:#000000">
+          <th style="padding:12px 14px;font-weight:700">SDR</th><th style="padding:12px 14px;font-weight:700">TICKETS</th><th style="padding:12px 14px;font-weight:700">ACCOUNTS</th><th style="padding:12px 14px;font-weight:700">ORDERS</th><th style="padding:12px 14px;font-weight:700">REVENUE</th><th style="padding:12px 14px;font-weight:700">VIA LINK</th><th style="padding:12px 14px;font-weight:700">VIA DROPDOWN</th>
+        </tr></thead>
+        <tbody>
+          <sc-for list="{{ sdrRows }}" as="r" hint-placeholder-count="8">
+            <tr style="border-top:1px solid #1F1F1F">
+              <td style="padding:12px 14px;font-weight:700;color:{{ r.nameColor }}">{{ r.name }}</td>
+              <td style="padding:12px 14px"><div style="display:flex;align-items:center;gap:10px"><span style="font-family:'IBM Plex Mono',monospace;font-weight:700;min-width:3ch">{{ r.tickets }}</span><div style="flex:1;min-width:60px;height:6px;background:#1F1F1F"><div style="height:100%;width:{{ r.pct }};background:#20FC8F"></div></div></div></td>
+              <td style="padding:12px 14px;font-family:'IBM Plex Mono',monospace;font-weight:700">{{ r.accounts }}</td>
+              <td style="padding:12px 14px;font-family:'IBM Plex Mono',monospace">{{ r.orders }}</td>
+              <td style="padding:12px 14px;font-family:'IBM Plex Mono',monospace">{{ r.revenue }}</td>
+              <td style="padding:12px 14px;font-family:'IBM Plex Mono',monospace;color:#BFBFBF">{{ r.link }}</td>
+              <td style="padding:12px 14px;font-family:'IBM Plex Mono',monospace;color:#BFBFBF">{{ r.drop }}</td>
+            </tr>
+          </sc-for>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
   <section style="display:flex;flex-direction:column;gap:14px">
     <div style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:baseline;gap:8px 20px"><h2 style="margin:0;font-weight:700;font-size:clamp(24px,2.4vw,34px);letter-spacing:-.03em">Still needs details</h2><span style="font-family:'IBM Plex Mono',monospace;font-weight:700;font-size:12px;letter-spacing:.06em;color:#FFFFFF">{{ pendingLabel }}</span></div>
     <sc-if value="{{ noPending }}"><span style="font-size:15px;color:#8C8C8C">Everyone's picks are in.</span></sc-if>
@@ -127,8 +151,9 @@ input::placeholder{color:#595959}
 </sc-if>
 </div>
 </x-dc>
-<script type="text/x-dc" data-dc-script data-props="{&quot;apiUrl&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;https://paramijam-checkout.pages.dev&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Data&quot;},&quot;demo&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:false,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Data&quot;,&quot;description&quot;:&quot;Show sample data (preview only)&quot;}}">
+<script type="text/x-dc" data-dc-script data-props="{&quot;apiUrl&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;https://paramijam-checkout.pages.dev&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Data&quot;},&quot;demo&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:false,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Data&quot;,&quot;description&quot;:&quot;Show sample data (preview only)&quot;},&quot;$preview&quot;:{&quot;width&quot;:1280}}">
 const KEY = 'pj-admin-key';
+const SDRS = [['mwall', 'McKay Wall'], ['bhancock', 'Britton Hancock'], ['cfrandsen', 'Caze Frandsen'], ['cdean', 'Colby Dean'], ['dturner', 'Dallin Turner'], ['mhammond', 'Meredith Hammond'], ['tporter', 'Tyler Porter'], ['abrady', 'Alex Brady']];
 const TIERS = [['ga', 'General Admission'], ['preferred', 'Preferred'], ['vip', 'VIP'], ['black', 'Black']];
 const WS = { 'class-a': 'Class A ready submission package', evidence: 'GRC evidence script automation', gap: 'Gap assessments', rev5: 'FedRAMP Rev5 to 20x advisory', automate: 'Automate up to 90% of a Paramify instance', na: 'N/A' };
 const money = n => '$' + Math.round(n || 0).toLocaleString('en-US');
@@ -136,13 +161,13 @@ const hasPicks = a => !!a.wType && Array.isArray(a.ws) && a.ws.length > 0;
 const winterText = a => !a.wType ? 'Pending' : a.wType === 'none' ? 'None' : a.wType === 'ski' ? (a.sport === 'board' ? 'Snowboard' : 'Ski') + (a.lesson === 'yes' ? ' + lesson' : '') + (a.equip === 'yes' ? ' + gear' : '') : 'Tue ' + a.tue + ' / Wed ' + a.wed;
 
 function demoData() {
-  const mk = (id, src, fill, total, at) => ({ id, source: src, fill, buyer: 0, total, paidTotal: total, paidAt: '2026-11-03T15:00:00Z', finishUrl: fill === 'later' ? 'https://www.paramijam.com/checkout?order=' + id + '&finish=1' : '', attendees: at });
+  const mk = (id, src, fill, total, at, ref) => ({ id, source: src, fill, attr: { ref: ref || '', refSource: ref ? 'link' : '' }, buyer: 0, total, paidTotal: total, paidAt: '2026-11-03T15:00:00Z', finishUrl: fill === 'later' ? 'https://www.paramijam.com/checkout?order=' + id + '&finish=1' : '', attendees: at });
   const p = (first, last, tier, extra) => ({ first, last, tier, email: first.toLowerCase() + '@example.com', company: 'Acme Federal', title: 'ISSO', fit: 'mens', size: 'L', know: 'Current Customer', ws: ['rev5', 'gap'], wType: 'ski', sport: 'ski', lesson: 'no', equip: 'yes', ...extra });
   return { sold: 71, cap: 120, left: 49, orders: [
-    mk('PJ-DEMO00001', 'drop1', 'all', 399, [p('Avery', 'Lin', 'ga', { wType: 'none', ws: ['na'] })]),
-    mk('PJ-DEMO00002', 'drop1', 'later', 1498, [p('Jordan', 'Lee', 'preferred', { fit: 'womens', size: 'M' }), p('Sam', 'Ortiz', 'preferred', { wType: '', ws: [], fit: '', size: '' }), p('Riley', 'Chen', 'vip', { wType: '', ws: [] })]),
+    mk('PJ-DEMO00001', 'drop1', 'all', 399, [p('Avery', 'Lin', 'ga', { wType: 'none', ws: ['na'] })], 'mwall'),
+    mk('PJ-DEMO00002', 'drop1', 'later', 1498, [p('Jordan', 'Lee', 'preferred', { fit: 'womens', size: 'M' }), p('Sam', 'Ortiz', 'preferred', { wType: '', ws: [], fit: '', size: '' }), p('Riley', 'Chen', 'vip', { wType: '', ws: [] })], 'bhancock'),
     mk('PJ-DEMO00003', 'advisory', 'all', 0, [p('Morgan', 'Shaw', 'preferred', { know: 'Partner (Club 7739 Member)', wType: 'other', tue: 'Bobsled', wed: 'Lodge', ws: ['class-a', 'automate'] })]),
-    mk('PJ-DEMO00004', 'drop1', 'all', 1199, [p('Casey', 'Ford', 'black', { ws: ['evidence'] })])
+    mk('PJ-DEMO00004', 'drop1', 'all', 1199, [p('Casey', 'Ford', 'black', { ws: ['evidence'], company: 'Northwind Gov' })], 'mwall')
   ] };
 }
 
@@ -210,6 +235,12 @@ class Component extends DCLogic {
       company: [a.company, a.title].filter(Boolean).join(' · ') || '—', winter: winterText(a), workshops: (a.ws || []).filter(x => x !== 'na').map(x => WS[x] || x).join(', ') || (a.ws && a.ws.includes('na') ? 'N/A' : 'Pending'),
       shirt: a.size ? (a.fit === 'womens' ? 'W ' : 'M ') + a.size : '—', know: a.know || '—', order: a.o.id
     }));
+    const sdrName = id => (SDRS.find(s => s[0] === id) || [, id])[1];
+    const refs = SDRS.map(s => s[0]); orders.forEach(o => { const r = o.attr && o.attr.ref; if (r && !refs.includes(r)) refs.push(r); });
+    const sdrStat = (list, name, color) => { const t = list.reduce((s, o) => s + o.attendees.length, 0); return { name, nameColor: color, n: t, tickets: String(t), accounts: String(new Set(list.flatMap(o => o.attendees.map(a => (a.company || '').trim().toLowerCase()).filter(Boolean))).size), orders: String(list.length), revenue: money(list.reduce((s, o) => s + (o.paidTotal ?? o.total ?? 0), 0)), link: String(list.filter(o => o.attr && o.attr.refSource === 'link').length), drop: String(list.filter(o => o.attr && o.attr.refSource === 'dropdown').length) }; };
+    let sdrRows = refs.map(id => sdrStat(orders.filter(o => o.attr && o.attr.ref === id), sdrName(id), '#FFFFFF')).sort((a, b) => b.n - a.n || a.name.localeCompare(b.name));
+    sdrRows.push(sdrStat(orders.filter(o => !(o.attr && o.attr.ref)), 'No SDR', '#8C8C8C'));
+    const sdrMax = Math.max(1, ...sdrRows.map(r => r.n)); sdrRows = sdrRows.map(r => ({ ...r, pct: Math.round(r.n / sdrMax * 100) + '%' }));
     const upd = st.updated ? st.updated.toLocaleTimeString([], { hour: 'numeric', minute: '2-digit', second: '2-digit' }) : '';
     return {
       authed, needKey: !authed, canSignOut: authed && !demo,
@@ -220,7 +251,7 @@ class Component extends DCLogic {
       refresh: () => demo ? null : this.load(),
       csvHref: this.api() + '/export.csv?key=' + encodeURIComponent(st.key),
       hasErr: !!st.err, err: st.err, stats, panels, pending, noPending: !pending.length, pendingLabel: pending.length + (pending.length === 1 ? ' PERSON' : ' PEOPLE'),
-      rows, attendeeCount: String(att.length), q: st.q, setQ: e => this.setState({ q: e.target.value })
+      sdrRows, rows, attendeeCount: String(att.length), q: st.q, setQ: e => this.setState({ q: e.target.value })
     };
   }
 }

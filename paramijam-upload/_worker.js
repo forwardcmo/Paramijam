@@ -16,6 +16,7 @@ const CAP = 120, MAX_PER_ORDER = 10, ADDON = 150;
 const ALLOW_ORIGINS = ['https://www.paramijam.com', 'https://paramijam.com'];
 const TIERS = { ga: 399, preferred: 599, vip: 849, black: 1199 }; // must match the Stripe prices
 const TIER_ENV = { ga: 'PRICE_GA', preferred: 'PRICE_PREFERRED', vip: 'PRICE_VIP', black: 'PRICE_BLACK' };
+const SDRS = { mwall: 'McKay Wall', bhancock: 'Britton Hancock', cfrandsen: 'Caze Frandsen', cdean: 'Colby Dean', dturner: 'Dallin Turner', mhammond: 'Meredith Hammond', tporter: 'Tyler Porter', abrady: 'Alex Brady' };
 const COUNTED_SOURCES = ['drop1']; // advisory/partner orders don't count toward the 120
 const EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
@@ -55,7 +56,9 @@ function clean(body) {
   }));
   const fill = body.fill === 'later' && attendees.length > 1 ? 'later' : 'all';
   const buyer = Math.min(Math.max(0, body.buyer | 0), Math.max(0, attendees.length - 1));
-  return { attendees, fill, buyer, source: body.source === 'advisory' ? 'advisory' : 'drop1', code: s(body.code).slice(0, 64) };
+  const at = body.attribution || {};
+  const attr = { ref: String(at.ref || '').toLowerCase().replace(/[^a-z0-9-]/g, '').slice(0, 40), refSource: ['link', 'dropdown'].includes(at.refSource) ? at.refSource : '', utm_source: s(at.utm_source), utm_medium: s(at.utm_medium), utm_campaign: s(at.utm_campaign), utm_content: s(at.utm_content), utm_term: s(at.utm_term), landing: s(at.landing) };
+  return { attendees, fill, buyer, source: body.source === 'advisory' ? 'advisory' : 'drop1', code: s(body.code).slice(0, 64), attr };
 }
 const full = (o, i) => o.fill === 'all' || i === o.buyer;
 function cart(o) {
@@ -166,6 +169,7 @@ async function hubspotSync(env, o) {
     const props = { email, firstname: a.first, lastname: a.last, jobtitle: a.title, pj_order_id: o.id, pj_role: role, pj_tier: TIER_NAMES[a.tier], pj_source: o.source, pj_purchase_date: String(day) };
     if (a.company) props.company = a.company;
     if (a.know) props.pj_relationship = a.know;
+    if (o.attr && o.attr.ref) props.pj_sdr = SDRS[o.attr.ref] || o.attr.ref;
     if ((a.fw || []).length) props.pj_frameworks = a.fw.join(';');
     if (a.fwOther) props.pj_frameworks_other = a.fwOther;
     if (a.size) props.pj_shirt = (a.fit === 'womens' ? "Women's " : "Men's ") + a.size;
@@ -230,7 +234,7 @@ async function checkout(req, env) {
   }
   const sess = await stripe(env, 'POST', 'checkout/sessions', {
     mode: 'payment', line_items, discounts, customer_email: order.email, client_reference_id: id,
-    metadata: { order_id: id, tickets: c.tickets, source: o.source }, payment_intent_data: { metadata: { order_id: id }, receipt_email: order.email, description: ('Paramijam 2027 · Order ' + id + (order.finishUrl ? ' · Finish your team’s details: ' + order.finishUrl : '')).slice(0, 1000) },
+    metadata: { order_id: id, tickets: c.tickets, source: o.source, sdr: o.attr.ref ? (SDRS[o.attr.ref] || o.attr.ref) : '', sdr_source: o.attr.refSource, utm_source: o.attr.utm_source, utm_campaign: o.attr.utm_campaign }, payment_intent_data: { metadata: { order_id: id }, receipt_email: order.email, description: ('Paramijam 2027 · Order ' + id + (order.finishUrl ? ' · Finish your team’s details: ' + order.finishUrl : '')).slice(0, 1000) },
     success_url: `${ret}?order=${id}${back}`, cancel_url: ret + (back ? '?from=advisory' : ''),
     expires_at: Math.floor(Date.now() / 1000) + 1800
   });
@@ -293,7 +297,7 @@ async function saveAttendees(req, env, id) {
 }
 
 async function exportCsv(env) {
-  const rows = [['order', 'status', 'source', 'paid_at', 'ticket', 'tier', 'first', 'last', 'email', 'title', 'company', 'phone', 'shirt_fit', 'shirt_size', 'knows_paramify', 'frameworks', 'winter', 'sport', 'lesson', 'equipment', 'tue', 'wed', 'workshops', 'ga_addon_winter', 'ga_addon_workshops', 'dietary', 'accessibility', 'order_total', 'discount_code']];
+  const rows = [['order', 'status', 'source', 'paid_at', 'ticket', 'tier', 'first', 'last', 'email', 'title', 'company', 'phone', 'shirt_fit', 'shirt_size', 'knows_paramify', 'frameworks', 'winter', 'sport', 'lesson', 'equipment', 'tue', 'wed', 'workshops', 'ga_addon_winter', 'ga_addon_workshops', 'dietary', 'accessibility', 'order_total', 'discount_code', 'sdr', 'sdr_source', 'utm_source', 'utm_medium', 'utm_campaign']];
   let cursor;
   do {
     const page = await env.ORDERS.list({ prefix: 'order:', cursor });
@@ -304,7 +308,7 @@ async function exportCsv(env) {
         const isFull = full(o, i) || !!a.wType;
         const w = a.tier === 'ga' ? (isFull ? !!a.wType && a.wType !== 'none' : a.addW) : true;
         const ks = a.tier === 'ga' ? (isFull ? a.ws.some(x => x !== 'na') : a.addK) : true;
-        rows.push([o.id, o.status, o.source, o.paidAt, i + 1, a.tier, a.first, a.last, a.email, a.title, a.company, a.phone, a.fit, a.size, a.know, (a.fw || []).map(f => f === 'Other' && a.fwOther ? 'Other: ' + a.fwOther : f).join('|'), a.wType || 'pending', a.sport, a.lesson, a.equip, a.tue, a.wed, a.ws.join('|'), a.tier === 'ga' ? w : 'included', a.tier === 'ga' ? ks : 'included', a.diet, a.access, o.total, o.code]);
+        rows.push([o.id, o.status, o.source, o.paidAt, i + 1, a.tier, a.first, a.last, a.email, a.title, a.company, a.phone, a.fit, a.size, a.know, (a.fw || []).map(f => f === 'Other' && a.fwOther ? 'Other: ' + a.fwOther : f).join('|'), a.wType || 'pending', a.sport, a.lesson, a.equip, a.tue, a.wed, a.ws.join('|'), a.tier === 'ga' ? w : 'included', a.tier === 'ga' ? ks : 'included', a.diet, a.access, o.total, o.code, o.attr && o.attr.ref ? (SDRS[o.attr.ref] || o.attr.ref) : '', o.attr ? o.attr.refSource : '', o.attr ? o.attr.utm_source : '', o.attr ? o.attr.utm_medium : '', o.attr ? o.attr.utm_campaign : '']);
       });
     }
     cursor = page.list_complete ? null : page.cursor;

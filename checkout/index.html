@@ -8,6 +8,7 @@
 <body>
 <x-dc>
 <helmet>
+<script src="/pj-attr.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Paramijam 2027 · Checkout</title>
 <link rel="stylesheet" href="/_ds/paramify-design-system-019ddfc0-a4ec-7a1a-b8c4-ad5c4b97b94a/colors_and_type.css">
@@ -180,6 +181,7 @@ input::placeholder{color:#595959}
           </div>
         </sc-for>
       </div>
+      <sc-if value="{{ showInvite }}"><div style="display:flex;flex-direction:column;gap:10px"><span style="font-family:'IBM Plex Mono',monospace;font-weight:700;font-size:12px;letter-spacing:.08em;color:#BFBFBF">WHO INVITED YOU? <span style="color:#8C8C8C">(OPTIONAL)</span></span><div style="display:flex;flex-wrap:wrap;gap:8px"><sc-for list="{{ inviteOpts }}" as="o"><button onClick="{{ o.pick }}" style="cursor:pointer;padding:10px 14px;font-family:'IBM Plex Mono',monospace;font-weight:700;font-size:12px;letter-spacing:.04em;border:1px solid {{ o.bd }};background:{{ o.bg }};color:{{ o.fg }}">{{ o.label }}</button></sc-for></div></div></sc-if>
       <form onSubmit="{{ applyCode }}" style="display:flex;flex-direction:column;gap:10px">
         <span style="font-family:'IBM Plex Mono',monospace;font-weight:700;font-size:12px;letter-spacing:.08em;color:#BFBFBF">DISCOUNT OR INVITE CODE</span>
         <div style="display:flex;flex-wrap:wrap;gap:8px">
@@ -248,6 +250,7 @@ const WS = [
   { id: 'na', label: 'N/A, not attending workshops' }
 ];
 const ACTS = ['Bobsled', 'Snowmobile', 'Lodge'];
+const SDRS = [['mwall', 'McKay Wall'], ['bhancock', 'Britton Hancock'], ['cfrandsen', 'Caze Frandsen'], ['cdean', 'Colby Dean'], ['dturner', 'Dallin Turner'], ['mhammond', 'Meredith Hammond'], ['tporter', 'Tyler Porter'], ['abrady', 'Alex Brady']];
 const FITS = [['mens', "Men's"], ['womens', "Women's"]];
 const SIZES = ['XS', 'S', 'M', 'L', 'XL', '2XL', '3XL'];
 const KNOW = ['Partner (Club 7739 Member)', 'Evaluating Paramify', 'Current Customer', 'Previous Customer', 'Brand Ambassador', 'None. Paramify is new to me!'];
@@ -261,7 +264,7 @@ const tierOf = id => TIERS.find(t => t.id === id);
 const chip = (on, label, pick) => ({ label, pick, bg: on ? '#20FC8F' : 'transparent', fg: on ? '#000000' : '#FFFFFF', bd: on ? '#20FC8F' : '#343434' });
 
 class Component extends DCLogic {
-  state = { qty: { ga: 0, preferred: 0, vip: 0, black: 0 }, att: [], fill: '', buyer: 0, pos: 0, codeIn: '', disc: null, codeMsg: '', codeOk: false, err: '', busy: false, order: null, finish: false, finished: false, advisory: false, left: null };
+  state = { qty: { ga: 0, preferred: 0, vip: 0, black: 0 }, att: [], fill: '', buyer: 0, pos: 0, codeIn: '', disc: null, codeMsg: '', codeOk: false, err: '', busy: false, order: null, finish: false, finished: false, advisory: false, left: null, invitedBy: '' };
 
   componentDidMount() {
     const q = new URLSearchParams(location.search), s = {};
@@ -374,7 +377,8 @@ class Component extends DCLogic {
   back() { this.setState(st => ({ pos: Math.max(0, st.pos - 1), err: '' })); window.scrollTo(0, 0); }
   jump(pred) { const ix = this.screens().findIndex(pred); if (ix >= 0) { this.setState({ pos: ix, err: '' }); window.scrollTo(0, 0); } }
 
-  payload(code) { const { advisory, qty, fill, buyer, att } = this.state; return { source: advisory ? 'advisory' : 'drop1', qty, fill: att.length > 1 ? fill : 'all', buyer, attendees: att, code: code || '' }; }
+  attr() { try { return (window.pjAttr && window.pjAttr()) || {}; } catch (e) { return {}; } }
+  payload(code) { const { advisory, qty, fill, buyer, att, invitedBy } = this.state; const at = this.attr(); const pick = invitedBy && invitedBy !== 'none' ? invitedBy : ''; return { source: advisory ? 'advisory' : 'drop1', qty, fill: att.length > 1 ? fill : 'all', buyer, attendees: att, code: code || '', attribution: { ref: at.ref || pick, refSource: at.ref ? 'link' : pick ? 'dropdown' : '', utm_source: at.utm_source || '', utm_medium: at.utm_medium || '', utm_campaign: at.utm_campaign || '', utm_content: at.utm_content || '', utm_term: at.utm_term || '', landing: at.landing || '' } }; }
   async applyCode(e) {
     if (e && e.preventDefault) e.preventDefault();
     const code = this.state.codeIn.trim();
@@ -530,6 +534,7 @@ class Component extends DCLogic {
       eyebrow, title, sub, hasSub: !!sub, tagLine, tagColor, hasTagLine: !!tagLine,
       isTickets: sc.k === 'tickets', isMode: sc.k === 'mode', isInfo: sc.k === 'info', isWinter: sc.k === 'winter', isWorkshops: sc.k === 'workshops', isGuests: sc.k === 'guests', isReview: sc.k === 'review', isDone: done || fin,
       advisory: st.advisory,
+      showInvite: sc.k === 'review' && !this.attr().ref, inviteOpts: SDRS.map(([id, nm]) => chip(st.invitedBy === id, nm.toUpperCase(), () => this.setState({ invitedBy: id }))).concat([chip(st.invitedBy === 'none', 'OTHER', () => this.setState({ invitedBy: 'none' }))]),
       tiers: TIERS.map(t => { const q = st.qty[t.id]; const locked = st.advisory && t.id === 'ga'; return { showCaveat: t.id === 'ga' && !locked, locked, op: locked ? '0.4' : '1', pe: locked ? 'none' : 'auto', nameUpper: t.name.toUpperCase() + (t.pop ? ' · MOST POPULAR' : ''), tag: t.tag, bullets: t.bullets, priceLabel: money(t.price), qty: String(q), qtyColor: q ? '#20FC8F' : '#8C8C8C', nameColor: t.pop ? '#20FC8F' : '#BFBFBF', bd: q ? '#20FC8F' : '#343434', bg: q ? 'rgba(32,252,143,.06)' : '#0B0A0A', inc: () => this.setQty(t.id, 1), dec: () => this.setQty(t.id, -1) }; }),
       modeOpts, showBuyerPick, buyerOpts, fields, infoGroups, showFwOther: sc.k === 'info' && (a.fw || []).includes('Other'), fwOther: a ? a.fwOther || '' : '', setFwOther: e => this.setAtt(sc.i, 'fwOther', e.target.value), wOpts, qRows, hasRows: qRows.length > 0, wsOpts, guests, reviewRows, nextSteps,
       codeIn: st.codeIn, setCode: e => this.setState({ codeIn: e.target.value }), applyCode: e => this.applyCode(e),
