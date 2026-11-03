@@ -62,7 +62,7 @@ input::placeholder{color:#595959}
             <div style="display:flex;flex-wrap:wrap;align-items:baseline;gap:6px 14px"><span style="font-family:'IBM Plex Mono',monospace;font-weight:700;font-size:13px;letter-spacing:.06em;color:{{ t.nameColor }}">{{ t.nameUpper }}</span><span style="font-weight:700;font-size:18px;letter-spacing:-.02em">{{ t.tag }}</span></div>
             <ul style="margin:0;padding:0;list-style:none;display:flex;flex-wrap:wrap;gap:6px 18px;font-size:14px;line-height:1.35;color:rgba(255,255,255,.72)"><sc-for list="{{ t.bullets }}" as="b"><li style="display:flex;gap:8px"><span style="color:#20FC8F;font-family:'IBM Plex Mono',monospace">&gt;</span><span>{{ b }}</span></li></sc-for></ul>
             <sc-if value="{{ t.locked }}"><span style="font-family:'IBM Plex Mono',monospace;font-weight:700;font-size:12px;letter-spacing:.06em;color:#BFBFBF">NOT AVAILABLE WITH THE ADVISORY PASS</span></sc-if>
-            <sc-if value="{{ t.showCaveat }}"><p style="margin:4px 0 0;padding:12px 14px;border:1px dashed #595959;font-family:'IBM Plex Mono',monospace;font-size:12px;line-height:1.45;letter-spacing:.02em;color:#BFBFBF"><span style="font-weight:700;color:#FFFFFF">Please note:</span> GA tickets do not include mountain activities or workshops. Add either for $150 per person at checkout. The other three tiers DO include these add-ons for no add'l fee.</p></sc-if>
+            <sc-if value="{{ t.showCaveat }}"><p style="margin:4px 0 0;padding:12px 14px;border:1px dashed #595959;font-family:'IBM Plex Mono',monospace;font-size:12px;line-height:1.45;letter-spacing:.02em;color:#BFBFBF"><span style="font-weight:700;color:#FFFFFF">Please note:</span> GA tickets do not include winter activities or workshops. Add either for $150 per person at checkout. The other three tiers DO include these add-ons for no add'l fee.</p></sc-if>
           </div>
           <div style="display:flex;align-items:center;gap:20px">
             <span style="font-family:'IBM Plex Mono',monospace;font-weight:700;font-size:30px;letter-spacing:-.04em">{{ t.priceLabel }}</span>
@@ -198,6 +198,7 @@ input::placeholder{color:#595959}
       <sc-for list="{{ nextSteps }}" as="s" hint-placeholder-count="2">
         <div style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:16px 28px;padding:clamp(20px,2.2vw,28px);border-bottom:1px solid #2A2A2A">
           <div style="flex:1 1 320px;min-width:0;display:flex;flex-direction:column;gap:8px"><span style="font-family:'IBM Plex Mono',monospace;font-weight:700;font-size:12px;letter-spacing:.06em;color:#20FC8F">{{ s.num }}</span><span style="font-weight:700;font-size:22px;line-height:1.1;letter-spacing:-.02em">{{ s.title }}</span><span style="font-size:15px;line-height:1.4;color:#BFBFBF">{{ s.sub }}</span>
+            <sc-if value="{{ s.isHotel }}"><ul style="margin:4px 0 0;padding:0;list-style:none;display:flex;flex-direction:column;gap:8px;font-size:15px;line-height:1.35;color:#FFFFFF"><sc-for list="{{ s.perks }}" as="b"><li style="display:flex;gap:10px"><span style="color:#20FC8F;font-family:'IBM Plex Mono',monospace">&gt;</span><span>{{ b }}</span></li></sc-for></ul><div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:2px;margin-top:10px"><img src="/assets/pj-pool.avif" alt="Pendry Park City pool" style="width:100%;aspect-ratio:4/3;object-fit:cover;display:block"><img src="/assets/pj-fire.webp" alt="Pendry Park City fire lounge" style="width:100%;aspect-ratio:4/3;object-fit:cover;display:block"></div></sc-if>
             <sc-if value="{{ s.isCopy }}"><div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:6px"><input readOnly="{{ true }}" value="{{ s.url }}" onFocus="{{ s.select }}" aria-label="Team details link" style="flex:1 1 260px;min-width:0;background:#141414;border:1px dashed #595959;border-radius:0;padding:13px 14px;color:#FFFFFF;font-family:'IBM Plex Mono',monospace;font-size:13px;outline:none" style-focus="border-color:#20FC8F;border-style:solid"><button onClick="{{ s.copy }}" style="cursor:pointer;padding:13px 18px;background:transparent;border:1px solid rgba(255,255,255,.4);color:#FFFFFF;font-family:'IBM Plex Mono',monospace;font-weight:700;font-size:13px;letter-spacing:.04em;white-space:nowrap" style-hover="border-color:#20FC8F;color:#20FC8F">{{ s.copyLabel }}</button></div></sc-if></div>
           <sc-if value="{{ s.isLink }}"><a href="{{ s.href }}" target="{{ s.target }}" rel="noopener" style="flex:none;white-space:nowrap;display:flex;align-items:center;gap:10px;background:#20FC8F;color:#000000;text-decoration:none;padding:16px 22px;font-family:'IBM Plex Mono',monospace;font-weight:700;font-size:14px;letter-spacing:.04em" style-hover="background:#FFFFFF;color:#000000"><span>&gt;</span><span>{{ s.cta }}</span></a></sc-if>
           <sc-if value="{{ s.isBtn }}"><button onClick="{{ s.on }}" style="flex:none;white-space:nowrap;cursor:pointer;display:flex;align-items:center;gap:10px;background:#20FC8F;color:#000000;border:0;padding:16px 22px;font-family:'IBM Plex Mono',monospace;font-weight:700;font-size:14px;letter-spacing:.04em" style-hover="background:#FFFFFF"><span>&gt;</span><span>{{ s.cta }}</span></button></sc-if>
@@ -251,7 +252,6 @@ const WS = [
 ];
 const ACTS = ['Bobsled', 'Snowmobile', 'Lodge'];
 const SDRS = [['mwall', 'McKay Wall'], ['bhancock', 'Britton Hancock'], ['cfrandsen', 'Caze Frandsen'], ['cdean', 'Colby Dean'], ['dturner', 'Dallin Turner'], ['mhammond', 'Meredith Hammond'], ['tporter', 'Tyler Porter'], ['abrady', 'Alex Brady']];
-const FITS = [['mens', "Men's"], ['womens', "Women's"]];
 const SIZES = ['XS', 'S', 'M', 'L', 'XL', '2XL', '3XL'];
 const KNOW = ['Partner (Club 7739 Member)', 'Evaluating Paramify', 'Current Customer', 'Previous Customer', 'Brand Ambassador', 'None. Paramify is new to me!'];
 const FW = ['FedRAMP Rev5', 'FedRAMP 20x', 'FISMA', 'DoD ATO', 'CMMC', 'Other'];
@@ -360,7 +360,7 @@ class Component extends DCLogic {
     if (!sc) return '';
     if (sc.k === 'tickets') { if (!n) return 'Add at least one ticket.'; if (advisory && this.state.qty.ga) return "General Admission isn't available with the advisory pass. Remove it to continue."; if (left != null && !advisory && n > left) return 'Only ' + left + ' tickets left in Drop 1.'; }
     if (sc.k === 'mode' && !this.state.fill) return "Pick how you want to handle everyone's details.";
-    if (sc.k === 'info') { const a = att[sc.i]; if (['first', 'last', 'email', 'title', 'company'].some(k => !String(a[k]).trim())) return 'Fill in all required fields.'; if (!EMAIL.test(a.email.trim())) return 'Enter a valid email.'; if (!a.fit || !a.size) return 'Pick a shirt fit and size.'; if (!a.know) return 'Tell us how you know Paramify.'; if (!(a.fw || []).length) return 'Pick at least one framework.'; }
+    if (sc.k === 'info') { const a = att[sc.i]; if (['first', 'last', 'email', 'title', 'company'].some(k => !String(a[k]).trim())) return 'Fill in all required fields.'; if (!EMAIL.test(a.email.trim())) return 'Enter a valid email.'; if (!a.size) return 'Pick a shirt size.'; if (!a.know) return 'Tell us how you know Paramify.'; if (!(a.fw || []).length) return 'Pick at least one framework.'; }
     if (sc.k === 'winter') { const a = att[sc.i]; if (!a.wType) return 'Pick an option.'; if (a.wType === 'ski' && (!a.sport || !a.lesson || !a.equip)) return 'Answer all three questions.'; if (a.wType === 'other' && (!a.tue || !a.wed)) return 'Pick an activity for both days.'; }
     if (sc.k === 'workshops' && !att[sc.i].ws.length) return 'Pick at least one, or N/A.';
     if (sc.k === 'guests') for (let i = 0; i < n; i++) { if (i === buyer) continue; const a = att[i]; if (!a.first.trim() || !a.last.trim() || !a.title.trim()) return 'Add a name and title for ticket ' + (i + 1) + '.'; if (!EMAIL.test(a.email.trim())) return 'Add a valid email for ticket ' + (i + 1) + '.'; }
@@ -464,8 +464,7 @@ class Component extends DCLogic {
     const fields = sc.k === 'info' ? fieldDefs.map(([k, l, req, type, ac]) => ({ label: l + (req ? ' *' : ''), val: a[k], on: e => this.setAtt(sc.i, k, e.target.value), type, ac: you ? ac : 'off', ph: k === 'diet' ? 'Optional, e.g. vegetarian' : k === 'access' || k === 'phone' ? 'Optional' : '', span: k === 'diet' || k === 'access' ? '1 / -1' : 'auto' })) : [];
 
     const infoGroups = sc.k === 'info' ? [
-      { q: 'Shirt fit', hint: 'REQUIRED · FOR YOUR PARAMIJAM SWAG', opts: FITS.map(([v, l]) => chip(a.fit === v, l.toUpperCase(), () => this.setAtt(sc.i, 'fit', v))) },
-      { q: 'Shirt size', hint: 'REQUIRED', opts: SIZES.map(v => chip(a.size === v, v, () => this.setAtt(sc.i, 'size', v))) },
+      { q: 'Shirt size', hint: 'REQUIRED · UNISEX SIZES · FOR YOUR PARAMIJAM SWAG', opts: SIZES.map(v => chip(a.size === v, v, () => this.setAtt(sc.i, 'size', v))) },
       { q: you ? 'How do you know Paramify?' : 'How do they know Paramify?', hint: 'REQUIRED · PICK ONE', opts: KNOW.map(v => chip(a.know === v, v.toUpperCase(), () => this.setAtt(sc.i, 'know', v))) },
       { q: 'Which frameworks are of interest?', hint: 'REQUIRED · PICK ANY', opts: FW.map(v => { const cur = a.fw || [], on = cur.includes(v); return chip(on, (on ? '✓ ' : '') + v.toUpperCase(), () => this.setAtt(sc.i, 'fw', on ? cur.filter(x => x !== v) : cur.concat(v))); }) }
     ] : [];
@@ -508,13 +507,13 @@ class Component extends DCLogic {
     const reviewRows = sc.k === 'review' ? st.att.map((x, i) => {
       const full = this.isFull(i), ws = x.ws.filter(w => w !== 'na').length;
       const bits = [x.email];
-      if (full) { bits.push((x.fit === 'womens' ? "Women's " : "Men's ") + x.size + ' shirt'); bits.push(this.winterText(x)); bits.push(ws ? ws + (ws === 1 ? ' workshop' : ' workshops') : 'No workshops'); }
+      if (full) { bits.push('Unisex ' + x.size + ' shirt'); bits.push(this.winterText(x)); bits.push(ws ? ws + (ws === 1 ? ' workshop' : ' workshops') : 'No workshops'); }
       else { bits.push('Activities + workshops after checkout'); if (x.tier === 'ga') { if (x.addW) bits.push('+ winter activities'); if (x.addK) bits.push('+ workshops'); } }
       return { label: 'TICKET ' + (i + 1) + ' · ' + label(i), name: (x.first + ' ' + x.last).trim() || 'Name TBD', detail: bits.join(' · '), edit: () => full ? this.jump(s => s.k === 'info' && s.i === i) : this.jump(s => s.k === 'guests') };
     }) : [];
 
     const nextSteps = [];
-    if (done || fin) nextSteps.push({ num: '01 / BOOK YOUR ROOM', title: 'Get our Pendry discount.', sub: 'Lodging isn’t included, but our room block at Pendry Park City has a discounted nightly rate when you book through this link.', isLink: true, isBtn: false, href: lodging, target: '_blank', cta: 'BOOK YOUR ROOM ↗' });
+    if (done || fin) nextSteps.push({ num: '01 / BOOK YOUR ROOM', title: 'Stay where it all happens.', sub: 'Lodging isn’t included, but booking through our link gets you into the Paramijam room block at Pendry Park City.', isHotel: true, perks: ['Right on-site: every session, keynote and night lounge is steps from your room', 'Ski-in, ski-out access to the mountain', 'A significantly reduced nightly rate compared to high-season Park City prices', 'Night lounges and after-hours events, all under the same roof'], isLink: true, isBtn: false, href: lodging, target: '_blank', cta: 'BOOK YOUR ROOM ↗' });
     if (done && later && !pending) {
       const fh = location.pathname + '?order=' + encodeURIComponent(st.order.id) + '&finish=1' + (st.advisory ? '&from=advisory' : '');
       const url = location.origin + fh;

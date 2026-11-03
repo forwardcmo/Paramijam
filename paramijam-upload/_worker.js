@@ -172,7 +172,7 @@ async function hubspotSync(env, o) {
     if (o.attr && o.attr.ref) props.pj_sdr = SDRS[o.attr.ref] || o.attr.ref;
     if ((a.fw || []).length) props.pj_frameworks = a.fw.join(';');
     if (a.fwOther) props.pj_frameworks_other = a.fwOther;
-    if (a.size) props.pj_shirt = (a.fit === 'womens' ? "Women's " : "Men's ") + a.size;
+    if (a.size) props.pj_shirt = 'Unisex ' + a.size;
     if (role === 'buyer') Object.assign(props, {
       pj_tickets: String(o.attendees.length), pj_team_link: o.finishUrl || '',
       pj_details_complete: miss.length ? 'false' : 'true',

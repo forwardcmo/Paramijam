@@ -206,7 +206,7 @@ class Component extends DCLogic {
     const winterPairs = [['Ski', att.filter(a => a.wType === 'ski' && a.sport !== 'board').length], ['Snowboard', att.filter(a => a.wType === 'ski' && a.sport === 'board').length], ['Lesson requested', att.filter(a => a.wType === 'ski' && a.lesson === 'yes').length], ['Equipment needed', att.filter(a => a.wType === 'ski' && a.equip === 'yes').length]];
     ['Bobsled', 'Snowmobile', 'Lodge'].forEach(x => { winterPairs.push(['Tue · ' + x, att.filter(a => a.tue === x).length]); winterPairs.push(['Wed · ' + x, att.filter(a => a.wed === x).length]); });
     winterPairs.push(['No winter activities', att.filter(a => a.wType === 'none').length], ['Not picked yet', att.filter(a => !a.wType).length]);
-    const shirtMap = {}; att.forEach(a => { if (a.size) { const k = (a.fit === 'womens' ? "Women's " : "Men's ") + a.size; shirtMap[k] = (shirtMap[k] || 0) + 1; } });
+    const shirtMap = {}; att.forEach(a => { if (a.size) { const k = 'Unisex ' + a.size; shirtMap[k] = (shirtMap[k] || 0) + 1; } });
     const order = ['XS', 'S', 'M', 'L', 'XL', '2XL', '3XL'];
     const shirtPairs = Object.entries(shirtMap).sort((a, b) => a[0].localeCompare(b[0].split(' ')[0]) || order.indexOf(a[0].split(' ')[1]) - order.indexOf(b[0].split(' ')[1]));
     const knowMap = {}; att.forEach(a => { if (a.know) knowMap[a.know] = (knowMap[a.know] || 0) + 1; });
@@ -233,7 +233,7 @@ class Component extends DCLogic {
     const rows = att.filter(a => !q || [a.first, a.last, a.email, a.company, a.o.id].join(' ').toLowerCase().includes(q)).map(a => ({
       name: ((a.first || '') + ' ' + (a.last || '')).trim() || '—', email: a.email || '', tier: tn(a.tier).toUpperCase() + (a.o.source === 'advisory' ? ' · ADV' : ''), tierColor: a.tier === 'ga' ? '#BFBFBF' : '#20FC8F',
       company: [a.company, a.title].filter(Boolean).join(' · ') || '—', winter: winterText(a), workshops: (a.ws || []).filter(x => x !== 'na').map(x => WS[x] || x).join(', ') || (a.ws && a.ws.includes('na') ? 'N/A' : 'Pending'),
-      shirt: a.size ? (a.fit === 'womens' ? 'W ' : 'M ') + a.size : '—', know: a.know || '—', order: a.o.id
+      shirt: a.size || '—', know: a.know || '—', order: a.o.id
     }));
     const sdrName = id => (SDRS.find(s => s[0] === id) || [, id])[1];
     const refs = SDRS.map(s => s[0]); orders.forEach(o => { const r = o.attr && o.attr.ref; if (r && !refs.includes(r)) refs.push(r); });
