@@ -1,6 +1,43 @@
 <!DOCTYPE html>
 <html>
 <head>
+<!-- LinkedIn Insight Tag -->
+<script type="text/javascript">
+_linkedin_partner_id = "5677097";
+window._linkedin_data_partner_ids = window._linkedin_data_partner_ids || [];
+window._linkedin_data_partner_ids.push(_linkedin_partner_id);
+</script>
+<script type="text/javascript">
+(function(l) {
+if (!l){window.lintrk = function(a,b){window.lintrk.q.push([a,b])};
+window.lintrk.q=[]}
+var s = document.getElementsByTagName("script")[0];
+var b = document.createElement("script");
+b.type = "text/javascript";b.async = true;
+b.src = "https://snap.licdn.com/li.lms-analytics/insight.min.js";
+s.parentNode.insertBefore(b, s);})(window.lintrk);
+</script>
+<noscript>
+<img height="1" width="1" style="display:none;" alt="" src="https://px.ads.linkedin.com/collect/?pid=5677097&fmt=gif" />
+</noscript>
+
+<!-- Google Analytics + Google Ads, plus a purchase event when an order comes back from Stripe -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-1VGJ039RC0"></script>
+<script>
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'G-1VGJ039RC0');
+gtag('config', 'AW-11226980442');
+(function () {
+  var order = new URLSearchParams(location.search).get('order');
+  if (order) gtag('event', 'purchase', { transaction_id: order, currency: 'USD' });
+})();
+</script>
+
+<!-- HubSpot, same as the homepage -->
+<script type="text/javascript" id="hs-script-loader" async defer src="//js.hs-scripts.com/24251729.js"></script>
+
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <script src="/support.js"></script>
