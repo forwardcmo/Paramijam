@@ -60,6 +60,7 @@ input::placeholder{color:#595959}
           <div style="flex:1 1 300px;min-width:0;display:flex;flex-direction:column;gap:10px">
             <div style="display:flex;flex-wrap:wrap;align-items:baseline;gap:6px 14px"><span style="font-family:'IBM Plex Mono',monospace;font-weight:700;font-size:13px;letter-spacing:.06em;color:{{ t.nameColor }}">{{ t.nameUpper }}</span><span style="font-weight:700;font-size:18px;letter-spacing:-.02em">{{ t.tag }}</span></div>
             <ul style="margin:0;padding:0;list-style:none;display:flex;flex-wrap:wrap;gap:6px 18px;font-size:14px;line-height:1.35;color:rgba(255,255,255,.72)"><sc-for list="{{ t.bullets }}" as="b"><li style="display:flex;gap:8px"><span style="color:#20FC8F;font-family:'IBM Plex Mono',monospace">&gt;</span><span>{{ b }}</span></li></sc-for></ul>
+            <sc-if value="{{ t.isGa }}"><p style="margin:4px 0 0;padding:12px 14px;border:1px dashed #595959;font-family:'IBM Plex Mono',monospace;font-size:12px;line-height:1.45;letter-spacing:.02em;color:#BFBFBF"><span style="font-weight:700;color:#FFFFFF">Please note:</span> GA tickets do not include mountain activities or workshops. Add either for $150 per person at checkout. The other three tiers DO include these add-ons for no add'l fee.</p></sc-if>
           </div>
           <div style="display:flex;align-items:center;gap:20px">
             <span style="font-family:'IBM Plex Mono',monospace;font-weight:700;font-size:30px;letter-spacing:-.04em">{{ t.priceLabel }}</span>
@@ -432,7 +433,7 @@ class Component extends DCLogic {
     const backHref = st.advisory ? ((this.props.advisoryUrl || '').trim() || 'https://www.paramijam.com/advisory') : ((this.props.siteUrl || '').trim() || 'https://www.paramijam.com/');
 
     let eyebrow = '', title = '', sub = '', tagLine = '', tagColor = '#20FC8F';
-    if (sc.k === 'tickets') { eyebrow = st.advisory ? 'TICKETS · ADVISORY + PARTNERS' : 'TICKETS · DROP 1'; title = 'Which tier, and how many?'; sub = 'Buy for yourself or your whole team. Mix tiers in one order.'; }
+    if (sc.k === 'tickets') { eyebrow = st.advisory ? 'TICKETS · ADVISORY + PARTNERS' : 'TICKETS · DROP 1'; title = 'Very smart move! Which tier, and how many?'; sub = 'Buy for yourself or your whole team. Mix tiers in one order.'; }
     if (sc.k === 'mode') { eyebrow = "WHO'S COMING"; title = 'Do you have everyone’s info?'; sub = "You're buying " + n + " tickets. Pick how you want to handle everyone's details."; }
     if (sc.k === 'info') { eyebrow = 'TICKET ' + (sc.i + 1) + ' OF ' + n + ' · ' + tierUpper; title = st.finish ? 'Finish ' + (a.first || 'their') + '’s details.' : you ? 'Tell us about you.' : 'Who’s on ticket ' + (sc.i + 1) + '?'; sub = 'We use this for badges, check-in and event updates.'; }
     if (sc.k === 'winter') {
@@ -525,7 +526,7 @@ class Component extends DCLogic {
       eyebrow, title, sub, hasSub: !!sub, tagLine, tagColor, hasTagLine: !!tagLine,
       isTickets: sc.k === 'tickets', isMode: sc.k === 'mode', isInfo: sc.k === 'info', isWinter: sc.k === 'winter', isWorkshops: sc.k === 'workshops', isGuests: sc.k === 'guests', isReview: sc.k === 'review', isDone: done || fin,
       advisory: st.advisory,
-      tiers: TIERS.map(t => { const q = st.qty[t.id]; return { nameUpper: t.name.toUpperCase() + (t.pop ? ' · MOST POPULAR' : ''), tag: t.tag, bullets: t.bullets, priceLabel: money(t.price), qty: String(q), qtyColor: q ? '#20FC8F' : '#8C8C8C', nameColor: t.pop ? '#20FC8F' : '#BFBFBF', bd: q ? '#20FC8F' : '#343434', bg: q ? 'rgba(32,252,143,.06)' : '#0B0A0A', inc: () => this.setQty(t.id, 1), dec: () => this.setQty(t.id, -1) }; }),
+      tiers: TIERS.map(t => { const q = st.qty[t.id]; return { isGa: t.id === 'ga', nameUpper: t.name.toUpperCase() + (t.pop ? ' · MOST POPULAR' : ''), tag: t.tag, bullets: t.bullets, priceLabel: money(t.price), qty: String(q), qtyColor: q ? '#20FC8F' : '#8C8C8C', nameColor: t.pop ? '#20FC8F' : '#BFBFBF', bd: q ? '#20FC8F' : '#343434', bg: q ? 'rgba(32,252,143,.06)' : '#0B0A0A', inc: () => this.setQty(t.id, 1), dec: () => this.setQty(t.id, -1) }; }),
       modeOpts, showBuyerPick, buyerOpts, fields, infoGroups, showFwOther: sc.k === 'info' && (a.fw || []).includes('Other'), fwOther: a ? a.fwOther || '' : '', setFwOther: e => this.setAtt(sc.i, 'fwOther', e.target.value), wOpts, qRows, hasRows: qRows.length > 0, wsOpts, guests, reviewRows, nextSteps,
       codeIn: st.codeIn, setCode: e => this.setState({ codeIn: e.target.value }), applyCode: e => this.applyCode(e),
       hasCodeMsg: !!st.codeMsg, codeMsg: String(st.codeMsg).toUpperCase(), codeMsgColor: st.codeOk ? '#20FC8F' : '#FF273B',
