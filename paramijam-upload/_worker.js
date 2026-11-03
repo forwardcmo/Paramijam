@@ -22,7 +22,7 @@ const EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const s = v => String(v ?? '').slice(0, 200).trim();
 function cors(req) {
   const o = req.headers.get('Origin');
-  return { 'Access-Control-Allow-Origin': ALLOW_ORIGINS.includes(o) ? o : ALLOW_ORIGINS[0], 'Access-Control-Allow-Methods': 'GET,POST,OPTIONS', 'Access-Control-Allow-Headers': 'Content-Type', Vary: 'Origin' };
+  return { 'Access-Control-Allow-Origin': ALLOW_ORIGINS.includes(o) ? o : ALLOW_ORIGINS[0], 'Access-Control-Allow-Methods': 'GET,POST,OPTIONS', 'Access-Control-Allow-Headers': 'Content-Type, X-Admin-Key', Vary: 'Origin' };
 }
 const json = (req, data, status = 200, extra = {}) => new Response(JSON.stringify(data), { status, headers: { 'Content-Type': 'application/json', ...cors(req), ...extra } });
 
@@ -321,6 +321,17 @@ export default {
       if (p === '/count') {
         const sold = Math.min(CAP, parseInt((await env.ORDERS.get('sold')) || '0', 10));
         return json(req, { sold, left: CAP - sold }, 200, { 'Cache-Control': 'public, max-age=15' });
+      }
+      if (p === '/admin/orders') {
+        if (!env.ADMIN_KEY || req.headers.get('X-Admin-Key') !== env.ADMIN_KEY) return json(req, { error: 'forbidden' }, 403);
+        const orders = []; let cursor;
+        do {
+          const page = await env.ORDERS.list({ prefix: 'order:', cursor });
+          for (const k of page.keys) { const o = JSON.parse(await env.ORDERS.get(k.name)); if (o.status === 'paid') orders.push(publicOrder(o)); }
+          cursor = page.list_complete ? null : page.cursor;
+        } while (cursor);
+        const sold = Math.min(CAP, parseInt((await env.ORDERS.get('sold')) || '0', 10));
+        return json(req, { sold, cap: CAP, left: CAP - sold, orders }, 200, { 'Cache-Control': 'no-store' });
       }
       if (p === '/validate' && req.method === 'POST') {
         const o = clean(await req.json()), d = await discount(env, o.code, o, cart(o));

@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="/support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Paramijam 2027 · Admin</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&display=swap">
+<style>
+html,body{margin:0;background:#0B0A0A}
+*{box-sizing:border-box}
+a{color:#20FC8F}
+a:hover{color:#FFFFFF}
+button,input{font:inherit}
+input::placeholder{color:#595959}
+</style>
+</helmet>
+
+<div style="min-height:100vh;background:#0B0A0A;color:#FFFFFF;font-family:'Helvetica Neue',Helvetica,Arial,sans-serif">
+
+<header data-screen-label="01 Header" style="position:sticky;top:0;z-index:50;background:rgba(11,10,10,.94);border-bottom:1px solid #2A2A2A;backdrop-filter:blur(6px)">
+  <div style="max-width:1440px;margin:0 auto;padding:14px clamp(16px,3vw,40px);display:flex;align-items:center;justify-content:space-between;gap:12px 24px;flex-wrap:wrap;font-family:'IBM Plex Mono',monospace;font-weight:700;font-size:12px;letter-spacing:.06em">
+    <span style="display:flex;align-items:center;gap:10px"><span style="width:8px;height:8px;background:#20FC8F"></span>PARAMIJAM 2027 · ADMIN</span>
+    <div style="display:flex;align-items:center;gap:16px;flex-wrap:wrap;color:#8C8C8C">
+      <span>{{ statusLine }}</span>
+      <sc-if value="{{ authed }}"><button onClick="{{ refresh }}" style="cursor:pointer;background:transparent;border:1px solid #343434;color:#FFFFFF;padding:8px 12px;font-family:'IBM Plex Mono',monospace;font-weight:700;font-size:11px;letter-spacing:.06em" style-hover="border-color:#20FC8F;color:#20FC8F">REFRESH</button></sc-if>
+      <sc-if value="{{ authed }}"><a href="{{ csvHref }}" style="color:#FFFFFF;text-decoration:none;border:1px solid #343434;padding:8px 12px;font-size:11px" style-hover="border-color:#20FC8F;color:#20FC8F">CSV</a></sc-if>
+      <sc-if value="{{ canSignOut }}"><button onClick="{{ signOut }}" style="cursor:pointer;background:transparent;border:0;color:#8C8C8C;font-family:'IBM Plex Mono',monospace;font-weight:700;font-size:11px;letter-spacing:.06em" style-hover="color:#FF273B">SIGN OUT</button></sc-if>
+    </div>
+  </div>
+</header>
+
+<sc-if value="{{ needKey }}" hint-placeholder-val="{{ false }}">
+  <main data-screen-label="02 Sign in" style="max-width:520px;margin:0 auto;padding:clamp(48px,10vh,120px) 20px;display:flex;flex-direction:column;gap:20px">
+    <span style="font-family:'IBM Plex Mono',monospace;font-weight:700;font-size:13px;letter-spacing:.06em;color:#20FC8F">&gt; PRIVATE</span>
+    <h1 style="margin:0;font-weight:700;font-size:44px;line-height:1;letter-spacing:-.04em">Ticket dashboard.</h1>
+    <p style="margin:0;font-size:16px;line-height:1.4;color:#BFBFBF">Enter the ADMIN_KEY from your password manager. It's saved in this browser only.</p>
+    <form onSubmit="{{ signIn }}" style="display:flex;flex-wrap:wrap;gap:8px">
+      <input type="password" value="{{ keyIn }}" onChange="{{ setKeyIn }}" placeholder="ADMIN_KEY" autoComplete="off" style="flex:1 1 240px;min-width:0;background:#141414;border:1px solid #343434;border-radius:0;padding:15px 14px;color:#FFFFFF;font-family:'IBM Plex Mono',monospace;font-size:15px;outline:none" style-focus="border-color:#20FC8F">
+      <button type="submit" style="cursor:pointer;background:#20FC8F;color:#000000;border:0;padding:15px 22px;font-family:'IBM Plex Mono',monospace;font-weight:700;font-size:14px;letter-spacing:.04em" style-hover="background:#FFFFFF">&gt; OPEN</button>
+    </form>
+    <sc-if value="{{ hasErr }}"><span style="font-family:'IBM Plex Mono',monospace;font-weight:700;font-size:13px;color:#FF273B">&gt; {{ err }}</span></sc-if>
+  </main>
+</sc-if>
+
+<sc-if value="{{ authed }}" hint-placeholder-val="{{ true }}">
+<main data-screen-label="03 Dashboard" style="max-width:1440px;margin:0 auto;padding:clamp(24px,3vw,48px) clamp(16px,3vw,40px) 80px;display:flex;flex-direction:column;gap:clamp(24px,3vw,40px)">
+
+  <sc-if value="{{ hasErr }}"><span style="font-family:'IBM Plex Mono',monospace;font-weight:700;font-size:13px;color:#FF273B">&gt; {{ err }}</span></sc-if>
+
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,200px),1fr));gap:2px;background:#2A2A2A;border:2px solid #2A2A2A">
+    <sc-for list="{{ stats }}" as="s" hint-placeholder-count="5">
+      <div style="background:{{ s.bg }};color:{{ s.fg }};padding:clamp(18px,2vw,28px);display:flex;flex-direction:column;gap:14px;min-height:150px">
+        <span style="font-family:'IBM Plex Mono',monospace;font-weight:700;font-size:12px;letter-spacing:.06em;color:{{ s.labelColor }}">{{ s.label }}</span>
+        <span style="margin-top:auto;font-family:'IBM Plex Mono',monospace;font-weight:700;font-size:clamp(40px,4vw,64px);line-height:.9;letter-spacing:-.05em">{{ s.value }}</span>
+        <span style="font-size:14px;line-height:1.3;color:{{ s.subColor }}">{{ s.sub }}</span>
+      </div>
+    </sc-for>
+  </div>
+
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,320px),1fr));gap:16px">
+    <sc-for list="{{ panels }}" as="p" hint-placeholder-count="4">
+      <section style="border:1px solid #343434;background:#000000;display:flex;flex-direction:column">
+        <div style="padding:16px 20px;border-bottom:1px solid #2A2A2A;display:flex;justify-content:space-between;gap:12px;font-family:'IBM Plex Mono',monospace;font-weight:700;font-size:12px;letter-spacing:.06em"><span>{{ p.title }}</span><span style="color:#8C8C8C">{{ p.note }}</span></div>
+        <div style="padding:12px 20px 18px;display:flex;flex-direction:column;gap:12px">
+          <sc-for list="{{ p.rows }}" as="r">
+            <div style="display:flex;flex-direction:column;gap:6px">
+              <div style="display:flex;justify-content:space-between;gap:12px;font-size:14px;line-height:1.3"><span style="color:#E9E9E9">{{ r.label }}</span><span style="font-family:'IBM Plex Mono',monospace;font-weight:700">{{ r.n }}</span></div>
+              <div style="height:6px;background:#1F1F1F"><div style="height:100%;width:{{ r.pct }};background:{{ r.color }}"></div></div>
+            </div>
+          </sc-for>
+          <sc-if value="{{ p.empty }}"><span style="font-size:14px;color:#8C8C8C">Nothing yet.</span></sc-if>
+        </div>
+      </section>
+    </sc-for>
+  </div>
+
+  <section style="display:flex;flex-direction:column;gap:14px">
+    <div style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:baseline;gap:8px 20px"><h2 style="margin:0;font-weight:700;font-size:clamp(24px,2.4vw,34px);letter-spacing:-.03em">Still needs details</h2><span style="font-family:'IBM Plex Mono',monospace;font-weight:700;font-size:12px;letter-spacing:.06em;color:#FFFFFF">{{ pendingLabel }}</span></div>
+    <sc-if value="{{ noPending }}"><span style="font-size:15px;color:#8C8C8C">Everyone's picks are in.</span></sc-if>
+    <div style="display:flex;flex-direction:column;border-top:2px solid #FFFFFF">
+      <sc-for list="{{ pending }}" as="g">
+        <div style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:8px 24px;padding:14px 0;border-bottom:1px solid #2A2A2A">
+          <div style="display:flex;flex-direction:column;gap:4px;min-width:0"><span style="font-weight:700;font-size:17px">{{ g.name }}</span><span style="font-size:13px;color:#BFBFBF">{{ g.detail }}</span></div>
+          <sc-if value="{{ g.hasLink }}"><a href="{{ g.link }}" target="_blank" rel="noopener" style="font-family:'IBM Plex Mono',monospace;font-weight:700;font-size:12px;letter-spacing:.04em;text-decoration:none">TEAM LINK ↗</a></sc-if>
+        </div>
+      </sc-for>
+    </div>
+  </section>
+
+  <section style="display:flex;flex-direction:column;gap:14px">
+    <div style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:12px 20px">
+      <h2 style="margin:0;font-weight:700;font-size:clamp(24px,2.4vw,34px);letter-spacing:-.03em">Attendees <span style="color:#8C8C8C">{{ attendeeCount }}</span></h2>
+      <input value="{{ q }}" onChange="{{ setQ }}" placeholder="Search name, email, company, order…" style="flex:0 1 360px;min-width:0;background:#141414;border:1px solid #343434;border-radius:0;padding:12px 14px;color:#FFFFFF;font-family:'IBM Plex Mono',monospace;font-size:14px;outline:none" style-focus="border-color:#20FC8F">
+    </div>
+    <div style="overflow-x:auto;border:1px solid #2A2A2A">
+      <table style="width:100%;min-width:1100px;border-collapse:collapse;font-size:14px;line-height:1.35">
+        <thead><tr style="text-align:left;font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.06em;color:#8C8C8C;background:#000000">
+          <th style="padding:12px 14px;font-weight:700">NAME</th><th style="padding:12px 14px;font-weight:700">TIER</th><th style="padding:12px 14px;font-weight:700">COMPANY · TITLE</th><th style="padding:12px 14px;font-weight:700">WINTER</th><th style="padding:12px 14px;font-weight:700">WORKSHOPS</th><th style="padding:12px 14px;font-weight:700">SHIRT</th><th style="padding:12px 14px;font-weight:700">KNOWS US</th><th style="padding:12px 14px;font-weight:700">ORDER</th>
+        </tr></thead>
+        <tbody>
+          <sc-for list="{{ rows }}" as="r">
+            <tr style="border-top:1px solid #1F1F1F;vertical-align:top">
+              <td style="padding:12px 14px"><div style="font-weight:700">{{ r.name }}</div><div style="color:#8C8C8C;font-size:13px">{{ r.email }}</div></td>
+              <td style="padding:12px 14px;font-family:'IBM Plex Mono',monospace;font-weight:700;font-size:12px;color:{{ r.tierColor }}">{{ r.tier }}</td>
+              <td style="padding:12px 14px;color:#E9E9E9">{{ r.company }}</td>
+              <td style="padding:12px 14px;color:#E9E9E9">{{ r.winter }}</td>
+              <td style="padding:12px 14px;color:#E9E9E9">{{ r.workshops }}</td>
+              <td style="padding:12px 14px;font-family:'IBM Plex Mono',monospace;font-size:12px">{{ r.shirt }}</td>
+              <td style="padding:12px 14px;color:#BFBFBF">{{ r.know }}</td>
+              <td style="padding:12px 14px;font-family:'IBM Plex Mono',monospace;font-size:12px;color:#BFBFBF">{{ r.order }}</td>
+            </tr>
+          </sc-for>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+</main>
+</sc-if>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;apiUrl&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;https://paramijam-checkout.pages.dev&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Data&quot;},&quot;demo&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:false,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Data&quot;,&quot;description&quot;:&quot;Show sample data (preview only)&quot;}}">
+const KEY = 'pj-admin-key';
+const TIERS = [['ga', 'General Admission'], ['preferred', 'Preferred'], ['vip', 'VIP'], ['black', 'Black']];
+const WS = { 'class-a': 'Class A ready submission package', evidence: 'GRC evidence script automation', gap: 'Gap assessments', rev5: 'FedRAMP Rev5 to 20x advisory', automate: 'Automate up to 90% of a Paramify instance', na: 'N/A' };
+const money = n => '$' + Math.round(n || 0).toLocaleString('en-US');
+const hasPicks = a => !!a.wType && Array.isArray(a.ws) && a.ws.length > 0;
+const winterText = a => !a.wType ? 'Pending' : a.wType === 'none' ? 'None' : a.wType === 'ski' ? (a.sport === 'board' ? 'Snowboard' : 'Ski') + (a.lesson === 'yes' ? ' + lesson' : '') + (a.equip === 'yes' ? ' + gear' : '') : 'Tue ' + a.tue + ' / Wed ' + a.wed;
+
+function demoData() {
+  const mk = (id, src, fill, total, at) => ({ id, source: src, fill, buyer: 0, total, paidTotal: total, paidAt: '2026-11-03T15:00:00Z', finishUrl: fill === 'later' ? 'https://www.paramijam.com/checkout?order=' + id + '&finish=1' : '', attendees: at });
+  const p = (first, last, tier, extra) => ({ first, last, tier, email: first.toLowerCase() + '@example.com', company: 'Acme Federal', title: 'ISSO', fit: 'mens', size: 'L', know: 'Current Customer', ws: ['rev5', 'gap'], wType: 'ski', sport: 'ski', lesson: 'no', equip: 'yes', ...extra });
+  return { sold: 71, cap: 120, left: 49, orders: [
+    mk('PJ-DEMO00001', 'drop1', 'all', 399, [p('Avery', 'Lin', 'ga', { wType: 'none', ws: ['na'] })]),
+    mk('PJ-DEMO00002', 'drop1', 'later', 1498, [p('Jordan', 'Lee', 'preferred', { fit: 'womens', size: 'M' }), p('Sam', 'Ortiz', 'preferred', { wType: '', ws: [], fit: '', size: '' }), p('Riley', 'Chen', 'vip', { wType: '', ws: [] })]),
+    mk('PJ-DEMO00003', 'advisory', 'all', 0, [p('Morgan', 'Shaw', 'preferred', { know: 'Partner (Club 7739 Member)', wType: 'other', tue: 'Bobsled', wed: 'Lodge', ws: ['class-a', 'automate'] })]),
+    mk('PJ-DEMO00004', 'drop1', 'all', 1199, [p('Casey', 'Ford', 'black', { ws: ['evidence'] })])
+  ] };
+}
+
+class Component extends DCLogic {
+  state = { key: '', keyIn: '', data: null, err: '', q: '', updated: null };
+  componentDidMount() {
+    let k = ''; try { k = localStorage.getItem(KEY) || ''; } catch (e) {}
+    if (this.props.demo) this.setState({ data: demoData(), updated: new Date() });
+    else if (k) this.setState({ key: k }, () => this.load());
+    this.t = setInterval(() => { if (this.state.key && !this.props.demo) this.load(); }, 30000);
+  }
+  componentWillUnmount() { clearInterval(this.t); }
+  api() { return ((this.props.apiUrl || '').trim() || 'https://paramijam-checkout.pages.dev').replace(/\/$/, ''); }
+  async load() {
+    try {
+      const r = await fetch(this.api() + '/admin/orders', { headers: { 'X-Admin-Key': this.state.key }, cache: 'no-store' });
+      if (r.status === 403) { try { localStorage.removeItem(KEY); } catch (e) {} return this.setState({ key: '', data: null, err: "That key didn't work." }); }
+      if (!r.ok) throw 0;
+      this.setState({ data: await r.json(), err: '', updated: new Date() });
+    } catch (e) { this.setState({ err: "Couldn't reach the checkout server. This dashboard only works on paramijam.com." }); }
+  }
+  renderVals() {
+    const st = this.state, demo = !!this.props.demo, d = st.data;
+    const authed = demo || (!!st.key && !!d);
+    const orders = d ? d.orders || [] : [];
+    const att = []; orders.forEach(o => o.attendees.forEach((a, i) => att.push({ ...a, o, i })));
+    const counted = orders.filter(o => o.source !== 'advisory').reduce((s, o) => s + o.attendees.length, 0);
+    const advTix = orders.filter(o => o.source === 'advisory').reduce((s, o) => s + o.attendees.length, 0);
+    const revenue = orders.reduce((s, o) => s + (o.paidTotal ?? o.total ?? 0), 0);
+    const pendingAll = att.filter(a => !hasPicks(a));
+    const bars = (pairs, color) => { const max = Math.max(1, ...pairs.map(p => p[1])); return pairs.map(([label, n]) => ({ label, n: String(n), pct: Math.round(n / max * 100) + '%', color: color || '#20FC8F' })); };
+    const tierPairs = TIERS.map(([id, l]) => [l, att.filter(a => a.tier === id).length]);
+    const gaW = att.filter(a => a.tier === 'ga' && (a.wType ? a.wType !== 'none' : a.addW)).length;
+    const gaK = att.filter(a => a.tier === 'ga' && (a.ws && a.ws.length ? a.ws.some(x => x !== 'na') : a.addK)).length;
+    const wsPairs = Object.keys(WS).map(id => [WS[id], att.filter(a => (a.ws || []).includes(id)).length]).filter(p => p[0] !== 'N/A' || p[1]);
+    const winterPairs = [['Ski', att.filter(a => a.wType === 'ski' && a.sport !== 'board').length], ['Snowboard', att.filter(a => a.wType === 'ski' && a.sport === 'board').length], ['Lesson requested', att.filter(a => a.wType === 'ski' && a.lesson === 'yes').length], ['Equipment needed', att.filter(a => a.wType === 'ski' && a.equip === 'yes').length]];
+    ['Bobsled', 'Snowmobile', 'Lodge'].forEach(x => { winterPairs.push(['Tue · ' + x, att.filter(a => a.tue === x).length]); winterPairs.push(['Wed · ' + x, att.filter(a => a.wed === x).length]); });
+    winterPairs.push(['No winter activities', att.filter(a => a.wType === 'none').length], ['Not picked yet', att.filter(a => !a.wType).length]);
+    const shirtMap = {}; att.forEach(a => { if (a.size) { const k = (a.fit === 'womens' ? "Women's " : "Men's ") + a.size; shirtMap[k] = (shirtMap[k] || 0) + 1; } });
+    const order = ['XS', 'S', 'M', 'L', 'XL', '2XL', '3XL'];
+    const shirtPairs = Object.entries(shirtMap).sort((a, b) => a[0].localeCompare(b[0].split(' ')[0]) || order.indexOf(a[0].split(' ')[1]) - order.indexOf(b[0].split(' ')[1]));
+    const knowMap = {}; att.forEach(a => { if (a.know) knowMap[a.know] = (knowMap[a.know] || 0) + 1; });
+    const fwMap = {}; att.forEach(a => (a.fw || []).forEach(f => { fwMap[f] = (fwMap[f] || 0) + 1; }));
+    const panels = [
+      { title: 'TICKETS BY TIER', note: att.length + ' TOTAL', rows: bars(tierPairs).concat(bars([['GA + winter add-on', gaW], ['GA + workshops add-on', gaK]], '#BFBFBF')) },
+      { title: 'WORKSHOP INTEREST', note: 'THURSDAY', rows: bars(wsPairs) },
+      { title: 'WINTER ACTIVITIES', note: 'TUE + WED', rows: bars(winterPairs.filter(p => p[1] > 0 || p[0] === 'Not picked yet')) },
+      { title: 'SHIRT SIZES', note: 'SWAG ORDER', rows: bars(shirtPairs) },
+      { title: 'HOW THEY KNOW PARAMIFY', note: '', rows: bars(Object.entries(knowMap).sort((a, b) => b[1] - a[1])) },
+      { title: 'FRAMEWORKS OF INTEREST', note: '', rows: bars(Object.entries(fwMap).sort((a, b) => b[1] - a[1])) }
+    ].map(p => ({ ...p, empty: !p.rows.length }));
+    const cap = d ? d.cap || 120 : 120, sold = d ? d.sold || 0 : 0, left = d ? (d.left ?? cap - sold) : cap;
+    const stats = [
+      { label: 'DROP 1 LEFT', value: String(left), sub: sold + ' of ' + cap + ' claimed (includes the starting count)', bg: left === 0 ? '#FF273B' : '#20FC8F', fg: '#000000', labelColor: '#000000', subColor: '#000000' },
+      { label: 'TICKETS SOLD HERE', value: String(counted), sub: 'Drop 1 tickets through this checkout', bg: '#0B0A0A', fg: '#FFFFFF', labelColor: '#BFBFBF', subColor: '#8C8C8C' },
+      { label: 'ADVISORY TICKETS', value: String(advTix), sub: "Don't count toward the 120", bg: '#0B0A0A', fg: '#FFFFFF', labelColor: '#BFBFBF', subColor: '#8C8C8C' },
+      { label: 'ORDERS', value: String(orders.length), sub: money(revenue) + ' collected', bg: '#0B0A0A', fg: '#FFFFFF', labelColor: '#BFBFBF', subColor: '#8C8C8C' },
+      { label: 'NEED DETAILS', value: String(pendingAll.length), sub: 'People without activity / workshop picks', bg: '#0B0A0A', fg: pendingAll.length ? '#FFFFFF' : '#20FC8F', labelColor: '#BFBFBF', subColor: '#8C8C8C' }
+    ];
+    const tn = id => (TIERS.find(t => t[0] === id) || [, id])[1];
+    const pending = pendingAll.map(a => { const b = a.o.attendees[a.o.buyer] || {}; return { name: ((a.first || '') + ' ' + (a.last || '')).trim() || 'Ticket ' + (a.i + 1), detail: [tn(a.tier), a.email, 'Order ' + a.o.id, 'Buyer: ' + ((b.first || '') + ' ' + (b.last || '')).trim() + ' ' + (b.email || '')].filter(Boolean).join(' · '), link: a.o.finishUrl || '', hasLink: !!a.o.finishUrl }; });
+    const q = st.q.trim().toLowerCase();
+    const rows = att.filter(a => !q || [a.first, a.last, a.email, a.company, a.o.id].join(' ').toLowerCase().includes(q)).map(a => ({
+      name: ((a.first || '') + ' ' + (a.last || '')).trim() || '—', email: a.email || '', tier: tn(a.tier).toUpperCase() + (a.o.source === 'advisory' ? ' · ADV' : ''), tierColor: a.tier === 'ga' ? '#BFBFBF' : '#20FC8F',
+      company: [a.company, a.title].filter(Boolean).join(' · ') || '—', winter: winterText(a), workshops: (a.ws || []).filter(x => x !== 'na').map(x => WS[x] || x).join(', ') || (a.ws && a.ws.includes('na') ? 'N/A' : 'Pending'),
+      shirt: a.size ? (a.fit === 'womens' ? 'W ' : 'M ') + a.size : '—', know: a.know || '—', order: a.o.id
+    }));
+    const upd = st.updated ? st.updated.toLocaleTimeString([], { hour: 'numeric', minute: '2-digit', second: '2-digit' }) : '';
+    return {
+      authed, needKey: !authed, canSignOut: authed && !demo,
+      statusLine: demo ? 'SAMPLE DATA' : authed ? 'LIVE · UPDATED ' + upd + ' · AUTO-REFRESH 30s' : 'SIGNED OUT',
+      keyIn: st.keyIn, setKeyIn: e => this.setState({ keyIn: e.target.value }),
+      signIn: e => { e.preventDefault(); const k = st.keyIn.trim(); if (!k) return; try { localStorage.setItem(KEY, k); } catch (x) {} this.setState({ key: k, keyIn: '', err: '' }, () => this.load()); },
+      signOut: () => { try { localStorage.removeItem(KEY); } catch (x) {} this.setState({ key: '', data: null }); },
+      refresh: () => demo ? null : this.load(),
+      csvHref: this.api() + '/export.csv?key=' + encodeURIComponent(st.key),
+      hasErr: !!st.err, err: st.err, stats, panels, pending, noPending: !pending.length, pendingLabel: pending.length + (pending.length === 1 ? ' PERSON' : ' PEOPLE'),
+      rows, attendeeCount: String(att.length), q: st.q, setQ: e => this.setState({ q: e.target.value })
+    };
+  }
+}
+</script>
+</body>
+</html>
