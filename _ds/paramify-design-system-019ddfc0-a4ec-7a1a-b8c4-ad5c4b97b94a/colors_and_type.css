@@ -1,0 +1,331 @@
+/* ──────────────────────────────────────────────────────────────────
+   Paramify Design System — Tokens + Base Styles
+   Source: Coast Guard Presentation reference deck (Figma).
+   ────────────────────────────────────────────────────────────────── */
+
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&family=Roboto:wght@400;500;700&display=swap");
+
+/* ── Open Sauce families — licensed brand faces ───────────────── */
+/* "Open Sauce Sans" — display face for the deck's hero title slide */
+@font-face { font-family: "Open Sauce Sans"; font-weight: 300; font-style: normal;
+  src: url("fonts/OpenSauceSans-Light.ttf") format("truetype"); font-display: swap; }
+@font-face { font-family: "Open Sauce Sans"; font-weight: 400; font-style: normal;
+  src: url("fonts/OpenSauceSans-Regular.ttf") format("truetype"); font-display: swap; }
+@font-face { font-family: "Open Sauce Sans"; font-weight: 500; font-style: normal;
+  src: url("fonts/OpenSauceSans-Medium.ttf") format("truetype"); font-display: swap; }
+@font-face { font-family: "Open Sauce Sans"; font-weight: 600; font-style: normal;
+  src: url("fonts/OpenSauceSans-SemiBold.ttf") format("truetype"); font-display: swap; }
+@font-face { font-family: "Open Sauce Sans"; font-weight: 700; font-style: normal;
+  src: url("fonts/OpenSauceSans-Bold.ttf") format("truetype"); font-display: swap; }
+@font-face { font-family: "Open Sauce Sans"; font-weight: 800; font-style: normal;
+  src: url("fonts/OpenSauceSans-ExtraBold.ttf") format("truetype"); font-display: swap; }
+@font-face { font-family: "Open Sauce Sans"; font-weight: 900; font-style: normal;
+  src: url("fonts/OpenSauceSans-Black.ttf") format("truetype"); font-display: swap; }
+
+/* "Open Sauce One" — slide-title face (H1 56px, feature labels 40px) */
+@font-face { font-family: "Open Sauce One"; font-weight: 300; font-style: normal;
+  src: url("fonts/OpenSauceOne-Light.ttf") format("truetype"); font-display: swap; }
+@font-face { font-family: "Open Sauce One"; font-weight: 400; font-style: normal;
+  src: url("fonts/OpenSauceOne-Regular.ttf") format("truetype"); font-display: swap; }
+@font-face { font-family: "Open Sauce One"; font-weight: 500; font-style: normal;
+  src: url("fonts/OpenSauceOne-Medium.ttf") format("truetype"); font-display: swap; }
+@font-face { font-family: "Open Sauce One"; font-weight: 600; font-style: normal;
+  src: url("fonts/OpenSauceOne-SemiBold.ttf") format("truetype"); font-display: swap; }
+@font-face { font-family: "Open Sauce One"; font-weight: 700; font-style: normal;
+  src: url("fonts/OpenSauceOne-Bold.ttf") format("truetype"); font-display: swap; }
+@font-face { font-family: "Open Sauce One"; font-weight: 800; font-style: normal;
+  src: url("fonts/OpenSauceOne-ExtraBold.ttf") format("truetype"); font-display: swap; }
+@font-face { font-family: "Open Sauce One"; font-weight: 900; font-style: normal;
+  src: url("fonts/OpenSauceOne-Black.ttf") format("truetype"); font-display: swap; }
+
+/* "Open Sauce Two" — also shipped; available if needed */
+@font-face { font-family: "Open Sauce Two"; font-weight: 400; font-style: normal;
+  src: url("fonts/OpenSauceTwo-Regular.ttf") format("truetype"); font-display: swap; }
+@font-face { font-family: "Open Sauce Two"; font-weight: 500; font-style: normal;
+  src: url("fonts/OpenSauceTwo-Medium.ttf") format("truetype"); font-display: swap; }
+@font-face { font-family: "Open Sauce Two"; font-weight: 600; font-style: normal;
+  src: url("fonts/OpenSauceTwo-SemiBold.ttf") format("truetype"); font-display: swap; }
+@font-face { font-family: "Open Sauce Two"; font-weight: 700; font-style: normal;
+  src: url("fonts/OpenSauceTwo-Bold.ttf") format("truetype"); font-display: swap; }
+
+:root {
+  /* ── Brand color ─────────────────────────────────────────────── */
+  --p-blue:           #1467FF;   /* "Sean Blue" — primary brand */
+  --p-blue-hover:     #0F55D9;
+  --p-blue-press:     #0A47B8;
+  --p-blue-soft:      #E7EFFF;   /* light tint for backgrounds */
+
+  /* ── Accent palette (used in product-UI fragments) ───────────── */
+  --p-cyan:           #64D2FF;
+  --p-teal:           #006690;
+  --p-green:          #20FC8F;
+  --p-green-deep:     #006734;
+  --p-violet:         #632CA6;
+  --p-red:            #FF4C4C;
+  --p-amber:          #F59E0B;
+
+  /* ── Neutrals (pure grayscale, no warm/cool cast) ────────────── */
+  --p-white:          #FFFFFF;
+  --p-grey-50:        #FAFAFA;
+  --p-grey-100:       #F6F6F6;
+  --p-grey-150:       #F0F0F0;
+  --p-grey-200:       #E9E9E9;
+  --p-grey-250:       #E2E2E2;
+  --p-grey-300:       #D9D9D9;
+  --p-grey-400:       #BFBFBF;
+  --p-grey-500:       #8C8C8C;
+  --p-grey-600:       #777777;
+  --p-grey-700:       #595959;
+  --p-grey-800:       #484848;
+  --p-grey-850:       #343434;
+  --p-grey-900:       #262626;
+  --p-grey-950:       #1F1F1F;
+  --p-grey-1000:      #141414;
+  --p-black:          #000000;
+
+  /* ── Semantic foreground ──────────────────────────────────────── */
+  --fg-1:             var(--p-black);     /* headlines, key labels */
+  --fg-2:             var(--p-grey-900);  /* primary text */
+  --fg-3:             var(--p-grey-600);  /* body / supporting */
+  --fg-4:             var(--p-grey-500);  /* muted */
+  --fg-on-blue:       var(--p-white);
+  --fg-link:          var(--p-blue);
+
+  /* ── Semantic background ──────────────────────────────────────── */
+  --bg-page:          var(--p-white);
+  --bg-panel:         var(--p-grey-100);  /* the screenshot-frame grey */
+  --bg-card:          #FCFCFC;
+  --bg-statement:     var(--p-blue);
+
+  /* ── Border ───────────────────────────────────────────────────── */
+  --border-hairline:  var(--p-grey-200);
+  --border-table:     var(--p-grey-150);
+  --border-strong:    var(--p-grey-300);
+
+  /* ── Type families ────────────────────────────────────────────── */
+  /* "Manrope" substitutes for Open Sauce Sans/One.
+     "Inter" is body. "IBM Plex Mono" is eyebrow.
+     "Roboto" is the in-app fragment font. */
+  --font-display:     "Open Sauce Sans", "Open Sauce One",
+                      ui-sans-serif, system-ui, sans-serif;
+  --font-title:       "Open Sauce One", "Open Sauce Sans", ui-sans-serif, system-ui, sans-serif;
+  --font-body:        "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-mono:        "IBM Plex Mono", ui-monospace, "SFMono-Regular", monospace;
+  --font-ui:          "Roboto", "Inter", ui-sans-serif, system-ui, sans-serif;
+
+  /* ── Type scale (matches deck values) ─────────────────────────── */
+  --fs-display:       128px;   /* Open Sauce Sans ExtraBold, hero */
+  --fs-title:         56px;    /* slide H1 — Open Sauce One Medium */
+  --fs-subtitle:      40px;    /* slide H2 — Inter Regular */
+  --fs-feature:       40px;    /* feature label — Open Sauce One Medium */
+  --fs-eyebrow:       40px;    /* IBM Plex Mono — title-slide tagline */
+  --fs-eyebrow-sm:    24px;    /* IBM Plex Mono — section eyebrow */
+  --fs-body-lg:       32px;
+  --fs-body:          24px;
+  --fs-body-sm:       20px;
+  --fs-caption:       16px;
+  --fs-micro:         12px;
+
+  --lh-display:       1.00;
+  --lh-title:         1.00;
+  --lh-feature:       1.10;
+  --lh-tight:         1.20;
+  --lh-body:          1.50;    /* 24px → 36px */
+  --lh-relaxed:       1.83;    /* 24px → 44px (deck uses both) */
+
+  --ls-display:       -0.010em;
+  --ls-eyebrow:        0.000em;
+
+  /* ── Spacing scale ───────────────────────────────────────────── */
+  --space-1:          4px;
+  --space-2:          8px;
+  --space-3:          12px;
+  --space-4:          16px;
+  --space-5:          20px;
+  --space-6:          24px;
+  --space-7:          30px;
+  --space-8:          36px;
+  --space-9:          40px;
+  --space-10:         48px;
+  --space-12:         64px;
+  --space-14:         80px;
+  --space-16:         104px;   /* slide vertical padding */
+  --space-18:         120px;   /* slide horizontal padding */
+
+  /* ── Radius ──────────────────────────────────────────────────── */
+  --r-sm:             8px;
+  --r-md:             12px;
+  --r-lg:             16px;
+  --r-screenshot:     9.7px;   /* preserved from deck UI panel */
+  --r-pill:           9999px;
+
+  /* ── Shadow ──────────────────────────────────────────────────── */
+  --shadow-card:      0 0 20px rgba(0, 0, 0, 0.20);
+  --shadow-pop:       0 4px 16px rgba(0, 0, 0, 0.15);
+  --shadow-soft:      0 1px 2px rgba(0, 0, 0, 0.06),
+                      0 4px 8px rgba(0, 0, 0, 0.04);
+
+  /* ── Slide canvas ────────────────────────────────────────────── */
+  --slide-w:          1920px;
+  --slide-h:          1080px;
+  --slide-padding-x:  120px;
+  --slide-padding-y:  104px;
+  --slide-content-w:  1680px;
+
+  /* ── Motion ──────────────────────────────────────────────────── */
+  --ease:             cubic-bezier(0.2, 0.8, 0.2, 1);
+  --t-fast:           120ms;
+  --t-base:           220ms;
+  --t-slow:           420ms;
+}
+
+/* ──────────────────────────────────────────────────────────────────
+   Base element styles — these read tokens above.
+   Use class `paramify` on a wrapper if you want these to apply
+   without globally hijacking page elements.
+   ────────────────────────────────────────────────────────────────── */
+
+.paramify, body.paramify {
+  font-family: var(--font-body);
+  font-size: var(--fs-body);
+  line-height: var(--lh-body);
+  color: var(--fg-3);
+  background: var(--bg-page);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+.paramify h1, .paramify .h1 {
+  font-family: var(--font-title);
+  font-weight: 500;
+  font-size: var(--fs-title);
+  line-height: var(--lh-title);
+  color: var(--fg-1);
+  letter-spacing: 0;
+  margin: 0;
+}
+
+.paramify h2, .paramify .h2 {
+  font-family: var(--font-body);
+  font-weight: 400;
+  font-size: var(--fs-subtitle);
+  line-height: var(--lh-title);
+  color: var(--p-grey-950);
+  margin: 0;
+}
+
+.paramify h3, .paramify .h3,
+.paramify .feature-label {
+  font-family: var(--font-title);
+  font-weight: 500;
+  font-size: var(--fs-feature);
+  line-height: var(--lh-feature);
+  color: var(--p-grey-1000);
+  margin: 0;
+}
+
+.paramify .eyebrow {
+  font-family: var(--font-mono);
+  font-weight: 400;
+  font-size: var(--fs-eyebrow-sm);
+  line-height: 1;
+  letter-spacing: var(--ls-eyebrow);
+  text-transform: uppercase;
+  color: currentColor;
+}
+
+.paramify .display {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: var(--fs-display);
+  line-height: var(--lh-display);
+  letter-spacing: var(--ls-display);
+  color: var(--fg-1);
+}
+
+.paramify p, .paramify .body {
+  font-family: var(--font-body);
+  font-size: var(--fs-body);
+  line-height: 36px;
+  color: var(--fg-3);
+  margin: 0;
+}
+
+.paramify .body-relaxed {
+  line-height: 44px;
+}
+
+.paramify code, .paramify .mono {
+  font-family: var(--font-mono);
+}
+
+.paramify a {
+  color: var(--fg-link);
+  text-decoration: none;
+  border-bottom: 1px solid currentColor;
+  transition: opacity var(--t-fast) var(--ease);
+}
+.paramify a:hover { opacity: 0.85; }
+
+/* ── Slide canvas wrapper ──────────────────────────────────────── */
+.paramify .slide {
+  position: relative;
+  width: var(--slide-w);
+  height: var(--slide-h);
+  background: var(--bg-page);
+  overflow: hidden;
+  font-family: var(--font-body);
+  color: var(--fg-3);
+}
+.paramify .slide.statement {
+  background: var(--bg-statement);
+  color: var(--fg-on-blue);
+}
+.paramify .slide.statement h1,
+.paramify .slide.statement .display,
+.paramify .slide.statement .eyebrow { color: var(--fg-on-blue); }
+
+/* ── Card ──────────────────────────────────────────────────────── */
+.paramify .card {
+  background: var(--bg-card);
+  border: 1.2px solid var(--border-hairline);
+  border-radius: var(--r-lg);
+  box-shadow: var(--shadow-card);
+}
+
+/* ── Button ────────────────────────────────────────────────────── */
+.paramify .btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  height: 44px;
+  padding: 0 20px;
+  border-radius: var(--r-md);
+  font-family: var(--font-body);
+  font-weight: 500;
+  font-size: 16px;
+  line-height: 1;
+  border: 1px solid transparent;
+  cursor: pointer;
+  transition: background var(--t-fast) var(--ease),
+              transform var(--t-fast) var(--ease),
+              opacity var(--t-fast) var(--ease);
+}
+.paramify .btn-primary {
+  background: var(--p-blue);
+  color: var(--p-white);
+}
+.paramify .btn-primary:hover  { background: var(--p-blue-hover); }
+.paramify .btn-primary:active { background: var(--p-blue-press); transform: translateY(1px); }
+.paramify .btn-secondary {
+  background: var(--p-white);
+  color: var(--fg-2);
+  border-color: var(--border-strong);
+}
+.paramify .btn-secondary:hover { background: var(--p-grey-50); }
+.paramify .btn-ghost {
+  background: transparent;
+  color: var(--fg-2);
+}
+.paramify .btn-ghost:hover { background: var(--p-grey-100); }

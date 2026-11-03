@@ -1,0 +1,543 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="/support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Paramijam 2027 · Checkout</title>
+<link rel="stylesheet" href="/_ds/paramify-design-system-019ddfc0-a4ec-7a1a-b8c4-ad5c4b97b94a/colors_and_type.css">
+<script src="/_ds/paramify-design-system-019ddfc0-a4ec-7a1a-b8c4-ad5c4b97b94a/_ds_bundle.js"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&display=swap">
+<style>
+html,body{margin:0;background:#0B0A0A}
+*{box-sizing:border-box}
+a{color:#20FC8F}
+a:hover{color:#FFFFFF}
+button{font:inherit}
+input::placeholder{color:#595959}
+::selection{background:#20FC8F;color:#000000}
+</style>
+</helmet>
+
+<div style="min-height:100vh;background:#0B0A0A;color:#FFFFFF;font-family:'Helvetica Neue',Helvetica,Arial,sans-serif">
+
+<header data-screen-label="01 Header" style="position:sticky;top:0;z-index:50;background:rgba(11,10,10,.94);border-bottom:1px solid #2A2A2A;backdrop-filter:blur(6px)">
+  <div style="max-width:1280px;margin:0 auto;padding:14px clamp(16px,3.4vw,40px);display:flex;align-items:center;justify-content:space-between;gap:12px 24px;flex-wrap:wrap">
+    <a href="{{ backHref }}" style="display:flex;align-items:center;gap:14px;text-decoration:none;color:#FFFFFF"><img src="/assets/logo-black-cropped.png" alt="Paramify" style="height:24px;width:auto;filter:brightness(0) invert(1)"><span style="font-family:'IBM Plex Mono',monospace;font-weight:700;font-size:12px;letter-spacing:.06em;color:#8C8C8C;white-space:nowrap">/ PARAMIJAM 2027</span></a>
+    <div style="display:flex;align-items:center;gap:14px;font-family:'IBM Plex Mono',monospace;font-weight:700;font-size:12px;letter-spacing:.06em">
+      <span style="display:flex;gap:2px"><sc-for list="{{ meter }}" as="m" hint-placeholder-count="6"><span style="width:14px;height:6px;background:{{ m.bg }}"></span></sc-for></span>
+      <span style="color:#BFBFBF;white-space:nowrap">{{ stepLabel }}</span>
+    </div>
+  </div>
+</header>
+
+<main data-screen-label="02 Checkout" style="max-width:1280px;margin:0 auto;padding:clamp(28px,4vw,64px) clamp(16px,3.4vw,40px) clamp(64px,8vw,120px);display:flex;flex-wrap:wrap;gap:clamp(28px,3.4vw,56px);align-items:flex-start">
+
+<section style="flex:1 1 560px;min-width:0;display:flex;flex-direction:column;gap:clamp(24px,3vw,40px)">
+  <div style="display:flex;flex-direction:column;gap:14px">
+    <span style="font-family:'IBM Plex Mono',monospace;font-weight:700;font-size:13px;letter-spacing:.06em;color:#20FC8F">&gt; {{ eyebrow }}</span>
+    <h1 style="margin:0;font-weight:700;font-size:clamp(36px,4.4vw,64px);line-height:.98;letter-spacing:-.04em;text-wrap:balance">{{ title }}</h1>
+    <sc-if value="{{ hasSub }}" hint-placeholder-val="{{ true }}"><p style="margin:0;font-weight:700;font-size:clamp(17px,1.4vw,20px);line-height:1.3;color:rgba(255,255,255,.7);max-width:58ch;text-wrap:pretty">{{ sub }}</p></sc-if>
+    <sc-if value="{{ hasTagLine }}"><span style="align-self:flex-start;font-family:'IBM Plex Mono',monospace;font-weight:700;font-size:12px;letter-spacing:.06em;padding:6px 10px;border:1.5px dashed {{ tagColor }};color:{{ tagColor }}">{{ tagLine }}</span></sc-if>
+  </div>
+
+  <sc-if value="{{ isTickets }}" hint-placeholder-val="{{ true }}">
+    <div style="display:flex;flex-direction:column;gap:14px">
+      <sc-if value="{{ advisory }}">
+        <div style="background:#20FC8F;color:#000000;padding:18px 20px;display:flex;flex-direction:column;gap:6px">
+          <span style="font-family:'IBM Plex Mono',monospace;font-weight:700;font-size:12px;letter-spacing:.06em">ADVISORY BOARD + CLUB 7739</span>
+          <span style="font-weight:700;font-size:17px;line-height:1.3">Your Preferred ticket is on us. Add it below, then enter your invite code on the review step. Extra tickets for your team are billed as usual.</span>
+        </div>
+      </sc-if>
+      <sc-for list="{{ tiers }}" as="t" hint-placeholder-count="4">
+        <div style="position:relative;border:1px solid {{ t.bd }};background:{{ t.bg }};display:flex;flex-wrap:wrap;gap:16px 24px;padding:clamp(18px,2vw,24px);align-items:center">
+          <div style="flex:1 1 300px;min-width:0;display:flex;flex-direction:column;gap:10px">
+            <div style="display:flex;flex-wrap:wrap;align-items:baseline;gap:6px 14px"><span style="font-family:'IBM Plex Mono',monospace;font-weight:700;font-size:13px;letter-spacing:.06em;color:{{ t.nameColor }}">{{ t.nameUpper }}</span><span style="font-weight:700;font-size:18px;letter-spacing:-.02em">{{ t.tag }}</span></div>
+            <ul style="margin:0;padding:0;list-style:none;display:flex;flex-wrap:wrap;gap:6px 18px;font-size:14px;line-height:1.35;color:rgba(255,255,255,.72)"><sc-for list="{{ t.bullets }}" as="b"><li style="display:flex;gap:8px"><span style="color:#20FC8F;font-family:'IBM Plex Mono',monospace">&gt;</span><span>{{ b }}</span></li></sc-for></ul>
+          </div>
+          <div style="display:flex;align-items:center;gap:20px">
+            <span style="font-family:'IBM Plex Mono',monospace;font-weight:700;font-size:30px;letter-spacing:-.04em">{{ t.priceLabel }}</span>
+            <div style="display:flex;border:1px solid #343434;background:#000000">
+              <button onClick="{{ t.dec }}" aria-label="Remove a ticket" style="width:48px;height:48px;background:transparent;border:0;color:#FFFFFF;cursor:pointer;font-family:'IBM Plex Mono',monospace;font-size:20px" style-hover="background:#1A1A1A">−</button>
+              <span style="width:52px;display:flex;align-items:center;justify-content:center;font-family:'IBM Plex Mono',monospace;font-weight:700;font-size:18px;border-left:1px solid #343434;border-right:1px solid #343434;color:{{ t.qtyColor }}">{{ t.qty }}</span>
+              <button onClick="{{ t.inc }}" aria-label="Add a ticket" style="width:48px;height:48px;background:transparent;border:0;color:#20FC8F;cursor:pointer;font-family:'IBM Plex Mono',monospace;font-size:20px" style-hover="background:#1A1A1A">+</button>
+            </div>
+          </div>
+        </div>
+      </sc-for>
+      <span style="font-family:'IBM Plex Mono',monospace;font-weight:700;font-size:12px;line-height:1.5;letter-spacing:.04em;color:#8C8C8C">&gt; DISCOUNT CODES ARE APPLIED ON THE REVIEW STEP · MAX 10 TICKETS PER ORDER</span>
+    </div>
+  </sc-if>
+
+  <sc-if value="{{ isMode }}">
+    <div style="display:flex;flex-direction:column;gap:24px">
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,260px),1fr));gap:14px">
+        <sc-for list="{{ modeOpts }}" as="o" hint-placeholder-count="2">
+          <button onClick="{{ o.pick }}" style="text-align:left;cursor:pointer;background:{{ o.bg }};color:{{ o.fg }};border:2px solid {{ o.bd }};padding:clamp(20px,2.2vw,28px);display:flex;flex-direction:column;gap:14px;min-height:210px">
+            <span style="font-family:'IBM Plex Mono',monospace;font-weight:700;font-size:12px;letter-spacing:.06em">{{ o.tag }}</span>
+            <span style="font-weight:700;font-size:clamp(22px,2vw,28px);line-height:1.05;letter-spacing:-.03em">{{ o.label }}</span>
+            <span style="margin-top:auto;font-size:15px;line-height:1.4;color:{{ o.subColor }}">{{ o.sub }}</span>
+          </button>
+        </sc-for>
+      </div>
+      <sc-if value="{{ showBuyerPick }}">
+        <div style="display:flex;flex-direction:column;gap:12px">
+          <span style="font-family:'IBM Plex Mono',monospace;font-weight:700;font-size:12px;letter-spacing:.08em;color:#BFBFBF">WHICH TICKET IS YOURS?</span>
+          <div style="display:flex;flex-wrap:wrap;gap:8px"><sc-for list="{{ buyerOpts }}" as="o"><button onClick="{{ o.pick }}" style="cursor:pointer;padding:12px 18px;font-family:'IBM Plex Mono',monospace;font-weight:700;font-size:13px;letter-spacing:.04em;border:1px solid {{ o.bd }};background:{{ o.bg }};color:{{ o.fg }}">{{ o.label }}</button></sc-for></div>
+        </div>
+      </sc-if>
+    </div>
+  </sc-if>
+
+  <sc-if value="{{ isInfo }}">
+    <div style="display:flex;flex-direction:column;gap:28px">
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,240px),1fr));gap:18px 16px">
+      <sc-for list="{{ fields }}" as="f" hint-placeholder-count="8">
+        <label style="display:flex;flex-direction:column;gap:8px;grid-column:{{ f.span }}"><span style="font-family:'IBM Plex Mono',monospace;font-weight:700;font-size:12px;letter-spacing:.08em;color:#BFBFBF">{{ f.label }}</span><input type="{{ f.type }}" value="{{ f.val }}" onChange="{{ f.on }}" placeholder="{{ f.ph }}" autoComplete="{{ f.ac }}" style="width:100%;background:#141414;border:1px solid #343434;border-radius:0;padding:15px 14px;color:#FFFFFF;font-family:'IBM Plex Mono',monospace;font-size:15px;outline:none" style-focus="border-color:#20FC8F"></label>
+      </sc-for>
+    </div>
+    <div style="display:flex;flex-direction:column;border-top:2px solid #FFFFFF">
+      <sc-for list="{{ infoGroups }}" as="g" hint-placeholder-count="4">
+        <div style="display:flex;flex-direction:column;gap:12px;padding:18px 0;border-bottom:1px solid #2A2A2A">
+          <div style="display:flex;flex-wrap:wrap;justify-content:space-between;gap:4px 16px;align-items:baseline"><span style="font-weight:700;font-size:18px;letter-spacing:-.02em">{{ g.q }}</span><span style="font-family:'IBM Plex Mono',monospace;font-weight:700;font-size:11px;letter-spacing:.06em;color:#8C8C8C">{{ g.hint }}</span></div>
+          <div style="display:flex;flex-wrap:wrap;gap:8px"><sc-for list="{{ g.opts }}" as="o"><button onClick="{{ o.pick }}" style="cursor:pointer;padding:12px 16px;font-family:'IBM Plex Mono',monospace;font-weight:700;font-size:13px;letter-spacing:.04em;border:1px solid {{ o.bd }};background:{{ o.bg }};color:{{ o.fg }}">{{ o.label }}</button></sc-for></div>
+        </div>
+      </sc-for>
+      <sc-if value="{{ showFwOther }}"><label style="display:flex;flex-direction:column;gap:8px;padding:18px 0;border-bottom:1px solid #2A2A2A"><span style="font-family:'IBM Plex Mono',monospace;font-weight:700;font-size:12px;letter-spacing:.08em;color:#BFBFBF">OTHER FRAMEWORK(S)</span><input type="text" value="{{ fwOther }}" onChange="{{ setFwOther }}" placeholder="e.g. SOC 2, ISO 27001, StateRAMP" style="width:100%;background:#141414;border:1px solid #343434;border-radius:0;padding:15px 14px;color:#FFFFFF;font-family:'IBM Plex Mono',monospace;font-size:15px;outline:none" style-focus="border-color:#20FC8F"></label></sc-if>
+    </div>
+    </div>
+  </sc-if>
+
+  <sc-if value="{{ isWinter }}">
+    <div style="display:flex;flex-direction:column;gap:20px">
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,210px),1fr));gap:14px">
+        <sc-for list="{{ wOpts }}" as="o" hint-placeholder-count="3">
+          <button onClick="{{ o.pick }}" style="text-align:left;cursor:pointer;background:{{ o.bg }};color:#FFFFFF;border:2px solid {{ o.bd }};padding:20px;display:flex;flex-direction:column;gap:12px;min-height:190px">
+            <span style="width:100%;display:flex;justify-content:space-between;gap:12px;font-family:'IBM Plex Mono',monospace;font-weight:700;font-size:12px;letter-spacing:.06em"><span style="color:#8C8C8C">{{ o.tag }}</span><span style="color:{{ o.priceColor }}">{{ o.price }}</span></span>
+            <span style="font-weight:700;font-size:22px;line-height:1.05;letter-spacing:-.03em">{{ o.label }}</span>
+            <span style="margin-top:auto;font-size:14px;line-height:1.4;color:#BFBFBF">{{ o.sub }}</span>
+          </button>
+        </sc-for>
+      </div>
+      <sc-if value="{{ hasRows }}">
+        <div style="display:flex;flex-direction:column;border-top:2px solid #FFFFFF">
+          <sc-for list="{{ qRows }}" as="r">
+            <div style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:12px 24px;padding:18px 0;border-bottom:1px solid #2A2A2A">
+              <span style="font-weight:700;font-size:19px;letter-spacing:-.02em">{{ r.q }}</span>
+              <div style="display:flex;flex-wrap:wrap;gap:8px"><sc-for list="{{ r.opts }}" as="o"><button onClick="{{ o.pick }}" style="cursor:pointer;padding:12px 18px;font-family:'IBM Plex Mono',monospace;font-weight:700;font-size:13px;letter-spacing:.04em;border:1px solid {{ o.bd }};background:{{ o.bg }};color:{{ o.fg }}">{{ o.label }}</button></sc-for></div>
+            </div>
+          </sc-for>
+        </div>
+      </sc-if>
+    </div>
+  </sc-if>
+
+  <sc-if value="{{ isWorkshops }}">
+    <div style="display:flex;flex-direction:column;gap:8px">
+      <sc-for list="{{ wsOpts }}" as="o" hint-placeholder-count="6">
+        <button onClick="{{ o.pick }}" style="text-align:left;cursor:pointer;display:flex;align-items:center;gap:16px;padding:18px 20px;background:{{ o.bg }};border:1px solid {{ o.bd }};color:#FFFFFF">
+          <span style="width:24px;height:24px;flex:none;border:2px solid {{ o.boxBd }};background:{{ o.boxBg }};color:#000000;display:flex;align-items:center;justify-content:center;font-family:'IBM Plex Mono',monospace;font-weight:700;font-size:14px">{{ o.mark }}</span>
+          <span style="font-family:'IBM Plex Mono',monospace;font-weight:700;font-size:12px;color:#8C8C8C">{{ o.num }}</span>
+          <span style="font-weight:700;font-size:18px;line-height:1.2;letter-spacing:-.01em">{{ o.label }}</span>
+        </button>
+      </sc-for>
+    </div>
+  </sc-if>
+
+  <sc-if value="{{ isGuests }}">
+    <div style="display:flex;flex-direction:column;gap:14px">
+      <sc-for list="{{ guests }}" as="g" hint-placeholder-count="2">
+        <div style="border:1px solid #343434;background:#0B0A0A">
+          <div style="display:flex;justify-content:space-between;gap:12px;padding:14px 20px;border-bottom:1px solid #2A2A2A;font-family:'IBM Plex Mono',monospace;font-weight:700;font-size:12px;letter-spacing:.06em"><span>{{ g.label }}</span><span style="color:#8C8C8C">{{ g.tierName }}</span></div>
+          <div style="padding:20px;display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,200px),1fr));gap:14px">
+            <sc-for list="{{ g.fields }}" as="f">
+              <label style="display:flex;flex-direction:column;gap:8px"><span style="font-family:'IBM Plex Mono',monospace;font-weight:700;font-size:12px;letter-spacing:.08em;color:#BFBFBF">{{ f.label }}</span><input type="{{ f.type }}" value="{{ f.val }}" onChange="{{ f.on }}" style="width:100%;background:#141414;border:1px solid #343434;border-radius:0;padding:15px 14px;color:#FFFFFF;font-family:'IBM Plex Mono',monospace;font-size:15px;outline:none" style-focus="border-color:#20FC8F"></label>
+            </sc-for>
+          </div>
+          <sc-if value="{{ g.isGa }}">
+            <div style="padding:0 20px 20px;display:flex;flex-wrap:wrap;align-items:center;gap:8px 12px"><span style="font-family:'IBM Plex Mono',monospace;font-weight:700;font-size:12px;letter-spacing:.06em;color:#8C8C8C">GA ADD-ONS:</span><sc-for list="{{ g.addons }}" as="o"><button onClick="{{ o.pick }}" style="cursor:pointer;padding:10px 14px;font-family:'IBM Plex Mono',monospace;font-weight:700;font-size:12px;letter-spacing:.04em;border:1px solid {{ o.bd }};background:{{ o.bg }};color:{{ o.fg }}">{{ o.label }}</button></sc-for></div>
+          </sc-if>
+        </div>
+      </sc-for>
+    </div>
+  </sc-if>
+
+  <sc-if value="{{ isReview }}">
+    <div style="display:flex;flex-direction:column;gap:28px">
+      <div style="display:flex;flex-direction:column;border-top:2px solid #FFFFFF">
+        <sc-for list="{{ reviewRows }}" as="r" hint-placeholder-count="2">
+          <div style="display:grid;grid-template-columns:minmax(0,1fr) auto;gap:6px 20px;padding:18px 0;border-bottom:1px solid #2A2A2A">
+            <div style="display:flex;flex-direction:column;gap:6px;min-width:0"><span style="font-family:'IBM Plex Mono',monospace;font-weight:700;font-size:11px;letter-spacing:.06em;color:#8C8C8C">{{ r.label }}</span><span style="font-weight:700;font-size:20px;letter-spacing:-.02em">{{ r.name }}</span><span style="font-size:14px;line-height:1.45;color:#BFBFBF">{{ r.detail }}</span></div>
+            <button onClick="{{ r.edit }}" style="align-self:start;background:transparent;border:0;color:#20FC8F;font-family:'IBM Plex Mono',monospace;font-weight:700;font-size:12px;letter-spacing:.06em;cursor:pointer;padding:4px 0" style-hover="color:#FFFFFF">EDIT</button>
+          </div>
+        </sc-for>
+      </div>
+      <form onSubmit="{{ applyCode }}" style="display:flex;flex-direction:column;gap:10px">
+        <span style="font-family:'IBM Plex Mono',monospace;font-weight:700;font-size:12px;letter-spacing:.08em;color:#BFBFBF">DISCOUNT OR INVITE CODE</span>
+        <div style="display:flex;flex-wrap:wrap;gap:8px">
+          <input value="{{ codeIn }}" onChange="{{ setCode }}" placeholder="e.g. kennyeatworld" autoComplete="off" style="flex:1 1 220px;min-width:0;background:#141414;border:1px dashed #595959;border-radius:0;padding:15px 14px;color:#FFFFFF;font-family:'IBM Plex Mono',monospace;font-size:15px;outline:none" style-focus="border-color:#20FC8F;border-style:solid">
+          <button type="submit" style="cursor:pointer;padding:15px 22px;background:transparent;border:1px solid rgba(255,255,255,.4);color:#FFFFFF;font-family:'IBM Plex Mono',monospace;font-weight:700;font-size:14px;letter-spacing:.04em" style-hover="border-color:#20FC8F;color:#20FC8F">APPLY</button>
+        </div>
+        <sc-if value="{{ hasCodeMsg }}"><span style="font-family:'IBM Plex Mono',monospace;font-weight:700;font-size:12px;letter-spacing:.04em;color:{{ codeMsgColor }}">&gt; {{ codeMsg }}</span></sc-if>
+      </form>
+    </div>
+  </sc-if>
+
+  <sc-if value="{{ isDone }}">
+    <div style="display:flex;flex-direction:column;border:1px solid #343434">
+      <sc-for list="{{ nextSteps }}" as="s" hint-placeholder-count="2">
+        <div style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:16px 28px;padding:clamp(20px,2.2vw,28px);border-bottom:1px solid #2A2A2A">
+          <div style="flex:1 1 320px;min-width:0;display:flex;flex-direction:column;gap:8px"><span style="font-family:'IBM Plex Mono',monospace;font-weight:700;font-size:12px;letter-spacing:.06em;color:#20FC8F">{{ s.num }}</span><span style="font-weight:700;font-size:22px;line-height:1.1;letter-spacing:-.02em">{{ s.title }}</span><span style="font-size:15px;line-height:1.4;color:#BFBFBF">{{ s.sub }}</span>
+            <sc-if value="{{ s.isCopy }}"><div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:6px"><input readOnly="{{ true }}" value="{{ s.url }}" onFocus="{{ s.select }}" aria-label="Team details link" style="flex:1 1 260px;min-width:0;background:#141414;border:1px dashed #595959;border-radius:0;padding:13px 14px;color:#FFFFFF;font-family:'IBM Plex Mono',monospace;font-size:13px;outline:none" style-focus="border-color:#20FC8F;border-style:solid"><button onClick="{{ s.copy }}" style="cursor:pointer;padding:13px 18px;background:transparent;border:1px solid rgba(255,255,255,.4);color:#FFFFFF;font-family:'IBM Plex Mono',monospace;font-weight:700;font-size:13px;letter-spacing:.04em;white-space:nowrap" style-hover="border-color:#20FC8F;color:#20FC8F">{{ s.copyLabel }}</button></div></sc-if></div>
+          <sc-if value="{{ s.isLink }}"><a href="{{ s.href }}" target="{{ s.target }}" rel="noopener" style="flex:none;white-space:nowrap;display:flex;align-items:center;gap:10px;background:#20FC8F;color:#000000;text-decoration:none;padding:16px 22px;font-family:'IBM Plex Mono',monospace;font-weight:700;font-size:14px;letter-spacing:.04em" style-hover="background:#FFFFFF;color:#000000"><span>&gt;</span><span>{{ s.cta }}</span></a></sc-if>
+          <sc-if value="{{ s.isBtn }}"><button onClick="{{ s.on }}" style="flex:none;white-space:nowrap;cursor:pointer;display:flex;align-items:center;gap:10px;background:#20FC8F;color:#000000;border:0;padding:16px 22px;font-family:'IBM Plex Mono',monospace;font-weight:700;font-size:14px;letter-spacing:.04em" style-hover="background:#FFFFFF"><span>&gt;</span><span>{{ s.cta }}</span></button></sc-if>
+        </div>
+      </sc-for>
+    </div>
+  </sc-if>
+
+  <sc-if value="{{ showNav }}" hint-placeholder-val="{{ true }}">
+    <div style="display:flex;flex-direction:column;gap:12px;padding-top:20px;border-top:1px solid #2A2A2A">
+      <sc-if value="{{ hasErr }}"><span style="font-family:'IBM Plex Mono',monospace;font-weight:700;font-size:13px;letter-spacing:.02em;color:#FF273B">&gt; {{ err }}</span></sc-if>
+      <div style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:12px">
+        <sc-if value="{{ canBack }}"><button onClick="{{ back }}" style="cursor:pointer;padding:18px 22px;background:transparent;border:1px solid rgba(255,255,255,.4);color:#FFFFFF;font-family:'IBM Plex Mono',monospace;font-weight:700;font-size:14px;letter-spacing:.04em" style-hover="border-color:#20FC8F;color:#20FC8F">← BACK</button></sc-if>
+        <sc-if value="{{ noBack }}" hint-placeholder-val="{{ true }}"><a href="{{ backHref }}" style="padding:18px 0;color:#BFBFBF;text-decoration:none;font-family:'IBM Plex Mono',monospace;font-weight:700;font-size:13px;letter-spacing:.04em" style-hover="color:#20FC8F">← BACK TO PARAMIJAM</a></sc-if>
+        <button onClick="{{ next }}" disabled="{{ busy }}" style="margin-left:auto;cursor:pointer;display:flex;align-items:center;gap:12px;background:#20FC8F;color:#000000;border:0;padding:18px 26px;font-family:'IBM Plex Mono',monospace;font-weight:700;font-size:15px;letter-spacing:.04em" style-hover="background:#FFFFFF"><span>&gt;</span><span>{{ nextLabel }}</span></button>
+      </div>
+      <sc-if value="{{ isReview }}"><span style="font-family:'IBM Plex Mono',monospace;font-weight:700;font-size:11px;line-height:1.5;letter-spacing:.04em;color:#8C8C8C;text-align:right">PAYMENT IS HANDLED BY STRIPE. PARAMIFY NEVER SEES OR STORES YOUR CARD.</span></sc-if>
+    </div>
+  </sc-if>
+</section>
+
+<sc-if value="{{ showSummary }}" hint-placeholder-val="{{ true }}">
+<aside data-screen-label="03 Order summary" style="flex:1 1 320px;max-width:440px;min-width:0;position:sticky;top:88px;border:1px solid #343434;background:#000000;display:flex;flex-direction:column">
+  <div style="padding:18px 20px;border-bottom:1px solid #2A2A2A;display:flex;justify-content:space-between;flex-wrap:wrap;gap:6px 12px;font-family:'IBM Plex Mono',monospace;font-weight:700;font-size:12px;letter-spacing:.06em"><span>{{ summaryTitle }}</span><span style="color:#8C8C8C">PARK CITY · JAN 26–28, 2027</span></div>
+  <sc-if value="{{ emptyCart }}"><p style="margin:0;padding:20px;font-size:15px;line-height:1.4;color:#8C8C8C">No tickets yet. Pick a tier to get started.</p></sc-if>
+  <div style="padding:6px 20px;display:flex;flex-direction:column">
+    <sc-for list="{{ lines }}" as="l"><div style="display:flex;justify-content:space-between;gap:16px;padding:12px 0;font-size:15px;line-height:1.3;border-bottom:1px solid #1F1F1F;color:{{ l.color }}"><span>{{ l.label }}</span><span style="font-family:'IBM Plex Mono',monospace;font-weight:700;white-space:nowrap">{{ l.amt }}</span></div></sc-for>
+  </div>
+  <div style="padding:18px 20px;display:flex;justify-content:space-between;align-items:baseline;gap:16px"><span style="font-family:'IBM Plex Mono',monospace;font-weight:700;font-size:12px;letter-spacing:.06em;color:#BFBFBF">{{ totalCaption }}</span><span style="font-family:'IBM Plex Mono',monospace;font-weight:700;font-size:36px;letter-spacing:-.04em">{{ totalLabel }}</span></div>
+  <sc-if value="{{ hasLeft }}"><div style="padding:12px 20px;border-top:1px solid #2A2A2A;display:flex;align-items:center;gap:10px;font-family:'IBM Plex Mono',monospace;font-weight:700;font-size:11px;letter-spacing:.06em;color:#20FC8F"><span style="width:8px;height:8px;background:#20FC8F"></span>{{ leftLabel }}</div></sc-if>
+</aside>
+</sc-if>
+
+</main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;apiUrl&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Stripe&quot;,&quot;description&quot;:&quot;Checkout worker URL. Blank = demo mode (no real charge; try codes kennyeatworld or cab2027).&quot;},&quot;siteUrl&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;https://www.paramijam.com/&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Links&quot;},&quot;advisoryUrl&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;https://www.paramijam.com/advisory&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Links&quot;},&quot;lodgingUrl&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;https://book.passkey.com/event/51361247/owner/50282924/home&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Links&quot;},&quot;advisoryLodgingUrl&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;https://book.passkey.com/event/51368377/owner/50282924/home&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Links&quot;}}">
+const TIERS = [
+  { id: 'ga', name: 'General Admission', price: 399, tag: 'Get in the room.', bullets: ['Tue–Wed, 2 days', 'Keynotes, panels, breakouts', 'Jimmy Eat World concert', 'Winter activities + workshops: $150 add-ons'] },
+  { id: 'preferred', name: 'Preferred', price: 599, tag: 'The full Paramijam.', bullets: ['Tue–Thu, 3 days', '2 days of winter activities included', 'Thursday workshops included'], pop: true },
+  { id: 'vip', name: 'VIP', price: 849, tag: 'The best seat in the house.', bullets: ['Everything in Preferred', 'Reserved main-stage seating', 'VIP Experience Lounge'] },
+  { id: 'black', name: 'Black', price: 1199, tag: 'Door to door.', bullets: ['Everything in VIP', 'VIP access at the concert', 'SLC airport transport'] }
+];
+const WS = [
+  { id: 'class-a', label: 'Leave with a Class A ready submission package' },
+  { id: 'evidence', label: 'GRC evidence script automation' },
+  { id: 'gap', label: 'Gap assessments' },
+  { id: 'rev5', label: 'FedRAMP Rev5 to 20x advisory' },
+  { id: 'automate', label: 'For customers: automate up to 90% of any Paramify instance' },
+  { id: 'na', label: 'N/A, not attending workshops' }
+];
+const ACTS = ['Bobsled', 'Snowmobile', 'Lodge'];
+const FITS = [['mens', "Men's"], ['womens', "Women's"]];
+const SIZES = ['XS', 'S', 'M', 'L', 'XL', '2XL', '3XL'];
+const KNOW = ['Partner (Club 7739 Member)', 'Evaluating Paramify', 'Current Customer', 'Previous Customer', 'Brand Ambassador', 'None. Paramify is new to me!'];
+const FW = ['FedRAMP Rev5', 'FedRAMP 20x', 'FISMA', 'DoD ATO', 'CMMC', 'Other'];
+const ADDON = 150, MAXQ = 10, KEY = 'pj-checkout-v1';
+const EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+const DEMO = { kennyeatworld: { label: 'Drop 1: $300 off every ticket', perTicket: 300 }, cab2027: { label: 'Advisory + partner pass: 1 Preferred ticket on us', freeTickets: 1, tiers: ['preferred'] } };
+const money = n => (n < 0 ? '-' : '') + '$' + Math.abs(Math.round(n)).toLocaleString('en-US');
+const blank = t => ({ tier: t, first: '', last: '', email: '', title: '', company: '', phone: '', diet: '', access: '', fit: '', size: '', know: '', fw: [], fwOther: '', wType: '', sport: '', lesson: '', equip: '', tue: '', wed: '', ws: [], addW: false, addK: false });
+const tierOf = id => TIERS.find(t => t.id === id);
+const chip = (on, label, pick) => ({ label, pick, bg: on ? '#20FC8F' : 'transparent', fg: on ? '#000000' : '#FFFFFF', bd: on ? '#20FC8F' : '#343434' });
+
+class Component extends DCLogic {
+  state = { qty: { ga: 0, preferred: 0, vip: 0, black: 0 }, att: [], fill: '', buyer: 0, pos: 0, codeIn: '', disc: null, codeMsg: '', codeOk: false, err: '', busy: false, order: null, finish: false, finished: false, advisory: false, left: null };
+
+  componentDidMount() {
+    const q = new URLSearchParams(location.search), s = {};
+    if (q.get('from') === 'advisory') s.advisory = true;
+    const oid = q.get('order');
+    if (!oid) { try { const v = JSON.parse(localStorage.getItem(KEY) || 'null'); if (v && Array.isArray(v.att)) Object.assign(s, { qty: v.qty, att: v.att, fill: v.fill || '', buyer: v.buyer || 0, pos: v.pos || 0, codeIn: v.codeIn || '' }); } catch (e) {} }
+    const t = q.get('tier') || (s.advisory ? 'preferred' : null);
+    if (!oid && tierOf(t) && !(s.att && s.att.length)) { s.qty = { ga: 0, preferred: 0, vip: 0, black: 0, [t]: 1 }; s.att = [blank(t)]; s.pos = 0; }
+    if (q.get('code')) s.codeIn = q.get('code');
+    this.setState(s, () => { if (oid) this.loadOrder(oid, q.get('finish') === '1', 0); });
+    this.pollLeft(); this.pl = setInterval(() => this.pollLeft(), 30000);
+  }
+  componentWillUnmount() { clearInterval(this.pl); clearTimeout(this.ot); }
+  componentDidUpdate() {
+    if (this.state.order) return;
+    try { const { qty, att, fill, buyer, pos, codeIn } = this.state; localStorage.setItem(KEY, JSON.stringify({ qty, att, fill, buyer, pos, codeIn })); } catch (e) {}
+  }
+  api() { return (this.props.apiUrl || '').trim().replace(/\/$/, ''); }
+  async pollLeft() {
+    const a = this.api(); if (!a) return;
+    try { const j = await (await fetch(a + '/count')).json(); if (typeof j.left === 'number') this.setState({ left: j.left }); } catch (e) {}
+  }
+  async loadOrder(id, finish, tries) {
+    const a = this.api(); if (!a) return;
+    try {
+      const r = await fetch(a + '/order/' + encodeURIComponent(id)); if (!r.ok) throw 0;
+      const o = await r.json();
+      try { localStorage.removeItem(KEY); } catch (e) {}
+      this.setState({ order: o, att: o.attendees, qty: o.qty, fill: o.fill, buyer: o.buyer, finish: !!finish && o.status === 'paid', pos: 0, err: '' });
+      if (o.status !== 'paid' && tries < 12) this.ot = setTimeout(() => this.loadOrder(id, finish, tries + 1), 5000);
+    } catch (e) { this.setState({ err: "We couldn't find that order. Check the link in your confirmation email." }); }
+  }
+
+  screens() {
+    const { att, fill, buyer, finish } = this.state, n = att.length;
+    if (finish) {
+      const s = [];
+      att.forEach((a, i) => { if (i === buyer) return; s.push({ k: 'info', i }); if (a.tier !== 'ga' || a.addW) s.push({ k: 'winter', i }); if (a.tier !== 'ga' || a.addK) s.push({ k: 'workshops', i }); });
+      return s.length ? s : [{ k: 'info', i: buyer }];
+    }
+    const s = [{ k: 'tickets' }];
+    if (n > 1) s.push({ k: 'mode' });
+    if (!n || (n > 1 && !fill)) return s;
+    const run = n === 1 || fill === 'all' ? att.map((_, i) => i) : [buyer];
+    run.forEach(i => s.push({ k: 'info', i }, { k: 'winter', i }, { k: 'workshops', i }));
+    if (n > 1 && fill === 'later') s.push({ k: 'guests' });
+    s.push({ k: 'review' });
+    return s;
+  }
+  isFull(i) { const { att, fill, buyer } = this.state; return att.length <= 1 || fill !== 'later' || i === buyer; }
+
+  charges() {
+    const { att, qty, disc, order } = this.state;
+    let w = 0, k = 0;
+    att.forEach((a, i) => {
+      if (a.tier !== 'ga') return;
+      if (this.isFull(i)) { if (a.wType && a.wType !== 'none') w++; if (a.ws.some(x => x !== 'na')) k++; }
+      else { if (a.addW) w++; if (a.addK) k++; }
+    });
+    const lines = TIERS.filter(t => qty[t.id] > 0).map(t => ({ label: t.name + ' × ' + qty[t.id], amt: t.price * qty[t.id] }));
+    if (w) lines.push({ label: 'GA winter activities × ' + w, amt: w * ADDON });
+    if (k) lines.push({ label: 'GA workshops × ' + k, amt: k * ADDON });
+    const sub = lines.reduce((s, l) => s + l.amt, 0);
+    let d = 0;
+    if (order && typeof order.discount === 'number') d = order.discount;
+    else if (disc) {
+      const r = disc.rule;
+      if (!r) d = disc.amount || 0;
+      else if (r.perTicket) d = r.perTicket * att.length;
+      else if (r.freeTickets) d = att.filter(a => !r.tiers || r.tiers.includes(a.tier)).map(a => tierOf(a.tier).price).sort((x, y) => y - x).slice(0, r.freeTickets).reduce((x, y) => x + y, 0);
+    }
+    d = Math.min(sub, d);
+    return { lines, w, k, sub, d, total: sub - d };
+  }
+
+  setQty(id, dlt) {
+    this.setState(st => {
+      const qty = { ...st.qty }, n = Object.values(qty).reduce((x, y) => x + y, 0);
+      if (dlt > 0 && n >= MAXQ) return { err: 'Max ' + MAXQ + ' tickets per order.' };
+      qty[id] = Math.max(0, qty[id] + dlt);
+      const pools = {}; st.att.forEach(a => (pools[a.tier] = pools[a.tier] || []).push(a));
+      const att = []; TIERS.forEach(t => { for (let i = 0; i < qty[t.id]; i++) att.push((pools[t.id] || [])[i] || blank(t.id)); });
+      return { qty, att, buyer: Math.min(st.buyer, Math.max(0, att.length - 1)), fill: att.length > 1 ? st.fill : '', err: '' };
+    });
+  }
+  setAtt(i, k, v) { this.setState(st => { const att = st.att.slice(); att[i] = { ...att[i], [k]: v }; return { att, err: '' }; }); }
+
+  invalid(sc) {
+    const { att, left, advisory, buyer } = this.state, n = att.length;
+    if (!sc) return '';
+    if (sc.k === 'tickets') { if (!n) return 'Add at least one ticket.'; if (left != null && !advisory && n > left) return 'Only ' + left + ' tickets left in Drop 1.'; }
+    if (sc.k === 'mode' && !this.state.fill) return "Pick how you want to handle everyone's details.";
+    if (sc.k === 'info') { const a = att[sc.i]; if (['first', 'last', 'email', 'title', 'company'].some(k => !String(a[k]).trim())) return 'Fill in all required fields.'; if (!EMAIL.test(a.email.trim())) return 'Enter a valid email.'; if (!a.fit || !a.size) return 'Pick a shirt fit and size.'; if (!a.know) return 'Tell us how you know Paramify.'; if (!(a.fw || []).length) return 'Pick at least one framework.'; }
+    if (sc.k === 'winter') { const a = att[sc.i]; if (!a.wType) return 'Pick an option.'; if (a.wType === 'ski' && (!a.sport || !a.lesson || !a.equip)) return 'Answer all three questions.'; if (a.wType === 'other' && (!a.tue || !a.wed)) return 'Pick an activity for both days.'; }
+    if (sc.k === 'workshops' && !att[sc.i].ws.length) return 'Pick at least one, or N/A.';
+    if (sc.k === 'guests') for (let i = 0; i < n; i++) { if (i === buyer) continue; const a = att[i]; if (!a.first.trim() || !a.last.trim() || !a.title.trim()) return 'Add a name and title for ticket ' + (i + 1) + '.'; if (!EMAIL.test(a.email.trim())) return 'Add a valid email for ticket ' + (i + 1) + '.'; }
+    return '';
+  }
+  next() {
+    const scr = this.screens(), pos = Math.min(this.state.pos, scr.length - 1), sc = scr[pos], e = this.invalid(sc);
+    if (e) return this.setState({ err: e });
+    if (this.state.finish && pos === scr.length - 1) return this.submitFinish();
+    if (sc.k === 'review') return this.pay();
+    this.setState({ pos: pos + 1, err: '' }); window.scrollTo(0, 0);
+    if (scr[pos + 1] && scr[pos + 1].k === 'review' && this.state.disc && !this.state.disc.rule) this.applyCode();
+  }
+  back() { this.setState(st => ({ pos: Math.max(0, st.pos - 1), err: '' })); window.scrollTo(0, 0); }
+  jump(pred) { const ix = this.screens().findIndex(pred); if (ix >= 0) { this.setState({ pos: ix, err: '' }); window.scrollTo(0, 0); } }
+
+  payload(code) { const { advisory, qty, fill, buyer, att } = this.state; return { source: advisory ? 'advisory' : 'drop1', qty, fill: att.length > 1 ? fill : 'all', buyer, attendees: att, code: code || '' }; }
+  async applyCode(e) {
+    if (e && e.preventDefault) e.preventDefault();
+    const code = this.state.codeIn.trim();
+    if (!code) return this.setState({ disc: null, codeMsg: '', codeOk: false });
+    const api = this.api();
+    if (!api) {
+      const r = DEMO[code.toLowerCase()];
+      if (!r) return this.setState({ disc: null, codeMsg: "That code isn't valid.", codeOk: false });
+      return this.setState({ disc: { code, label: r.label, rule: r }, codeMsg: 'APPLIED: ' + r.label.toUpperCase(), codeOk: true });
+    }
+    try {
+      const r = await fetch(api + '/validate', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(this.payload(code)) });
+      const j = await r.json();
+      if (!r.ok || j.error) throw new Error(j.error || "That code isn't valid.");
+      this.setState({ disc: { code: j.code, label: j.label, amount: j.amount }, codeMsg: 'APPLIED: ' + String(j.label).toUpperCase(), codeOk: true });
+    } catch (err) { this.setState({ disc: null, codeMsg: err.message, codeOk: false }); }
+  }
+  async pay() {
+    const api = this.api(), c = this.charges(), body = this.payload(this.state.disc ? this.state.disc.code : '');
+    if (!api) {
+      const id = 'PJ-' + Math.random().toString(36).slice(2, 8).toUpperCase();
+      try { localStorage.removeItem(KEY); } catch (e) {}
+      this.setState({ order: { id, ...body, status: 'paid', discount: c.d, total: c.total, email: this.state.att[this.state.buyer].email }, err: '' });
+      return window.scrollTo(0, 0);
+    }
+    this.setState({ busy: true, err: '' });
+    try {
+      const r = await fetch(api + '/checkout', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ ...body, returnUrl: location.origin + location.pathname }) });
+      const j = await r.json();
+      if (!r.ok || !j.url) throw new Error(j.error || 'Checkout is unavailable right now. Try again in a minute.');
+      location.href = j.url;
+    } catch (e) { this.setState({ busy: false, err: e.message }); }
+  }
+  async submitFinish() {
+    const api = this.api();
+    if (api) {
+      this.setState({ busy: true });
+      try { const r = await fetch(api + '/order/' + encodeURIComponent(this.state.order.id) + '/attendees', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ attendees: this.state.att }) }); if (!r.ok) throw 0; }
+      catch (e) { return this.setState({ busy: false, err: "Couldn't save. Try again." }); }
+    }
+    this.setState({ busy: false, finished: true, finish: false, err: '' }); window.scrollTo(0, 0);
+  }
+
+  winterText(a) {
+    if (a.wType === 'ski') return (a.sport === 'board' ? 'Snowboard' : 'Ski') + ' Tue + Wed' + (a.lesson === 'yes' ? ', lesson' : '') + (a.equip === 'yes' ? ', equipment' : '');
+    if (a.wType === 'other') return 'Tue: ' + a.tue + ', Wed: ' + a.wed;
+    return 'No winter activities';
+  }
+
+  renderVals() {
+    const st = this.state, scr = this.screens(), n = st.att.length, c = this.charges();
+    const done = !!st.order && !st.finish && !st.finished, fin = st.finished;
+    const pos = Math.min(st.pos, scr.length - 1);
+    const sc = done || fin ? { k: 'done' } : scr[pos];
+    const a = sc.i != null ? st.att[sc.i] : null, ga = !!a && a.tier === 'ga';
+    const you = !!a && !st.finish && sc.i === st.buyer && (n === 1 || st.fill === 'later');
+    const who = !a ? '' : you ? 'you' : (a.first.trim() || 'ticket ' + (sc.i + 1));
+    const tierUpper = a ? tierOf(a.tier).name.toUpperCase() : '';
+    const lodging = (st.advisory ? (this.props.advisoryLodgingUrl || '').trim() || 'https://book.passkey.com/event/51368377/owner/50282924/home' : (this.props.lodgingUrl || '').trim() || 'https://book.passkey.com/event/51361247/owner/50282924/home');
+    const backHref = st.advisory ? ((this.props.advisoryUrl || '').trim() || 'https://www.paramijam.com/advisory') : ((this.props.siteUrl || '').trim() || 'https://www.paramijam.com/');
+
+    let eyebrow = '', title = '', sub = '', tagLine = '', tagColor = '#20FC8F';
+    if (sc.k === 'tickets') { eyebrow = st.advisory ? 'TICKETS · ADVISORY + PARTNERS' : 'TICKETS · DROP 1'; title = 'Which tier, and how many?'; sub = 'Buy for yourself or your whole team. Mix tiers in one order.'; }
+    if (sc.k === 'mode') { eyebrow = "WHO'S COMING"; title = 'Do you have everyone’s info?'; sub = "You're buying " + n + " tickets. Pick how you want to handle everyone's details."; }
+    if (sc.k === 'info') { eyebrow = 'TICKET ' + (sc.i + 1) + ' OF ' + n + ' · ' + tierUpper; title = st.finish ? 'Finish ' + (a.first || 'their') + '’s details.' : you ? 'Tell us about you.' : 'Who’s on ticket ' + (sc.i + 1) + '?'; sub = 'We use this for badges, check-in and event updates.'; }
+    if (sc.k === 'winter') {
+      eyebrow = 'TICKET ' + (sc.i + 1) + ' OF ' + n + ' · WINTER ACTIVITIES'; title = you ? 'Pick your winter activities.' : 'Winter activities for ' + who + '.';
+      sub = 'Ski or snowboard covers both Tue and Wed. Pick something else to choose one activity per day.';
+      tagLine = ga ? (st.finish ? 'INCLUDED IN YOUR ORDER' : 'NOT INCLUDED WITH GA · $150 ADD-ON PER PERSON') : 'INCLUDED WITH ' + tierUpper; tagColor = ga && !st.finish ? '#FFFFFF' : '#20FC8F';
+    }
+    if (sc.k === 'workshops') {
+      eyebrow = 'TICKET ' + (sc.i + 1) + ' OF ' + n + ' · THURSDAY WORKSHOPS'; title = 'Which workshops interest ' + who + '?'; sub = 'Hands-on, Thursday. Pick as many as you like.';
+      tagLine = ga ? (st.finish ? 'INCLUDED IN YOUR ORDER' : 'NOT INCLUDED WITH GA · $150 ADD-ON PER PERSON') : 'INCLUDED WITH ' + tierUpper; tagColor = ga && !st.finish ? '#FFFFFF' : '#20FC8F';
+    }
+    if (sc.k === 'guests') { eyebrow = 'YOUR CREW · ' + (n - 1) + ' MORE ' + (n - 1 === 1 ? 'TICKET' : 'TICKETS'); title = 'Just the basics for now.'; sub = 'Name, email and title for each ticket. After checkout you can finish their activity and workshop picks, or send them the link.'; }
+    if (sc.k === 'review') { eyebrow = 'REVIEW + PAY'; title = 'Review and pay.'; sub = 'Check everyone’s details, add a code, then pay securely on Stripe.'; }
+    const pending = done && st.order.status && st.order.status !== 'paid';
+    const later = (st.order && st.order.fill === 'later') && n > 1;
+    if (done) { eyebrow = 'ORDER ' + st.order.id + (pending ? ' · PROCESSING' : ' · CONFIRMED'); title = pending ? 'Almost there.' : 'You’re in.'; sub = pending ? 'We’re confirming your payment with Stripe. This page updates on its own.' : n + (n === 1 ? ' ticket' : ' tickets') + ' to Paramijam 2027. Your receipt is on its way to ' + (st.order.email || 'your inbox') + '.'; }
+    if (fin) { eyebrow = 'ORDER ' + st.order.id + ' · DETAILS SAVED'; title = 'All set.'; sub = 'Everyone’s details are saved. See you in Park City.'; }
+
+    const fieldDefs = [['first', 'FIRST NAME', 1, 'text', 'given-name'], ['last', 'LAST NAME', 1, 'text', 'family-name'], ['email', 'WORK EMAIL', 1, 'email', 'email'], ['title', 'TITLE', 1, 'text', 'organization-title'], ['company', 'COMPANY', 1, 'text', 'organization'], ['phone', 'PHONE', 0, 'tel', 'tel'], ['diet', 'DIETARY NEEDS', 0, 'text', 'off'], ['access', 'ACCESSIBILITY NEEDS', 0, 'text', 'off']];
+    const fields = sc.k === 'info' ? fieldDefs.map(([k, l, req, type, ac]) => ({ label: l + (req ? ' *' : ''), val: a[k], on: e => this.setAtt(sc.i, k, e.target.value), type, ac: you ? ac : 'off', ph: k === 'diet' ? 'Optional, e.g. vegetarian' : k === 'access' || k === 'phone' ? 'Optional' : '', span: k === 'diet' || k === 'access' ? '1 / -1' : 'auto' })) : [];
+
+    const infoGroups = sc.k === 'info' ? [
+      { q: 'Shirt fit', hint: 'REQUIRED · FOR YOUR PARAMIJAM SWAG', opts: FITS.map(([v, l]) => chip(a.fit === v, l.toUpperCase(), () => this.setAtt(sc.i, 'fit', v))) },
+      { q: 'Shirt size', hint: 'REQUIRED', opts: SIZES.map(v => chip(a.size === v, v, () => this.setAtt(sc.i, 'size', v))) },
+      { q: you ? 'How do you know Paramify?' : 'How do they know Paramify?', hint: 'REQUIRED · PICK ONE', opts: KNOW.map(v => chip(a.know === v, v.toUpperCase(), () => this.setAtt(sc.i, 'know', v))) },
+      { q: 'Which frameworks are of interest?', hint: 'REQUIRED · PICK ANY', opts: FW.map(v => { const cur = a.fw || [], on = cur.includes(v); return chip(on, (on ? '✓ ' : '') + v.toUpperCase(), () => this.setAtt(sc.i, 'fw', on ? cur.filter(x => x !== v) : cur.concat(v))); }) }
+    ] : [];
+    const price = id => id === 'none' ? '—' : ga ? (st.finish ? 'PAID' : '+$150') : 'INCLUDED';
+    const wOpts = sc.k === 'winter' ? [
+      { id: 'ski', tag: 'A', label: 'Ski or snowboard', sub: 'Both days, Tue + Wed. Lift pass, equipment and a lesson if you want one.' },
+      { id: 'other', tag: 'B', label: 'Something else', sub: 'One activity per day: bobsled, snowmobile or the lodge.' },
+      { id: 'none', tag: 'C', label: 'No winter activities', sub: 'Skip the mountain. We’ll see you at sessions.' }
+    ].map(o => { const on = a.wType === o.id; return { ...o, price: price(o.id), priceColor: o.id === 'none' ? '#8C8C8C' : ga && !st.finish ? '#FFFFFF' : '#20FC8F', bg: on ? 'rgba(32,252,143,.08)' : '#0B0A0A', bd: on ? '#20FC8F' : '#343434', pick: () => this.setAtt(sc.i, 'wType', o.id) }; }) : [];
+    const yn = key => [['yes', 'Yes'], ['no', 'No']].map(([v, l]) => chip(a[key] === v, l, () => this.setAtt(sc.i, key, v)));
+    let qRows = [];
+    if (sc.k === 'winter' && a.wType === 'ski') qRows = [
+      { q: 'Ski or snowboard?', opts: [['ski', 'Ski'], ['board', 'Snowboard']].map(([v, l]) => chip(a.sport === v, l, () => this.setAtt(sc.i, 'sport', v))) },
+      { q: 'Want a lesson?', opts: yn('lesson') },
+      { q: 'Need equipment?', opts: yn('equip') }];
+    if (sc.k === 'winter' && a.wType === 'other') qRows = [['tue', 'Tuesday'], ['wed', 'Wednesday']].map(([k, l]) => ({ q: l, opts: ACTS.map(x => chip(a[k] === x, x.toUpperCase(), () => this.setAtt(sc.i, k, x))) }));
+
+    const wsOpts = sc.k === 'workshops' ? WS.map((w, ix) => {
+      const on = a.ws.includes(w.id);
+      return { num: '0' + (ix + 1), label: w.label, mark: on ? '✓' : '', bg: on ? 'rgba(32,252,143,.08)' : '#0B0A0A', bd: on ? '#20FC8F' : '#2A2A2A', boxBd: on ? '#20FC8F' : '#595959', boxBg: on ? '#20FC8F' : 'transparent',
+        pick: () => { const cur = a.ws; const nx = w.id === 'na' ? (on ? [] : ['na']) : on ? cur.filter(x => x !== w.id) : cur.filter(x => x !== 'na').concat(w.id); this.setAtt(sc.i, 'ws', nx); } };
+    }) : [];
+
+    const tierCounts = {}; st.att.forEach(x => { tierCounts[x.tier] = (tierCounts[x.tier] || 0) + 1; });
+    const label = i => { const t = st.att[i].tier; let k = 0; for (let j = 0; j <= i; j++) if (st.att[j].tier === t) k++; return tierOf(t).name.toUpperCase() + (tierCounts[t] > 1 ? ' #' + k : ''); };
+    const guests = sc.k === 'guests' ? st.att.map((g, i) => i === st.buyer ? null : {
+      label: 'TICKET ' + (i + 1), tierName: tierOf(g.tier).name.toUpperCase(), isGa: g.tier === 'ga',
+      fields: [['first', 'FIRST NAME *', 'text'], ['last', 'LAST NAME *', 'text'], ['email', 'EMAIL *', 'email'], ['title', 'TITLE *', 'text']].map(([k, l, type]) => ({ label: l, type, val: g[k], on: e => this.setAtt(i, k, e.target.value) })),
+      addons: [['addW', 'WINTER ACTIVITIES +$150'], ['addK', 'WORKSHOPS +$150']].map(([k, l]) => chip(g[k], (g[k] ? '✓ ' : '+ ') + l, () => this.setAtt(i, k, !g[k])))
+    }).filter(Boolean) : [];
+
+    const distinct = Object.keys(tierCounts);
+    const showBuyerPick = sc.k === 'mode' && st.fill === 'later' && distinct.length > 1;
+    const buyerOpts = showBuyerPick ? TIERS.filter(t => tierCounts[t.id]).map(t => { const i = st.att.findIndex(x => x.tier === t.id); return chip(st.att[st.buyer] && st.att[st.buyer].tier === t.id, t.name.toUpperCase(), () => this.setState({ buyer: i })); }) : [];
+    const modeOpt = (id, tag, l, s) => { const on = st.fill === id; return { tag, label: l, sub: s, bg: on ? '#20FC8F' : '#0B0A0A', fg: on ? '#000000' : '#FFFFFF', subColor: on ? '#000000' : '#BFBFBF', bd: on ? '#20FC8F' : '#343434', pick: () => this.setState({ fill: id, err: '' }) }; };
+    const modeOpts = sc.k === 'mode' ? [
+      modeOpt('all', 'B / I HAVE EVERYONE’S INFO', 'Fill it all out now.', 'Enter details, winter activities and workshops for all ' + n + ' tickets before you check out.'),
+      modeOpt('later', 'C / I’LL GET IT LATER', 'Just the basics for now.', 'Fill out your own details, then a name, email and title for each other ticket. Finish the rest after checkout.')] : [];
+
+    const reviewRows = sc.k === 'review' ? st.att.map((x, i) => {
+      const full = this.isFull(i), ws = x.ws.filter(w => w !== 'na').length;
+      const bits = [x.email];
+      if (full) { bits.push((x.fit === 'womens' ? "Women's " : "Men's ") + x.size + ' shirt'); bits.push(this.winterText(x)); bits.push(ws ? ws + (ws === 1 ? ' workshop' : ' workshops') : 'No workshops'); }
+      else { bits.push('Activities + workshops after checkout'); if (x.tier === 'ga') { if (x.addW) bits.push('+ winter activities'); if (x.addK) bits.push('+ workshops'); } }
+      return { label: 'TICKET ' + (i + 1) + ' · ' + label(i), name: (x.first + ' ' + x.last).trim() || 'Name TBD', detail: bits.join(' · '), edit: () => full ? this.jump(s => s.k === 'info' && s.i === i) : this.jump(s => s.k === 'guests') };
+    }) : [];
+
+    const nextSteps = [];
+    if (done || fin) nextSteps.push({ num: '01 / BOOK YOUR ROOM', title: 'Get our Pendry discount.', sub: 'Lodging isn’t included, but our room block at Pendry Park City has a discounted nightly rate when you book through this link.', isLink: true, isBtn: false, href: lodging, target: '_blank', cta: 'BOOK YOUR ROOM ↗' });
+    if (done && later && !pending) {
+      const fh = location.pathname + '?order=' + encodeURIComponent(st.order.id) + '&finish=1' + (st.advisory ? '&from=advisory' : '');
+      const url = location.origin + fh;
+      nextSteps.push({ num: '02 / GET YOUR CREW’S INFO', title: 'Finish details for ' + (n - 1) + (n - 1 === 1 ? ' ticket.' : ' tickets.'), sub: 'Fill in their winter activities and workshop picks yourself, or copy this link and send it to your team so they can add their own.', isLink: !!this.api(), isBtn: !this.api(), href: fh, target: '_self', cta: 'FINISH DETAILS', on: () => { this.setState({ finish: true, pos: 0, err: '' }); window.scrollTo(0, 0); },
+        isCopy: true, url, copyLabel: st.copied ? '✓ COPIED' : 'COPY LINK', select: e => e.target.select(),
+        copy: () => { try { navigator.clipboard.writeText(url); } catch (e) {} this.setState({ copied: true }); clearTimeout(this.ct); this.ct = setTimeout(() => this.setState({ copied: false }), 2000); } });
+    }
+
+    const lines = c.lines.map(l => ({ label: l.label, amt: money(l.amt), color: '#FFFFFF' }));
+    if (c.d > 0) lines.push({ label: (st.disc ? st.disc.label : 'Discount'), amt: money(-c.d), color: '#20FC8F' });
+    const total = scr.length + 1;
+    const meter = Array.from({ length: total }, (_, i) => ({ bg: done || fin || i < pos ? '#20FC8F' : i === pos ? '#FFFFFF' : '#343434' }));
+    const isLastFinish = st.finish && pos === scr.length - 1;
+
+    return {
+      backHref, meter, stepLabel: done || fin ? 'CONFIRMED' : 'STEP ' + (pos + 1) + ' / ' + scr.length,
+      eyebrow, title, sub, hasSub: !!sub, tagLine, tagColor, hasTagLine: !!tagLine,
+      isTickets: sc.k === 'tickets', isMode: sc.k === 'mode', isInfo: sc.k === 'info', isWinter: sc.k === 'winter', isWorkshops: sc.k === 'workshops', isGuests: sc.k === 'guests', isReview: sc.k === 'review', isDone: done || fin,
+      advisory: st.advisory,
+      tiers: TIERS.map(t => { const q = st.qty[t.id]; return { nameUpper: t.name.toUpperCase() + (t.pop ? ' · MOST POPULAR' : ''), tag: t.tag, bullets: t.bullets, priceLabel: money(t.price), qty: String(q), qtyColor: q ? '#20FC8F' : '#8C8C8C', nameColor: t.pop ? '#20FC8F' : '#BFBFBF', bd: q ? '#20FC8F' : '#343434', bg: q ? 'rgba(32,252,143,.06)' : '#0B0A0A', inc: () => this.setQty(t.id, 1), dec: () => this.setQty(t.id, -1) }; }),
+      modeOpts, showBuyerPick, buyerOpts, fields, infoGroups, showFwOther: sc.k === 'info' && (a.fw || []).includes('Other'), fwOther: a ? a.fwOther || '' : '', setFwOther: e => this.setAtt(sc.i, 'fwOther', e.target.value), wOpts, qRows, hasRows: qRows.length > 0, wsOpts, guests, reviewRows, nextSteps,
+      codeIn: st.codeIn, setCode: e => this.setState({ codeIn: e.target.value }), applyCode: e => this.applyCode(e),
+      hasCodeMsg: !!st.codeMsg, codeMsg: String(st.codeMsg).toUpperCase(), codeMsgColor: st.codeOk ? '#20FC8F' : '#FF273B',
+      showNav: !done && !fin, hasErr: !!st.err, err: st.err, canBack: !done && pos > 0, noBack: !done && !fin && pos === 0,
+      back: () => this.back(), next: () => this.next(), busy: st.busy,
+      nextLabel: st.busy ? 'ONE SEC…' : isLastFinish ? 'SAVE DETAILS' : sc.k === 'review' ? (c.total === 0 ? 'CONFIRM ORDER' : 'PAY ' + money(c.total) + ' ON STRIPE') : 'CONTINUE',
+      showSummary: !st.finish && !fin, summaryTitle: done ? 'RECEIPT' : 'YOUR ORDER', emptyCart: n === 0, lines,
+      totalCaption: done ? 'PAID' : 'TOTAL', totalLabel: money(c.total),
+      hasLeft: st.left != null && !st.advisory && !done, leftLabel: st.left + ' OF 120 LEFT IN DROP 1'
+    };
+  }
+}
+</script>
+</body>
+</html>
