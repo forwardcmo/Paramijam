@@ -102,7 +102,7 @@ body.pj-site{margin:0;background:var(--ink);color:var(--white);font-family:var(-
 .pj-speakers{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,210px),1fr));gap:1px;padding:1px}
 .pj-spk{background:var(--ink);display:flex;flex-direction:column}
 .pj-spk-img{aspect-ratio:1/1;background:repeating-linear-gradient(135deg,#141414 0 10px,#191919 10px 20px);display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden}
-.pj-spk-img img{width:100%;height:100%;object-fit:cover;filter:grayscale(1) contrast(1.05)}
+.pj-spk-img img{width:100%;height:100%;object-fit:cover}
 .pj-spk-img .pj-init{font-family:var(--mono);font-weight:700;font-size:44px;color:var(--g4);letter-spacing:.02em}
 .pj-spk-img .pj-ph{position:absolute;left:10px;bottom:10px;font-family:var(--mono);font-weight:700;font-size:10px;letter-spacing:.08em;color:var(--g4)}
 .pj-spk-body{padding:16px 16px 20px;display:flex;flex-direction:column;gap:6px}
@@ -228,3 +228,12 @@ details:not([open]) .pj-more .pj-close{display:none}
 
 @keyframes pjBlink{0%,49%{opacity:1}50%,100%{opacity:0}}
 @media (prefers-reduced-motion:reduce){[style*="pjBlink"]{animation:none!important}}
+
+/* Black Friday hero badge */
+.pj-bf{position:absolute;right:clamp(16px,3.4vw,56px);top:50%;z-index:3;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;width:clamp(180px,16vw,240px);aspect-ratio:1;padding:0 18px;box-sizing:border-box;border-radius:50%;background:#20FC8F;color:#000;text-decoration:none;text-align:center;font-family:'IBM Plex Mono',monospace;font-weight:700;text-transform:uppercase;transform:translateY(-50%) rotate(-12deg);box-shadow:0 0 0 6px #000,0 0 0 8px #20FC8F,0 20px 60px rgba(32,252,143,.35);animation:pjBfPulse 2.4s ease-in-out infinite;transition:background .2s}
+.pj-bf:hover{background:#fff}
+.pj-bf-dot{width:10px;height:10px;border-radius:50%;background:#000;animation:blink 1.1s steps(1) infinite}
+.pj-bf-a{font-size:clamp(12px,1vw,14px);letter-spacing:.06em;line-height:1.2;max-width:11ch}
+.pj-bf-b{font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;font-size:clamp(24px,2.1vw,34px);letter-spacing:-.04em;line-height:.95}
+@keyframes pjBfPulse{0%,100%{transform:translateY(-50%) rotate(-12deg) scale(1)}50%{transform:translateY(-50%) rotate(-12deg) scale(1.05)}}
+@media (max-width:900px){.pj-bf{position:relative;right:auto;top:auto;align-self:flex-start;flex-direction:row;width:auto;aspect-ratio:auto;border-radius:0;padding:10px 14px;gap:10px;transform:rotate(-2deg);animation:none;box-shadow:4px 4px 0 #000,4px 4px 0 1px #20FC8F;margin-top:24px}.pj-bf-a,.pj-bf-b{font-family:'IBM Plex Mono',monospace;font-size:13px;letter-spacing:.06em;max-width:none}.pj-bf-b::before{content:'— '}}
