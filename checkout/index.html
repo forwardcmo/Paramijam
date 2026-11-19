@@ -306,9 +306,9 @@ input::placeholder{color:#595959}
 <script type="text/x-dc" data-dc-script data-props="{&quot;apiUrl&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;https://paramijam-checkout.pages.dev&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Stripe&quot;,&quot;description&quot;:&quot;Checkout worker URL. Blank = demo mode (no real charge; try codes kennyeatworld or cab2027).&quot;},&quot;siteUrl&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;https://www.paramijam.com/&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Links&quot;},&quot;advisoryUrl&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;https://www.paramijam.com/advisory&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Links&quot;},&quot;lodgingUrl&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;https://book.passkey.com/event/51361247/owner/50282924/home&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Links&quot;},&quot;advisoryLodgingUrl&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;https://book.passkey.com/event/51368377/owner/50282924/home&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Links&quot;}}">
 const TIERS = [
   { id: 'ga', name: 'General Admission', price: 399, tag: 'Get in the room.', bullets: ['Tue–Wed, 2 days', 'Keynotes, panels, breakouts', 'Jimmy Eat World concert', 'Winter activities + workshops: $150 add-ons'] },
-  { id: 'preferred', name: 'Preferred', price: 599, tag: 'The full Paramijam.', bullets: ['Tue–Thu, 3 days', '2 days of winter activities included', 'Thursday workshops included'], pop: true },
+  { id: 'preferred', name: 'Preferred', price: 599, tag: 'The full Paramijam.', bullets: ['Tue–Thu, 3 days', '2 days of winter activities included (ski, snowboard or bobsled)', 'Thursday workshops included'], pop: true },
   { id: 'vip', name: 'VIP', price: 849, tag: 'The best seat in the house.', bullets: ['Everything in Preferred', 'Reserved main-stage seating', 'VIP Experience Lounge'] },
-  { id: 'black', name: 'Black', price: 1199, tag: 'Door to door.', bullets: ['Everything in VIP', 'VIP access at the concert', 'SLC airport transport'] }
+  { id: 'black', name: 'Black', price: 1199, tag: 'Door to door.', bullets: ['Everything in VIP', 'Snowmobiling (Black only)', 'VIP access at the concert', 'SLC airport transport'] }
 ];
 const WS = [
   { id: 'class-a', label: 'Leave with a Class A ready submission package' },
@@ -319,12 +319,13 @@ const WS = [
   { id: 'na', label: 'N/A, not attending workshops' }
 ];
 const ACTS = ['Bobsled', 'Snowmobile', 'Lodge'];
+const actsFor = tier => tier === 'black' ? ACTS : ACTS.filter(x => x !== 'Snowmobile'); // snowmobiling is Black-only
 const SDRS = [['mwall', 'McKay Wall'], ['bhancock', 'Britton Hancock'], ['cfrandsen', 'Caze Frandsen'], ['cdean', 'Colby Dean'], ['dturner', 'Dallin Turner'], ['mhammond', 'Meredith Hammond'], ['tporter', 'Tyler Porter'], ['abrady', 'Alex Brady']];
 const SIZES = ['XS', 'S', 'M', 'L', 'XL', '2XL', '3XL'];
 const KNOW = ['Partner (Club 7739 Member)', 'Evaluating Paramify', 'Current Customer', 'Previous Customer', 'Brand Ambassador', 'None. Paramify is new to me!'];
 const FW = ['FedRAMP Rev5', 'FedRAMP 20x', 'FISMA', 'DoD ATO', 'CMMC', 'Other'];
 const ADDON = 150, MAXQ = 10, KEY = 'pj-checkout-v1';
-const DROP = { name: 'Drop 2', cap: 100, pct: 50, label: 'Drop 2: 50% off tickets', ends: Date.parse('2026-11-30T23:59:59-07:00') };
+const DROP = { name: 'Drop 2', cap: 100, pct: 50, label: 'Drop 2: 50% off', tiers: ['ga', 'preferred', 'vip'], ends: Date.parse('2026-11-30T23:59:59-07:00') };
 const PAY_LATER_UNTIL = Date.parse('2027-01-04T23:59:59-07:00'), INVOICE_DUE = 'Jan 15, 2027';
 const dropOn = adv => !adv && Date.now() <= DROP.ends;
 const EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -400,7 +401,7 @@ class Component extends DCLogic {
     if (w) lines.push({ label: 'GA winter activities × ' + w, amt: w * ADDON });
     if (k) lines.push({ label: 'GA workshops × ' + k, amt: k * ADDON });
     const sub = lines.reduce((s, l) => s + l.amt, 0);
-    const ticketSub = TIERS.reduce((s, t) => s + t.price * qty[t.id], 0);
+    const ticketSub = TIERS.filter(t => DROP.tiers.includes(t.id)).reduce((s, t) => s + t.price * qty[t.id], 0);
     const dd = order ? 0 : dropOn(this.state.advisory) ? Math.round(ticketSub * DROP.pct) / 100 : 0;
     let d = 0;
     if (order && typeof order.discount === 'number') d = order.discount;
@@ -435,7 +436,7 @@ class Component extends DCLogic {
     if (sc.k === 'tickets') { if (!n) return 'Add at least one ticket.'; if (advisory && this.state.qty.ga) return "General Admission isn't available with the advisory pass. Remove it to continue."; if (left != null && !advisory && n > left) return 'Only ' + left + ' tickets left in ' + DROP.name + '.'; }
     if (sc.k === 'mode' && !this.state.fill) return "Pick how you want to handle everyone's details.";
     if (sc.k === 'info') { const a = att[sc.i]; if (['first', 'last', 'email', 'title', 'company'].some(k => !String(a[k]).trim())) return 'Fill in all required fields.'; if (!EMAIL.test(a.email.trim())) return 'Enter a valid email.'; if (!a.size) return 'Pick a shirt size.'; if (!a.know) return 'Tell us how you know Paramify.'; if (!(a.fw || []).length) return 'Pick at least one framework.'; }
-    if (sc.k === 'winter') { const a = att[sc.i]; if (!a.wType) return 'Pick an option.'; if (a.wType === 'ski' && (!a.sport || !a.lesson || !a.equip)) return 'Answer all three questions.'; if (a.wType === 'other' && (!a.tue || !a.wed)) return 'Pick an activity for both days.'; }
+    if (sc.k === 'winter') { const a = att[sc.i]; if (!a.wType) return 'Pick an option.'; if (a.wType === 'ski' && (!a.sport || !a.lesson || !a.equip)) return 'Answer all three questions.'; if (a.wType === 'other' && (!a.tue || !a.wed)) return 'Pick an activity for both days.'; if (a.tier !== 'black' && (a.tue === 'Snowmobile' || a.wed === 'Snowmobile')) return 'Snowmobiling is only available with Black tickets. Pick another activity.'; }
     if (sc.k === 'workshops' && !att[sc.i].ws.length) return 'Pick at least one, or N/A.';
     if (sc.k === 'guests') for (let i = 0; i < n; i++) { if (i === buyer) continue; const a = att[i]; if (!a.first.trim() || !a.last.trim() || !a.title.trim()) return 'Add a name and title for ticket ' + (i + 1) + '.'; if (!EMAIL.test(a.email.trim())) return 'Add a valid email for ticket ' + (i + 1) + '.'; }
     return '';
@@ -516,7 +517,7 @@ class Component extends DCLogic {
     const backHref = st.advisory ? ((this.props.advisoryUrl || '').trim() || 'https://www.paramijam.com/advisory') : ((this.props.siteUrl || '').trim() || 'https://www.paramijam.com/');
 
     let eyebrow = '', title = '', sub = '', tagLine = '', tagColor = '#20FC8F';
-    if (sc.k === 'tickets') { eyebrow = st.advisory ? 'TICKETS · ADVISORY + PARTNERS' : dropOn(false) ? 'TICKETS · DROP 2 · 50% OFF APPLIED' : 'TICKETS'; title = 'Very smart move! Which tier, and how many?'; sub = 'Buy for yourself or your whole team. Mix tiers in one order.'; }
+    if (sc.k === 'tickets') { eyebrow = st.advisory ? 'TICKETS · ADVISORY + PARTNERS' : dropOn(false) ? 'TICKETS · DROP 2 · 50% OFF GA, PREFERRED + VIP' : 'TICKETS'; title = 'Very smart move! Which tier, and how many?'; sub = 'Buy for yourself or your whole team. Mix tiers in one order.'; }
     if (sc.k === 'mode') { eyebrow = "WHO'S COMING"; title = 'Do you have everyone’s info?'; sub = "You're buying " + n + " tickets. Pick how you want to handle everyone's details."; }
     if (sc.k === 'info') { eyebrow = 'TICKET ' + (sc.i + 1) + ' OF ' + n + ' · ' + tierUpper; title = st.finish ? 'Finish ' + (a.first || 'their') + '’s details.' : you ? 'Tell us about you.' : 'Who’s on ticket ' + (sc.i + 1) + '?'; sub = 'We use this for badges, check-in and event updates.'; }
     if (sc.k === 'winter') {
@@ -547,7 +548,7 @@ class Component extends DCLogic {
     const price = id => id === 'none' ? '—' : ga ? (st.finish ? 'PAID' : '+$150') : 'INCLUDED';
     const wOpts = sc.k === 'winter' ? [
       { id: 'ski', tag: 'A', label: 'Ski or snowboard', sub: 'Both days, Tue + Wed. Lift pass, equipment and a lesson if you want one.' },
-      { id: 'other', tag: 'B', label: 'Something else', sub: 'One activity per day: bobsled, snowmobile or the lodge.' },
+      { id: 'other', tag: 'B', label: 'Something else', sub: a.tier === 'black' ? 'One activity per day: bobsled, snowmobile or the lodge. Snowmobiling is included with your Black ticket.' : 'One activity per day: bobsled or the lodge. (Snowmobiling is only available with Black tickets.)' },
       { id: 'none', tag: 'C', label: 'No winter activities', sub: 'Skip the mountain. We’ll see you at sessions.' }
     ].map(o => { const on = a.wType === o.id; return { ...o, price: price(o.id), priceColor: o.id === 'none' ? '#8C8C8C' : ga && !st.finish ? '#FFFFFF' : '#20FC8F', bg: on ? 'rgba(32,252,143,.08)' : '#0B0A0A', bd: on ? '#20FC8F' : '#343434', pick: () => this.setAtt(sc.i, 'wType', o.id) }; }) : [];
     const yn = key => [['yes', 'Yes'], ['no', 'No']].map(([v, l]) => chip(a[key] === v, l, () => this.setAtt(sc.i, key, v)));
@@ -556,7 +557,7 @@ class Component extends DCLogic {
       { q: 'Ski or snowboard?', opts: [['ski', 'Ski'], ['board', 'Snowboard']].map(([v, l]) => chip(a.sport === v, l, () => this.setAtt(sc.i, 'sport', v))) },
       { q: 'Want a lesson?', opts: yn('lesson') },
       { q: 'Need equipment?', opts: yn('equip') }];
-    if (sc.k === 'winter' && a.wType === 'other') qRows = [['tue', 'Tuesday'], ['wed', 'Wednesday']].map(([k, l]) => ({ q: l, opts: ACTS.map(x => chip(a[k] === x, x.toUpperCase(), () => this.setAtt(sc.i, k, x))) }));
+    if (sc.k === 'winter' && a.wType === 'other') qRows = [['tue', 'Tuesday'], ['wed', 'Wednesday']].map(([k, l]) => ({ q: l, opts: actsFor(a.tier).map(x => chip(a[k] === x, x.toUpperCase(), () => this.setAtt(sc.i, k, x))) }));
 
     const wsOpts = sc.k === 'workshops' ? WS.map((w, ix) => {
       const on = a.ws.includes(w.id);
@@ -612,7 +613,7 @@ class Component extends DCLogic {
       isTickets: sc.k === 'tickets', isMode: sc.k === 'mode', isInfo: sc.k === 'info', isWinter: sc.k === 'winter', isWorkshops: sc.k === 'workshops', isGuests: sc.k === 'guests', isReview: sc.k === 'review', isDone: done || fin,
       advisory: st.advisory,
       showInvite: sc.k === 'review' && !this.attr().ref, inviteOpts: SDRS.map(([id, nm]) => chip(st.invitedBy === id, nm.toUpperCase(), () => this.setState({ invitedBy: id }))).concat([chip(st.invitedBy === 'none', 'OTHER', () => this.setState({ invitedBy: 'none' }))]),
-      tiers: TIERS.map(t => { const q = st.qty[t.id]; const locked = st.advisory && t.id === 'ga'; return { showCaveat: t.id === 'ga' && !locked, locked, op: locked ? '0.4' : '1', pe: locked ? 'none' : 'auto', nameUpper: t.name.toUpperCase() + (t.pop ? ' · MOST POPULAR' : ''), tag: t.tag, bullets: t.bullets, priceLabel: money(dropOn(st.advisory) ? t.price * (100 - DROP.pct) / 100 : t.price), hasWas: dropOn(st.advisory), wasLabel: money(t.price), priceColor: dropOn(st.advisory) ? '#20FC8F' : '#FFFFFF', qty: String(q), qtyColor: q ? '#20FC8F' : '#8C8C8C', nameColor: t.pop ? '#20FC8F' : '#BFBFBF', bd: q ? '#20FC8F' : '#343434', bg: q ? 'rgba(32,252,143,.06)' : '#0B0A0A', inc: () => this.setQty(t.id, 1), dec: () => this.setQty(t.id, -1) }; }),
+      tiers: TIERS.map(t => { const q = st.qty[t.id]; const locked = st.advisory && t.id === 'ga'; return { showCaveat: t.id === 'ga' && !locked, locked, op: locked ? '0.4' : '1', pe: locked ? 'none' : 'auto', nameUpper: t.name.toUpperCase() + (t.pop ? ' · MOST POPULAR' : ''), tag: t.tag, bullets: t.bullets, priceLabel: money(dropOn(st.advisory) && DROP.tiers.includes(t.id) ? t.price * (100 - DROP.pct) / 100 : t.price), hasWas: dropOn(st.advisory) && DROP.tiers.includes(t.id), wasLabel: money(t.price), priceColor: dropOn(st.advisory) && DROP.tiers.includes(t.id) ? '#20FC8F' : '#FFFFFF', qty: String(q), qtyColor: q ? '#20FC8F' : '#8C8C8C', nameColor: t.pop ? '#20FC8F' : '#BFBFBF', bd: q ? '#20FC8F' : '#343434', bg: q ? 'rgba(32,252,143,.06)' : '#0B0A0A', inc: () => this.setQty(t.id, 1), dec: () => this.setQty(t.id, -1) }; }),
       modeOpts, showBuyerPick, buyerOpts, fields, infoGroups, showFwOther: sc.k === 'info' && (a.fw || []).includes('Other'), fwOther: a ? a.fwOther || '' : '', setFwOther: e => this.setAtt(sc.i, 'fwOther', e.target.value), wOpts, qRows, hasRows: qRows.length > 0, wsOpts, guests, reviewRows, nextSteps,
       showPay: sc.k === 'review' && c.total > 0 && Date.now() <= PAY_LATER_UNTIL,
       payOpts: [['now', 'A / PAY NOW', 'Pay by card', 'Pay securely on Stripe and get your receipt right away.'], ['later', 'B / BUY NOW, PAY LATER', 'Pay later by invoice', 'Your seats are held now. We email an invoice you can pay online. Due in full by ' + INVOICE_DUE + '.']].map(([id, tag, l, sb]) => { const on = st.pay === id; return { tag, label: l, sub: sb, bg: on ? '#20FC8F' : '#0B0A0A', fg: on ? '#000000' : '#FFFFFF', subColor: on ? '#000000' : '#BFBFBF', bd: on ? '#20FC8F' : '#343434', pick: () => this.setState({ pay: id, err: '' }) }; }),
