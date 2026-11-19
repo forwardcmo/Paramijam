@@ -27,16 +27,21 @@
 </script>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<script src="/support.js"></script>
+<link rel="icon" href="../favicon.ico" sizes="32x32">
+<link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="../assets/apple-touch-icon.png">
+<link rel="stylesheet" href="../site.css">
+<script src="../site.js"></script>
+<script src="../support.js"></script>
 </head>
 <body>
 <x-dc>
 <helmet>
-<script src="/pj-attr.js"></script>
+<script src="../pj-attr.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Paramijam 2027 · Advisory Board + Club 7739</title>
-<link rel="stylesheet" href="/_ds/paramify-design-system-019ddfc0-a4ec-7a1a-b8c4-ad5c4b97b94a/colors_and_type.css">
-<script src="/_ds/paramify-design-system-019ddfc0-a4ec-7a1a-b8c4-ad5c4b97b94a/_ds_bundle.js"></script>
+<link rel="stylesheet" href="../_ds/paramify-design-system-019ddfc0-a4ec-7a1a-b8c4-ad5c4b97b94a/colors_and_type.css">
+<script src="../_ds/paramify-design-system-019ddfc0-a4ec-7a1a-b8c4-ad5c4b97b94a/_ds_bundle.js"></script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&amp;display=swap">
 <style>
@@ -60,18 +65,22 @@ details[open] .pj-plus{transform:rotate(45deg)}
 
 <div style="position:relative;background:#0B0A0A;color:#FFFFFF;font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;overflow-x:clip">
 
-<header data-screen-label="01 Header" style="position:sticky;top:0;z-index:100;background:rgba(11,10,10,.94);border-bottom:1px solid #2A2A2A;backdrop-filter:blur(6px)">
-  <div style="max-width:1600px;margin:0 auto;padding:14px clamp(16px,3.4vw,56px);display:flex;align-items:center;justify-content:space-between;gap:16px 28px;flex-wrap:wrap">
-    <a href="#top" style="display:flex;align-items:center"><img src="/assets/logo-black-cropped.png" alt="Paramify" style="height:26px;width:auto;filter:brightness(0) invert(1)"></a>
-    <div style="display:flex;align-items:center;gap:clamp(14px,2.4vw,36px);flex-wrap:wrap;font-family:'IBM Plex Mono',monospace;font-weight:700;font-size:12px;letter-spacing:.06em;text-transform:uppercase">
-      <span style="display:flex;align-items:center;gap:8px;color:#BFBFBF;white-space:nowrap"><span style="width:8px;height:8px;background:#20FC8F"></span>{{ headerNote }}</span>
-      <a href="{{ claimHref }}" style="display:flex;align-items:center;gap:8px;background:#20FC8F;color:#000000;text-decoration:none;padding:11px 16px;font-size:13px" style-hover="background:#FFFFFF;color:#000000"><span>&gt;</span><span style="white-space:nowrap">{{ ctaShort }}</span></a>
+<div class="pj-chrome pj-site" data-screen-label="Site nav">
+<a class="pj-promo" href="/tickets"><b>DROP 2 IS LIVE</b>50% off every ticket + buy now, pay later · Ends Nov 30 →</a>
+<nav class="pj-nav" aria-label="Main">
+  <div class="pj-wrap">
+    <a class="pj-logo" href="/" aria-label="Paramijam home"><img src="../assets/paramijam-wordmark-text.svg" alt="paramijam"><span>JAN 26–28 · PARK CITY</span></a>
+    <div class="pj-links"><a href="/agenda">Agenda</a><a href="/what-you-get">What you get</a><a href="/stay">Hotel</a><a href="/faq">FAQ</a><a href="/sponsor">Sponsor</a><a class="pj-btn sm" href="/tickets"><span class="pj-car">&gt;</span><span>Buy tickets</span></a></div>
+    <div class="pj-nav-right">
+      <a class="pj-btn sm pj-nav-cta" href="/tickets"><span>&gt;</span><span>Tickets</span></a>
+      <details class="pj-menu"><summary aria-label="Open menu">MENU ≡</summary><div class="pj-menu-panel"><a href="/">Home</a><a href="/tickets">Tickets</a><a href="/agenda">Agenda</a><a href="/what-you-get">What you get</a><a href="/stay">Hotel</a><a href="/faq">FAQ</a><a href="/sponsor">Sponsor</a><a class="pj-btn" href="/tickets"><span>&gt;</span><span>Buy tickets</span></a></div></details>
     </div>
   </div>
-</header>
+</nav>
+</div>
 
 <section id="top" data-screen-label="02 Hero" style="position:relative;min-height:calc(100vh - 56px);display:flex;animation:crtOn 1.4s cubic-bezier(.2,.7,.2,1) both">
-  <div style="position:absolute;inset:0;background:url(/assets/pj-dan-cart.jpg) center 30%/cover no-repeat;filter:saturate(.8) contrast(1.05)"></div>
+  <div style="position:absolute;inset:0;background:url(../assets/pj-dan-cart.jpg) center 30%/cover no-repeat;filter:saturate(.8) contrast(1.05)"></div>
   <div style="position:absolute;inset:0;background:rgba(0,0,0,.6)"></div>
   <div style="position:absolute;inset:0;background:linear-gradient(180deg,rgba(11,10,10,0) 55%,#0B0A0A 100%)"></div>
   <div style="position:relative;z-index:2;width:100%;max-width:1600px;margin:0 auto;padding:clamp(240px,calc(20vh + 140px),380px) clamp(16px,3.4vw,56px) clamp(64px,12vh,140px);display:flex;flex-direction:column;gap:clamp(56px,10vh,160px)">
@@ -81,8 +90,8 @@ details[open] .pj-plus{transform:rotate(45deg)}
     </div>
     <div style="display:flex;flex-direction:column;gap:clamp(28px,5vh,56px)">
       <div style="position:relative;width:min(100%,1000px);aspect-ratio:518/100;animation:fadeUp .9s ease-out 1.4s both">
-        <img src="/assets/paramijam-wordmark-text.svg" alt="paramijam" style="position:absolute;inset:0;width:100%;height:100%">
-        <img src="/assets/paramijam-cursor.svg" alt="" style="position:absolute;left:31.7%;top:56.8%;width:5.21%;height:auto;animation:roam 12s steps(1) infinite 3s">
+        <img src="../assets/paramijam-wordmark-text.svg" alt="paramijam" style="position:absolute;inset:0;width:100%;height:100%">
+        <img src="../assets/paramijam-cursor.svg" alt="" style="position:absolute;left:31.7%;top:56.8%;width:5.21%;height:auto;animation:roam 12s steps(1) infinite 3s">
       </div>
       <div style="display:flex;flex-direction:column;gap:clamp(14px,2vh,22px)">
       <span style="align-self:flex-start;background:#20FC8F;color:#000000;padding:6px 10px;font-family:'IBM Plex Mono',monospace;font-weight:700;font-size:clamp(12px,1vw,15px);line-height:1;letter-spacing:.06em;white-space:nowrap;animation:fadeUp .8s ease-out 1.6s both">[CLUB 7739 &amp; CUSTOMER ADVISORY]</span>
@@ -139,7 +148,7 @@ details[open] .pj-plus{transform:rotate(45deg)}
       <p style="margin:0;font-weight:700;font-size:clamp(19px,1.6vw,24px);line-height:1.25;letter-spacing:-.01em;color:rgba(255,255,255,.7);max-width:40ch;text-wrap:pretty">Before Paramijam kicks off, get ahead of compliance's Y2K.<span style="display:block;height:.6em"></span>Spend Monday at an invite-only roundtable with Paramify's product and leadership teams, helping us build the future of GRC engineering.</p>
     </div>
     <div style="position:relative;display:flex;justify-content:center;padding-bottom:clamp(24px,3vw,40px)">
-      <div style="position:relative;width:100%;max-width:620px;aspect-ratio:1;background:url(/assets/pj-dan-crt.jpg) center/cover no-repeat"></div>
+      <div style="position:relative;width:100%;max-width:620px;aspect-ratio:1;background:url(../assets/pj-dan-crt.jpg) center/cover no-repeat"></div>
       <div style="position:absolute;left:clamp(-8px,-2vw,-32px);bottom:0;width:min(92%,460px);background:#C0C0C0;color:#000000;border:2px solid;border-color:#FFFFFF #404040 #404040 #FFFFFF;box-shadow:4px 4px 0 rgba(0,0,0,.6);font-family:'IBM Plex Mono',monospace">
         <div style="background:#000080;color:#FFFFFF;padding:6px 8px;display:flex;justify-content:space-between;align-items:center;font-weight:700;font-size:13px"><span>ROADMAP.EXE</span><span style="width:18px;height:16px;background:#C0C0C0;color:#000000;border:1px solid;border-color:#FFFFFF #404040 #404040 #FFFFFF;display:flex;align-items:center;justify-content:center;font-size:11px;line-height:1">×</span></div>
         <div style="padding:16px;display:flex;flex-direction:column;gap:10px;font-size:13px;line-height:1.45">
@@ -212,7 +221,7 @@ details[open] .pj-plus{transform:rotate(45deg)}
 </section>
 
 <section id="mornings" data-screen-label="05 Mornings" style="position:relative;min-height:100vh;display:flex;align-items:flex-end;overflow:hidden">
-  <div style="position:absolute;inset:0;background:url(/assets/pj-ski.jpg) 70% center/cover no-repeat"></div>
+  <div style="position:absolute;inset:0;background:url(../assets/pj-ski.jpg) 70% center/cover no-repeat"></div>
   <div style="position:absolute;inset:0;background:linear-gradient(180deg,rgba(11,10,10,.15) 0%,rgba(11,10,10,0) 40%,rgba(11,10,10,.85) 100%)"></div>
   <div style="position:relative;width:100%;max-width:1600px;margin:0 auto;padding:0 clamp(16px,3.4vw,56px) clamp(40px,7vh,96px);display:flex;flex-direction:column;gap:16px">
     <span style="font-family:'IBM Plex Mono',monospace;font-weight:700;font-size:13px;letter-spacing:.06em;color:#20FC8F">AM · ON THE MOUNTAIN</span>
@@ -221,9 +230,9 @@ details[open] .pj-plus{transform:rotate(45deg)}
 </section>
 <section data-screen-label="06 Afternoons" style="position:relative;min-height:100vh;display:flex;align-items:flex-end;overflow:hidden">
   <div style="position:absolute;inset:0;overflow:hidden;container-type:size">
-    <div style="position:absolute;left:50%;top:50%;width:max(100cqw,calc(100cqh * 1608 / 900));aspect-ratio:1608/900;transform:translate(-50%,-50%);background:url(/assets/pj-meeting.jpg) center/100% 100% no-repeat">
+    <div style="position:absolute;left:50%;top:50%;width:max(100cqw,calc(100cqh * 1608 / 900));aspect-ratio:1608/900;transform:translate(-50%,-50%);background:url(../assets/pj-meeting.jpg) center/100% 100% no-repeat">
       <div style="position:absolute;left:50.25%;top:41%;width:16%;height:22%;transform:translate(-50%,-50%);background:radial-gradient(ellipse at center,rgba(255,214,170,.28) 0%,rgba(255,214,170,.1) 40%,rgba(255,214,170,0) 70%);mix-blend-mode:screen;pointer-events:none"></div>
-      <img src="/assets/logo-black-cropped.png" alt="Paramify" style="position:absolute;left:50.25%;top:41%;width:9.2%;height:auto;transform:translate(-50%,-50%);filter:brightness(0) drop-shadow(0 0 1px rgba(255,240,220,.95)) drop-shadow(0 0 5px rgba(255,220,180,.8)) drop-shadow(0 0 16px rgba(255,205,150,.5));opacity:.92">
+      <img src="../assets/logo-black-cropped.png" alt="Paramify" style="position:absolute;left:50.25%;top:41%;width:9.2%;height:auto;transform:translate(-50%,-50%);filter:brightness(0) drop-shadow(0 0 1px rgba(255,240,220,.95)) drop-shadow(0 0 5px rgba(255,220,180,.8)) drop-shadow(0 0 16px rgba(255,205,150,.5));opacity:.92">
     </div>
   </div>
   <div style="position:absolute;inset:0;background:linear-gradient(180deg,rgba(11,10,10,.15) 0%,rgba(11,10,10,0) 40%,rgba(11,10,10,.85) 100%)"></div>
@@ -233,7 +242,7 @@ details[open] .pj-plus{transform:rotate(45deg)}
   </div>
 </section>
 <section data-screen-label="07 Nights" style="position:relative;min-height:100vh;display:flex;align-items:flex-end;overflow:hidden">
-  <div style="position:absolute;inset:0;background:url(/assets/pj-jew.jpg) center 40%/cover no-repeat"></div>
+  <div style="position:absolute;inset:0;background:url(../assets/pj-jew.jpg) center 40%/cover no-repeat"></div>
   <div style="position:absolute;inset:0;background:linear-gradient(180deg,rgba(11,10,10,.15) 0%,rgba(11,10,10,0) 40%,rgba(11,10,10,.85) 100%)"></div>
   <div style="position:relative;width:100%;max-width:1600px;margin:0 auto;padding:0 clamp(16px,3.4vw,56px) clamp(40px,7vh,96px);display:flex;flex-direction:column;gap:16px">
     <span style="font-family:'IBM Plex Mono',monospace;font-weight:700;font-size:13px;letter-spacing:.06em;color:#20FC8F">AFTER DARK</span>
@@ -262,12 +271,12 @@ details[open] .pj-plus{transform:rotate(45deg)}
 
 
 <div data-screen-label="10 Venue" style="display:flex;flex-wrap:wrap;gap:2px;background:#0B0A0A">
-  <div style="flex:2 1 560px;position:relative;min-height:clamp(320px,44vw,640px);background:url(/assets/pj-pool.avif) center 60%/cover"><img src="/assets/pendry-logo.png" alt="Pendry Park City" style="position:absolute;top:clamp(20px,4%,48px);right:clamp(20px,5%,64px);width:min(30%,320px);height:auto;filter:brightness(0) invert(1) drop-shadow(0 2px 12px rgba(0,0,0,.35))"><span style="position:absolute;left:12px;bottom:12px;font-family:'IBM Plex Mono',monospace;font-weight:700;font-size:12px;letter-spacing:.06em;color:#FFFFFF;background:rgba(0,0,0,.7);padding:6px 10px;white-space:nowrap">ROOFTOP POOL</span></div>
+  <div style="flex:2 1 560px;position:relative;min-height:clamp(320px,44vw,640px);background:url(../assets/pj-pool.avif) center 60%/cover"><img src="../assets/pendry-logo.png" alt="Pendry Park City" style="position:absolute;top:clamp(20px,4%,48px);right:clamp(20px,5%,64px);width:min(30%,320px);height:auto;filter:brightness(0) invert(1) drop-shadow(0 2px 12px rgba(0,0,0,.35))"><span style="position:absolute;left:12px;bottom:12px;font-family:'IBM Plex Mono',monospace;font-weight:700;font-size:12px;letter-spacing:.06em;color:#FFFFFF;background:rgba(0,0,0,.7);padding:6px 10px;white-space:nowrap">ROOFTOP POOL</span></div>
   <div style="flex:1 1 440px;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));grid-auto-rows:minmax(220px,1fr);gap:2px">
-    <div style="position:relative;min-height:220px;background:url(/assets/pj-fire.webp) center/cover"><span style="position:absolute;left:12px;bottom:12px;font-family:'IBM Plex Mono',monospace;font-weight:700;font-size:12px;letter-spacing:.06em;color:#FFFFFF;background:rgba(0,0,0,.7);padding:6px 10px;white-space:nowrap">FIRESIDE LOUNGE</span></div>
-    <div style="position:relative;min-height:220px;background:url(/assets/pj-bar.jpg) center/cover"><span style="position:absolute;left:12px;bottom:12px;font-family:'IBM Plex Mono',monospace;font-weight:700;font-size:12px;letter-spacing:.06em;color:#FFFFFF;background:rgba(0,0,0,.7);padding:6px 10px;white-space:nowrap">THE BAR</span></div>
-    <div style="position:relative;min-height:220px;background:url(/assets/pj-room.jpg) 60% center/cover"><span style="position:absolute;left:12px;bottom:12px;font-family:'IBM Plex Mono',monospace;font-weight:700;font-size:12px;letter-spacing:.06em;color:#FFFFFF;background:rgba(0,0,0,.7);padding:6px 10px;white-space:nowrap">YOUR ROOM</span></div>
-    <div style="position:relative;min-height:220px;background:url(/assets/pj-plaza.png) center/cover"><span style="position:absolute;left:12px;bottom:12px;font-family:'IBM Plex Mono',monospace;font-weight:700;font-size:12px;letter-spacing:.06em;color:#FFFFFF;background:rgba(0,0,0,.7);padding:6px 10px;white-space:nowrap">SLOPESIDE FIRE PIT</span></div>
+    <div style="position:relative;min-height:220px;background:url(../assets/pj-fire.webp) center/cover"><span style="position:absolute;left:12px;bottom:12px;font-family:'IBM Plex Mono',monospace;font-weight:700;font-size:12px;letter-spacing:.06em;color:#FFFFFF;background:rgba(0,0,0,.7);padding:6px 10px;white-space:nowrap">FIRESIDE LOUNGE</span></div>
+    <div style="position:relative;min-height:220px;background:url(../assets/pj-bar.jpg) center/cover"><span style="position:absolute;left:12px;bottom:12px;font-family:'IBM Plex Mono',monospace;font-weight:700;font-size:12px;letter-spacing:.06em;color:#FFFFFF;background:rgba(0,0,0,.7);padding:6px 10px;white-space:nowrap">THE BAR</span></div>
+    <div style="position:relative;min-height:220px;background:url(../assets/pj-room.jpg) 60% center/cover"><span style="position:absolute;left:12px;bottom:12px;font-family:'IBM Plex Mono',monospace;font-weight:700;font-size:12px;letter-spacing:.06em;color:#FFFFFF;background:rgba(0,0,0,.7);padding:6px 10px;white-space:nowrap">YOUR ROOM</span></div>
+    <div style="position:relative;min-height:220px;background:url(../assets/pj-plaza.png) center/cover"><span style="position:absolute;left:12px;bottom:12px;font-family:'IBM Plex Mono',monospace;font-weight:700;font-size:12px;letter-spacing:.06em;color:#FFFFFF;background:rgba(0,0,0,.7);padding:6px 10px;white-space:nowrap">SLOPESIDE FIRE PIT</span></div>
   </div>
 </div>
 
@@ -326,18 +335,19 @@ details[open] .pj-plus{transform:rotate(45deg)}
   </div>
 </section>
 
-<footer data-screen-label="13 Footer" style="border-top:1px solid #2A2A2A;background:#000000">
-  <div style="max-width:1600px;margin:0 auto;padding:clamp(56px,7vw,112px) clamp(16px,3.4vw,56px) 40px;display:flex;flex-direction:column;gap:clamp(40px,6vw,80px)">
-    <div style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:flex-end;gap:32px">
-      <span style="font-weight:700;font-size:clamp(32px,3.6vw,60px);line-height:1;letter-spacing:-.04em"><span style="white-space:nowrap">Party like it's 1999.</span><br><span style="color:#20FC8F;white-space:nowrap">Certify like it's 20x.</span></span>
-      <a href="{{ claimHref }}" style="display:flex;align-items:center;gap:12px;background:#20FC8F;color:#000000;text-decoration:none;padding:18px 26px;font-family:'IBM Plex Mono',monospace;font-weight:700;font-size:16px;letter-spacing:.04em" style-hover="background:#FFFFFF;color:#000000"><span>&gt;</span><span>{{ ctaLong }}</span></a>
+<footer class="pj-foot pj-site" data-screen-label="Site footer">
+  <div class="pj-wrap">
+    <div class="pj-foot-top">
+      <div class="pj-foot-tag"><span>Party like it's 1999.</span><span>Authorize like it's 2027.</span></div>
+      <a class="pj-btn lg" href="/tickets"><span class="pj-car">&gt;</span><span>Get your ticket</span></a>
     </div>
-    <img src="/assets/paramijam-wordmark.svg" alt="paramijam" style="width:101.51%;max-width:none;margin-left:-1.32%;height:auto;display:block">
-    <div style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:20px;padding-top:24px;border-top:1px solid #2A2A2A;font-family:'IBM Plex Mono',monospace;font-weight:700;font-size:12px;letter-spacing:.06em">
-      <span style="display:flex;align-items:center;gap:12px;white-space:nowrap"><span style="color:#8C8C8C">HOSTED BY</span><img src="/assets/logo-black-cropped.png" alt="Paramify" style="height:20px;width:auto;filter:brightness(0) invert(1)"></span>
-      <nav style="display:flex;flex-wrap:wrap;gap:24px"><a href="{{ publicHref }}" style="color:#FFFFFF;text-decoration:none" style-hover="color:#20FC8F">PARAMIJAM 2027</a><a href="/cpe" style="color:#FFFFFF;text-decoration:none" style-hover="color:#20FC8F">*CPE CREDIT INFORMATION</a><a href="mailto:paramijam@paramify.com" style="color:#FFFFFF;text-decoration:none" style-hover="color:#20FC8F">CONTACT</a><a href="https://www.paramify.com" style="color:#FFFFFF;text-decoration:none" style-hover="color:#20FC8F">PARAMIFY.COM</a></nav>
-      <span style="color:#8C8C8C;white-space:nowrap">ADVISORY BOARD + CLUB 7739 · PARK CITY, UT · JAN 25 – 28, 2027</span>
+    <img class="pj-foot-mark" src="../assets/paramijam-wordmark.svg" alt="paramijam">
+    <div class="pj-foot-cols">
+      <div><h4>THE EVENT</h4><ul><li><a href="/">Home</a></li><li><a href="/tickets">Tickets</a></li><li><a href="/agenda">Agenda</a></li><li><a href="/what-you-get">What you get</a></li><li><a href="/stay">Hotel</a></li></ul></div>
+      <div><h4>GOOD TO KNOW</h4><ul><li><a href="/faq">FAQ</a></li><li><a href="/cpe">CPE credits</a></li><li><a href="../Paramijam-Justification-Letter.pdf" target="_blank" rel="noopener">Justification letter</a></li><li><a href="/sponsor">Sponsor</a></li></ul></div>
+      <div><h4>GET IN TOUCH</h4><ul><li><a href="mailto:paramijam@paramify.com">paramijam@paramify.com</a></li><li><a href="https://www.paramify.com">Paramify.com</a></li><li><a class="pj-quiet" href="/advisory">Advisory Board + Club 7739 members</a></li></ul></div>
     </div>
+    <div class="pj-foot-base"><span>HOSTED BY<img src="../assets/logo-black-cropped.png" alt="Paramify"></span><span>PENDRY PARK CITY · PARK CITY, UT · JAN 26–28, 2027</span></div>
   </div>
 </footer>
 
