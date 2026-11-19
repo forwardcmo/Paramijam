@@ -237,3 +237,46 @@ details:not([open]) .pj-more .pj-close{display:none}
 .pj-bf-b{font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;font-size:clamp(24px,2.1vw,34px);letter-spacing:-.04em;line-height:.95}
 @keyframes pjBfPulse{0%,100%{transform:translateY(-50%) rotate(-12deg) scale(1)}50%{transform:translateY(-50%) rotate(-12deg) scale(1.05)}}
 @media (max-width:900px){.pj-bf{position:relative;right:auto;top:auto;align-self:flex-start;flex-direction:row;width:auto;aspect-ratio:auto;border-radius:0;padding:10px 14px;gap:10px;transform:rotate(-2deg);animation:none;box-shadow:4px 4px 0 #000,4px 4px 0 1px #20FC8F;margin-top:24px}.pj-bf-a,.pj-bf-b{font-family:'IBM Plex Mono',monospace;font-size:13px;letter-spacing:.06em;max-width:none}.pj-bf-b::before{content:'— '}}
+
+/* photo hero (agenda) */
+.pj-hero-bg{position:relative;overflow:hidden;min-height:clamp(460px,62vh,680px);display:flex;align-items:flex-end;background:#000}
+.pj-hero-img{position:absolute;inset:0;background-position:0% 22%;background-size:max(130%,cover);background-repeat:no-repeat;filter:saturate(.85) contrast(1.05)}
+.pj-hero-bg:after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,rgba(0,0,0,.72) 0%,rgba(0,0,0,.35) 50%,rgba(0,0,0,.1) 100%),linear-gradient(180deg,rgba(0,0,0,.35) 0%,rgba(0,0,0,0) 35%,rgba(11,10,10,.85) 100%)}
+.pj-hero-bg>.pj-wrap{position:relative;z-index:1;width:100%}
+.pj-hero-bg .pj-lede{color:rgba(255,255,255,.88)}
+.pj-hero-bg .pj-hero-top span+span{color:#fff;text-shadow:0 1px 8px rgba(0,0,0,.6)}
+@media (min-width:761px){.pj-hero-img{background-size:135% auto}}
+@media (max-width:760px){.pj-hero-bg{min-height:440px}.pj-hero-img{background-size:cover;background-position:50% 30%}}
+
+/* agenda topic tracks */
+.pj-tracknav{display:flex;flex-wrap:wrap;align-items:center;gap:10px;margin:clamp(24px,3vw,40px) 0 0}
+.pj-tracknav .pj-tag{color:var(--g5);margin-right:6px}
+.pj-tracknav a{display:inline-flex;align-items:center;gap:8px;border:1px solid var(--g3);color:var(--white)!important;text-decoration:none;font-family:var(--mono);font-weight:700;font-size:13px;letter-spacing:.04em;text-transform:uppercase;padding:10px 14px}
+.pj-tracknav a b{color:#000;background:var(--jam);padding:1px 6px;font-size:11px}
+.pj-tracknav a:hover{border-color:var(--jam);color:var(--jam)!important}
+.pj-tracks{display:flex;flex-direction:column;gap:clamp(40px,5vw,72px);margin-top:clamp(32px,4vw,56px)}
+.pj-track{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,2.2fr);gap:clamp(20px,4vw,64px);align-items:start;scroll-margin-top:120px}
+.pj-track-head{position:sticky;top:120px;display:flex;flex-direction:column;gap:10px}
+.pj-track-head .pj-tag{color:var(--jam)}
+.pj-track-head h3{margin:0;font-weight:700;font-size:clamp(26px,2.6vw,40px);line-height:1.02;letter-spacing:-.035em}
+.pj-track-head>p{margin:0;color:var(--g6);font-size:16px;line-height:1.5}
+.pj-track-also{display:flex;flex-wrap:wrap;gap:6px 12px;align-items:center;margin:6px 0 0!important;font-size:14px}
+.pj-track-also .pj-tag{color:var(--g5)!important;width:100%}
+.pj-track-also a{color:var(--jam)}
+.pj-track .pj-acc{border-top-color:var(--jam)}
+@media (max-width:860px){.pj-track{grid-template-columns:1fr}.pj-track-head{position:static}}
+
+/* home speaker rotation */
+.pj-rotate .pj-spk{transition:opacity .28s ease,transform .28s ease}
+.pj-rotate .pj-spk.pj-out,.pj-rotate .pj-spk.pj-in{opacity:0;transform:translateY(8px)}
+
+/* logo wall: center an incomplete last row */
+.pj-logos{display:flex!important;flex-wrap:wrap;justify-content:center;--lg:clamp(20px,3vw,48px)}
+.pj-logos>span{flex:0 0 calc((100% - 3 * var(--lg)) / 4);column-gap:0}
+.pj-logos{column-gap:var(--lg)}
+@media (max-width:640px){.pj-logos>span{flex-basis:calc((100% - var(--lg)) / 2)}}
+.pj-also{display:flex;flex-direction:column;padding:16px 0 4px}
+.pj-also .pj-tag{color:var(--g5);margin-bottom:6px}
+.pj-also a{display:flex;justify-content:space-between;align-items:baseline;gap:16px;padding:14px 0;border-top:1px dashed var(--g3);color:var(--g6)!important;text-decoration:none;font-weight:700;font-size:clamp(16px,1.3vw,19px);letter-spacing:-.015em}
+.pj-also a:hover{color:var(--white)!important}
+.pj-also-go{flex:none;font-family:var(--mono);font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--jam)}
