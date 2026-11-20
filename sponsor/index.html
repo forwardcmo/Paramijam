@@ -380,6 +380,10 @@ footer .wrap{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;
 .tracks{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
 .htrack{background:var(--paper);border:2px solid var(--gray2);padding:16px;display:grid;gap:6px;align-content:start}
 .htrack.open{border-color:var(--sean)}
+.tracks.taken{margin-top:12px}
+.htrack.gone{opacity:.6}
+.htrack.gone .tube{color:var(--red)}
+.htrack.gone b{text-decoration:line-through}
 .htrack .tube{color:var(--gray)}
 .htrack.open .tube{color:var(--sean)}
 .htrack b{font-weight:700;line-height:1.25}
@@ -751,7 +755,7 @@ h1,h2,h3{letter-spacing:-.012em}
     <div class="sched-wrap"><table class="sched">
 <thead><tr><th scope="col"><span class="sr">Time</span></th><th scope="col"><b>Mon · Jan 25</b><span>Partner &amp; CAB Day</span><i class="pre-chip">Pre-event · invite only</i></th><th scope="col"><b>Tue · Jan 26</b><span>Keynote day · full group</span></th><th scope="col"><b>Wed · Jan 27</b><span>Breakouts + concert · full group</span></th><th scope="col"><b>Thu · Jan 28</b><span>Hands-on day</span></th></tr></thead>
 <tbody><tr><th scope="row"><b>Morning</b><span>9 AM–12 PM</span></th><td class="pre" rowspan="3">CAB + partner meetings</td><td>Winter activities</td><td>Winter activities</td><td class="sp" rowspan="3">Hands-on training, 9 AM–4 PM</td></tr>
-<tr><th scope="row"><b>Midday</b><span>12–1 PM</span></th><td>Breakfast + après lunch at the Pendry</td><td class="sp">Breakfast + après lunch at the Pendry</td></tr>
+<tr><th scope="row"><b>Midday</b><span>12–1 PM</span></th><td>Breakfast + après lunch at the Pendry</td><td>Breakfast + après lunch at the Pendry</td></tr>
 <tr><th scope="row"><b>Afternoon</b><span>1 PM on</span></th><td class="sp">Keynote speakers and panelists</td><td class="sp">Breakout sessions with industry leaders</td></tr>
 <tr><th scope="row"><b>Evening</b></th><td class="pre">VIP dinner</td><td class="sp">Main Street dinners<br><span style="font-weight:400;opacity:.75">then Main Street happy hour at High West Park City</span></td><td class="sp">Dinner for all attendees + Jimmy Eat World*</td><td>Fly home</td></tr>
 <tr><th scope="row"><b>Late</b></th><td class="pre">Welcome Late Night Lounge</td><td>Late-night lounge</td><td>Late-night lounge</td><td class="empty"></td></tr>
@@ -818,6 +822,10 @@ h1,h2,h3{letter-spacing:-.012em}
         <div class="htrack open"><span class="tube">2 hrs · Open for sponsorship</span><b>Become an AI-powered GRC engineer</b><p>Leave with 1–5 custom evidence scripts. Multiple sessions available.</p></div>
         <div class="htrack open"><span class="tube">1 hr · Open for sponsorship</span><b>Gap assessment + action plan</b><p>Leave with a FedRAMP roadmap and next steps. Multiple sessions available.</p></div>
         <div class="htrack open"><span class="tube">1 hr · Open for sponsorship</span><b>Rev 5 to 20x advisory</b><p>Leave with answers from subject-matter experts. Multiple sessions available.</p></div>
+      </div>
+      <div class="tracks taken" aria-label="Sessions already sponsored">
+        <div class="htrack gone"><span class="tube">Wed breakout · Sold out</span><b>Rev5 Now: Your 18-Month Roadmap</b><p>Sponsored breakout session.</p></div>
+        <div class="htrack gone"><span class="tube">Thu workshop · Sold out</span><b>Sponsored Day 3 workshop</b><p>Topic being finalized.</p></div>
       </div>
       <div class="handson-foot">
         <p><b>Or bring your own.</b> The ballroom splits into private sponsor spaces, and attendees sign up ahead of time for the sessions they care about. Run a working session on a real problem, hands-on setup of your tool, or office hours with your experts.</p>
@@ -1035,15 +1043,15 @@ const GROUPS = [
   { id:"meals", name:"Meals", note:"One sponsor each", items:[
     { id:"vipdinner", name:"Monday VIP dinner", price:0, status:"gone", desc:"The invite-only Monday dinner for partners and the customer advisory board." },
     { id:"apres-tue", name:"Tuesday breakfast + après lunch", price:15000, status:"gone", desc:"Day 1 breakfast and lunch at the Pendry." },
-    { id:"apres-wed", name:"Wednesday breakfast + après lunch", price:15000, status:"open", desc:"Day 2 breakfast and lunch at the Pendry." },
+    { id:"apres-wed", name:"Wednesday breakfast + après lunch", price:15000, status:"gone", desc:"Day 2 breakfast and lunch at the Pendry." },
     { id:"wed-dinner", name:"Wednesday dinner for all attendees", price:12000, status:"open", desc:"Dinner for every attendee on Wednesday night before the concert." },
     { id:"day3-meals", name:"Thursday breakfast + lunch", price:15000, status:"open", desc:"Day 3 breakfast and lunch during the hands-on workshops." }
   ]},
-  { id:"dinners", name:"Tuesday Main Street dinners", desc:"We book a Park City venue for your dinner, promote it to fill seats, and cover signage and transportation.", note:"3 of 6 left · $25K each · one per company · Diamond and Spotlight pick venues first", items:[
+  { id:"dinners", name:"Tuesday Main Street dinners", desc:"We book a Park City venue for your dinner, promote it to fill seats, and cover signage and transportation.", note:"2 of 6 left · $25K each · one per company · Diamond and Spotlight pick venues first", items:[
     { id:"dinner1", name:"Park City Main Street Dinner #1", label:"Park City Main Street Dinner", num:1, price:25000, status:"gone", desc:"" },
     { id:"dinner2", name:"Park City Main Street Dinner #2", label:"Park City Main Street Dinner", num:2, price:25000, status:"gone", desc:"" },
     { id:"dinner3", name:"Park City Main Street Dinner #3", label:"Park City Main Street Dinner", num:3, price:25000, status:"gone", desc:"" },
-    { id:"dinner4", name:"Park City Main Street Dinner #4", label:"Park City Main Street Dinner", num:4, price:25000, status:"open", desc:"" },
+    { id:"dinner4", name:"Park City Main Street Dinner #4", label:"Park City Main Street Dinner", num:4, price:25000, status:"gone", desc:"" },
     { id:"dinner5", name:"Park City Main Street Dinner #5", label:"Park City Main Street Dinner", num:5, price:25000, status:"open", desc:"" },
     { id:"dinner6", name:"Park City Main Street Dinner #6", label:"Park City Main Street Dinner", num:6, price:25000, status:"open", desc:"" }
   ]},
