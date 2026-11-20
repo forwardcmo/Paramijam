@@ -20,3 +20,24 @@
     if (a.target === '_blank') window.open(url, '_blank', 'noopener'); else location.href = url;
   }, true);
 })();
+
+/* Ad tags on every page: LinkedIn Insight + Google Ads.
+   The checkout page already has both, so this skips whatever is already loaded. */
+(function () {
+  var ids = window._linkedin_data_partner_ids;
+  if (!ids || ids.indexOf('5677097') === -1) {
+    window._linkedin_partner_id = '5677097';
+    window._linkedin_data_partner_ids = ids || [];
+    window._linkedin_data_partner_ids.push('5677097');
+    if (!window.lintrk) { window.lintrk = function (a, b) { window.lintrk.q.push([a, b]); }; window.lintrk.q = []; }
+    var s = document.createElement('script');
+    s.async = true;
+    s.src = 'https://snap.licdn.com/li.lms-analytics/insight.min.js';
+    document.head.appendChild(s);
+  }
+  if (typeof window.gtag === 'function') {
+    var dl = window.dataLayer || [], hasAw = false;
+    for (var i = 0; i < dl.length; i++) if (dl[i] && dl[i][0] === 'config' && dl[i][1] === 'AW-11226980442') hasAw = true;
+    if (!hasAw) window.gtag('config', 'AW-11226980442');
+  }
+})();
