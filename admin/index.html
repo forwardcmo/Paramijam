@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<script src="/support.js"></script>
+<script src="../support.js"></script>
 </head>
 <body>
 <x-dc>
@@ -15,11 +15,13 @@
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&display=swap">
 <style>
 html,body{margin:0;background:#0B0A0A}
+html{scroll-behavior:smooth}
 *{box-sizing:border-box}
 a{color:#20FC8F}
 a:hover{color:#FFFFFF}
 button,input{font:inherit}
 input::placeholder{color:#595959}
+section[id]{scroll-margin-top:72px}
 </style>
 </helmet>
 
@@ -27,11 +29,14 @@ input::placeholder{color:#595959}
 
 <header data-screen-label="01 Header" style="position:sticky;top:0;z-index:50;background:rgba(11,10,10,.94);border-bottom:1px solid #2A2A2A;backdrop-filter:blur(6px)">
   <div style="max-width:1440px;margin:0 auto;padding:14px clamp(16px,3vw,40px);display:flex;align-items:center;justify-content:space-between;gap:12px 24px;flex-wrap:wrap;font-family:'IBM Plex Mono',monospace;font-weight:700;font-size:12px;letter-spacing:.06em">
-    <span style="display:flex;align-items:center;gap:10px"><span style="width:8px;height:8px;background:#20FC8F"></span>PARAMIJAM 2027 · ADMIN</span>
+    <div style="display:flex;align-items:center;gap:10px 22px;flex-wrap:wrap">
+      <span style="display:flex;align-items:center;gap:10px"><span style="width:8px;height:8px;background:#20FC8F"></span>PARAMIJAM 2027 · ADMIN</span>
+      <sc-if value="{{ authed }}"><nav style="display:flex;gap:16px;flex-wrap:wrap"><a href="#overview" style="color:#BFBFBF;text-decoration:none" style-hover="color:#20FC8F">OVERVIEW</a><a href="#reps" style="color:#BFBFBF;text-decoration:none" style-hover="color:#20FC8F">AE + SDR INVITES</a><a href="#customers" style="color:#BFBFBF;text-decoration:none" style-hover="color:#20FC8F">CUSTOMERS (CS)</a><a href="#attendees" style="color:#BFBFBF;text-decoration:none" style-hover="color:#20FC8F">ATTENDEES</a></nav></sc-if>
+    </div>
     <div style="display:flex;align-items:center;gap:16px;flex-wrap:wrap;color:#8C8C8C">
       <span>{{ statusLine }}</span>
       <sc-if value="{{ authed }}"><button onClick="{{ refresh }}" style="cursor:pointer;background:transparent;border:1px solid #343434;color:#FFFFFF;padding:8px 12px;font-family:'IBM Plex Mono',monospace;font-weight:700;font-size:11px;letter-spacing:.06em" style-hover="border-color:#20FC8F;color:#20FC8F">REFRESH</button></sc-if>
-      <sc-if value="{{ authed }}"><a href="{{ csvHref }}" style="color:#FFFFFF;text-decoration:none;border:1px solid #343434;padding:8px 12px;font-size:11px" style-hover="border-color:#20FC8F;color:#20FC8F">CSV</a></sc-if>
+      <sc-if value="{{ authed }}"><a href="{{ csvHref }}" style="color:#FFFFFF;text-decoration:none;border:1px solid #343434;padding:8px 12px;font-size:11px" style-hover="border-color:#20FC8F;color:#20FC8F">ALL ATTENDEES CSV</a></sc-if>
       <sc-if value="{{ canSignOut }}"><button onClick="{{ signOut }}" style="cursor:pointer;background:transparent;border:0;color:#8C8C8C;font-family:'IBM Plex Mono',monospace;font-weight:700;font-size:11px;letter-spacing:.06em" style-hover="color:#FF273B">SIGN OUT</button></sc-if>
     </div>
   </div>
@@ -51,10 +56,11 @@ input::placeholder{color:#595959}
 </sc-if>
 
 <sc-if value="{{ authed }}" hint-placeholder-val="{{ true }}">
-<main data-screen-label="03 Dashboard" style="max-width:1440px;margin:0 auto;padding:clamp(24px,3vw,48px) clamp(16px,3vw,40px) 80px;display:flex;flex-direction:column;gap:clamp(24px,3vw,40px)">
+<main data-screen-label="03 Dashboard" style="max-width:1440px;margin:0 auto;padding:clamp(24px,3vw,48px) clamp(16px,3vw,40px) 80px;display:flex;flex-direction:column;gap:clamp(32px,4vw,56px)">
 
   <sc-if value="{{ hasErr }}"><span style="font-family:'IBM Plex Mono',monospace;font-weight:700;font-size:13px;color:#FF273B">&gt; {{ err }}</span></sc-if>
 
+  <section id="overview" style="display:flex;flex-direction:column;gap:16px">
   <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,200px),1fr));gap:2px;background:#2A2A2A;border:2px solid #2A2A2A">
     <sc-for list="{{ stats }}" as="s" hint-placeholder-count="5">
       <div style="background:{{ s.bg }};color:{{ s.fg }};padding:clamp(18px,2vw,28px);display:flex;flex-direction:column;gap:14px;min-height:150px">
@@ -81,29 +87,132 @@ input::placeholder{color:#595959}
       </section>
     </sc-for>
   </div>
+  </section>
 
-  <section data-screen-label="04 Sales by SDR" style="display:flex;flex-direction:column;gap:14px">
-    <div style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:baseline;gap:8px 20px"><h2 style="margin:0;font-weight:700;font-size:clamp(24px,2.4vw,34px);letter-spacing:-.03em">Sales by SDR</h2><span style="font-family:'IBM Plex Mono',monospace;font-weight:700;font-size:12px;letter-spacing:.06em;color:#8C8C8C">ACCOUNTS = UNIQUE COMPANIES · MOST RECENT LINK WINS</span></div>
+  <!-- ================= AE + SDR INVITES ================= -->
+  <section id="reps" data-screen-label="04 AE + SDR invites" style="display:flex;flex-direction:column;gap:16px">
+    <div style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:flex-end;gap:12px 20px">
+      <div style="display:flex;flex-direction:column;gap:8px"><span style="font-family:'IBM Plex Mono',monospace;font-weight:700;font-size:12px;letter-spacing:.06em;color:#20FC8F">&gt; AE + SDR INVITES</span><h2 style="margin:0;font-weight:700;font-size:clamp(28px,3vw,44px);letter-spacing:-.035em;line-height:1">Who brought who.</h2><span style="font-size:14px;color:#8C8C8C;max-width:80ch">Credit goes to the most recent rep link a buyer clicked (remembered 60 days), or the "Who invited you?" pick at checkout. Click a rep to see their orders.</span></div>
+      <div style="display:flex;gap:6px;flex-wrap:wrap">
+        <sc-for list="{{ teamChips }}" as="c"><button onClick="{{ c.onClick }}" style="cursor:pointer;background:{{ c.bg }};color:{{ c.fg }};border:1px solid {{ c.border }};padding:8px 12px;font-family:'IBM Plex Mono',monospace;font-weight:700;font-size:11px;letter-spacing:.06em">{{ c.label }}</button></sc-for>
+      </div>
+    </div>
+
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,180px),1fr));gap:2px;background:#2A2A2A;border:2px solid #2A2A2A">
+      <sc-for list="{{ repStats }}" as="s" hint-placeholder-count="4">
+        <div style="background:#0B0A0A;padding:18px 20px;display:flex;flex-direction:column;gap:10px">
+          <span style="font-family:'IBM Plex Mono',monospace;font-weight:700;font-size:11px;letter-spacing:.06em;color:#BFBFBF">{{ s.label }}</span>
+          <span style="font-family:'IBM Plex Mono',monospace;font-weight:700;font-size:clamp(30px,3vw,44px);line-height:.9;letter-spacing:-.04em;color:{{ s.color }}">{{ s.value }}</span>
+          <span style="font-size:13px;color:#8C8C8C">{{ s.sub }}</span>
+        </div>
+      </sc-for>
+    </div>
+
     <div style="overflow-x:auto;border:1px solid #2A2A2A">
-      <table style="width:100%;min-width:760px;border-collapse:collapse;font-size:15px;line-height:1.35">
+      <table style="width:100%;min-width:1040px;border-collapse:collapse;font-size:15px;line-height:1.35">
         <thead><tr style="text-align:left;font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.06em;color:#8C8C8C;background:#000000">
-          <th style="padding:12px 14px;font-weight:700">SDR</th><th style="padding:12px 14px;font-weight:700">TICKETS</th><th style="padding:12px 14px;font-weight:700">ACCOUNTS</th><th style="padding:12px 14px;font-weight:700">ORDERS</th><th style="padding:12px 14px;font-weight:700">REVENUE</th><th style="padding:12px 14px;font-weight:700">VIA LINK</th><th style="padding:12px 14px;font-weight:700">VIA DROPDOWN</th>
+          <th style="padding:12px 14px;font-weight:700">REP</th><th style="padding:12px 14px;font-weight:700">TEAM</th><th style="padding:12px 14px;font-weight:700">TICKETS</th><th style="padding:12px 14px;font-weight:700">ACCOUNTS</th><th style="padding:12px 14px;font-weight:700">ORDERS</th><th style="padding:12px 14px;font-weight:700">REVENUE</th><th style="padding:12px 14px;font-weight:700">PAID · INVOICED</th><th style="padding:12px 14px;font-weight:700">PUBLIC · ADVISORY</th><th style="padding:12px 14px;font-weight:700">LINK · DROPDOWN</th>
         </tr></thead>
         <tbody>
-          <sc-for list="{{ sdrRows }}" as="r" hint-placeholder-count="8">
-            <tr style="border-top:1px solid #1F1F1F">
+          <sc-for list="{{ repRows }}" as="r" hint-placeholder-count="10">
+            <tr onClick="{{ r.onClick }}" style="border-top:1px solid #1F1F1F;cursor:pointer;background:{{ r.bg }}" style-hover="background:#141414">
               <td style="padding:12px 14px;font-weight:700;color:{{ r.nameColor }}">{{ r.name }}</td>
+              <td style="padding:12px 14px;font-family:'IBM Plex Mono',monospace;font-weight:700;font-size:11px;letter-spacing:.06em;color:#8C8C8C">{{ r.team }}</td>
               <td style="padding:12px 14px"><div style="display:flex;align-items:center;gap:10px"><span style="font-family:'IBM Plex Mono',monospace;font-weight:700;min-width:3ch">{{ r.tickets }}</span><div style="flex:1;min-width:60px;height:6px;background:#1F1F1F"><div style="height:100%;width:{{ r.pct }};background:#20FC8F"></div></div></div></td>
               <td style="padding:12px 14px;font-family:'IBM Plex Mono',monospace;font-weight:700">{{ r.accounts }}</td>
               <td style="padding:12px 14px;font-family:'IBM Plex Mono',monospace">{{ r.orders }}</td>
               <td style="padding:12px 14px;font-family:'IBM Plex Mono',monospace">{{ r.revenue }}</td>
-              <td style="padding:12px 14px;font-family:'IBM Plex Mono',monospace;color:#BFBFBF">{{ r.link }}</td>
-              <td style="padding:12px 14px;font-family:'IBM Plex Mono',monospace;color:#BFBFBF">{{ r.drop }}</td>
+              <td style="padding:12px 14px;font-family:'IBM Plex Mono',monospace;color:#BFBFBF">{{ r.paidInv }}</td>
+              <td style="padding:12px 14px;font-family:'IBM Plex Mono',monospace;color:#BFBFBF">{{ r.pubAdv }}</td>
+              <td style="padding:12px 14px;font-family:'IBM Plex Mono',monospace;color:#BFBFBF">{{ r.linkDrop }}</td>
             </tr>
           </sc-for>
         </tbody>
       </table>
     </div>
+
+    <div style="display:flex;flex-direction:column;gap:12px">
+      <div style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:10px 20px">
+        <h3 style="margin:0;font-weight:700;font-size:22px;letter-spacing:-.02em">{{ repOrdersTitle }} <span style="color:#8C8C8C">{{ repOrdersCount }}</span></h3>
+        <div style="display:flex;gap:10px;flex-wrap:wrap">
+          <sc-if value="{{ hasRepFilter }}"><button onClick="{{ clearRep }}" style="cursor:pointer;background:transparent;border:1px solid #343434;color:#FFFFFF;padding:8px 12px;font-family:'IBM Plex Mono',monospace;font-weight:700;font-size:11px;letter-spacing:.06em" style-hover="border-color:#20FC8F;color:#20FC8F">SHOW ALL REPS</button></sc-if>
+          <button onClick="{{ downloadReps }}" style="cursor:pointer;background:transparent;border:1px solid #343434;color:#FFFFFF;padding:8px 12px;font-family:'IBM Plex Mono',monospace;font-weight:700;font-size:11px;letter-spacing:.06em" style-hover="border-color:#20FC8F;color:#20FC8F">↓ DOWNLOAD CSV</button>
+        </div>
+      </div>
+      <div style="overflow-x:auto;border:1px solid #2A2A2A">
+        <table style="width:100%;min-width:1100px;border-collapse:collapse;font-size:14px;line-height:1.35">
+          <thead><tr style="text-align:left;font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.06em;color:#8C8C8C;background:#000000">
+            <th style="padding:12px 14px;font-weight:700">DATE</th><th style="padding:12px 14px;font-weight:700">REP</th><th style="padding:12px 14px;font-weight:700">BUYER</th><th style="padding:12px 14px;font-weight:700">COMPANY</th><th style="padding:12px 14px;font-weight:700">TICKETS</th><th style="padding:12px 14px;font-weight:700">AMOUNT</th><th style="padding:12px 14px;font-weight:700">STATUS</th><th style="padding:12px 14px;font-weight:700">PAGE</th><th style="padding:12px 14px;font-weight:700">VIA</th><th style="padding:12px 14px;font-weight:700">ORDER</th>
+          </tr></thead>
+          <tbody>
+            <sc-for list="{{ repOrders }}" as="r">
+              <tr style="border-top:1px solid #1F1F1F;vertical-align:top">
+                <td style="padding:12px 14px;font-family:'IBM Plex Mono',monospace;font-size:12px;color:#BFBFBF;white-space:nowrap">{{ r.date }}</td>
+                <td style="padding:12px 14px;font-weight:700">{{ r.rep }}</td>
+                <td style="padding:12px 14px"><div style="font-weight:700">{{ r.buyer }}</div><div style="color:#8C8C8C;font-size:13px">{{ r.email }}</div></td>
+                <td style="padding:12px 14px;color:#E9E9E9">{{ r.company }}</td>
+                <td style="padding:12px 14px;color:#E9E9E9">{{ r.tickets }}</td>
+                <td style="padding:12px 14px;font-family:'IBM Plex Mono',monospace">{{ r.amount }}</td>
+                <td style="padding:12px 14px;font-family:'IBM Plex Mono',monospace;font-weight:700;font-size:11px;letter-spacing:.06em;color:{{ r.statusColor }}">{{ r.status }}</td>
+                <td style="padding:12px 14px;font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.06em;color:#BFBFBF">{{ r.page }}</td>
+                <td style="padding:12px 14px;font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.06em;color:#BFBFBF">{{ r.via }}</td>
+                <td style="padding:12px 14px;font-family:'IBM Plex Mono',monospace;font-size:12px;color:#8C8C8C">{{ r.order }}</td>
+              </tr>
+            </sc-for>
+          </tbody>
+        </table>
+      </div>
+      <sc-if value="{{ noRepOrders }}"><span style="font-size:14px;color:#8C8C8C">No rep-credited orders yet.</span></sc-if>
+    </div>
+  </section>
+
+  <!-- ================= CUSTOMERS (CS) ================= -->
+  <section id="customers" data-screen-label="05 Customers" style="display:flex;flex-direction:column;gap:16px">
+    <div style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:flex-end;gap:12px 20px">
+      <div style="display:flex;flex-direction:column;gap:8px"><span style="font-family:'IBM Plex Mono',monospace;font-weight:700;font-size:12px;letter-spacing:.06em;color:#20FC8F">&gt; CUSTOMERS · FOR CS</span><h2 style="margin:0;font-weight:700;font-size:clamp(28px,3vw,44px);letter-spacing:-.035em;line-height:1">Customers who registered.</h2><span style="font-size:14px;color:#8C8C8C;max-width:80ch">Everyone who answered "Current Customer", "Previous Customer" or "Partner (Club 7739 Member)" at checkout, plus anyone registered through the advisory page.</span></div>
+      <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center">
+        <input value="{{ cq }}" onChange="{{ setCq }}" placeholder="Search name, company, email…" style="flex:0 1 280px;min-width:0;background:#141414;border:1px solid #343434;border-radius:0;padding:10px 12px;color:#FFFFFF;font-family:'IBM Plex Mono',monospace;font-size:13px;outline:none" style-focus="border-color:#20FC8F">
+        <button onClick="{{ downloadCustomers }}" style="cursor:pointer;background:transparent;border:1px solid #343434;color:#FFFFFF;padding:10px 12px;font-family:'IBM Plex Mono',monospace;font-weight:700;font-size:11px;letter-spacing:.06em" style-hover="border-color:#20FC8F;color:#20FC8F">↓ DOWNLOAD CSV</button>
+      </div>
+    </div>
+
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,180px),1fr));gap:2px;background:#2A2A2A;border:2px solid #2A2A2A">
+      <sc-for list="{{ custStats }}" as="s" hint-placeholder-count="5">
+        <div style="background:#0B0A0A;padding:18px 20px;display:flex;flex-direction:column;gap:10px">
+          <span style="font-family:'IBM Plex Mono',monospace;font-weight:700;font-size:11px;letter-spacing:.06em;color:#BFBFBF">{{ s.label }}</span>
+          <span style="font-family:'IBM Plex Mono',monospace;font-weight:700;font-size:clamp(30px,3vw,44px);line-height:.9;letter-spacing:-.04em;color:{{ s.color }}">{{ s.value }}</span>
+          <span style="font-size:13px;color:#8C8C8C">{{ s.sub }}</span>
+        </div>
+      </sc-for>
+    </div>
+
+    <div style="display:flex;gap:6px;flex-wrap:wrap">
+      <sc-for list="{{ custChips }}" as="c"><button onClick="{{ c.onClick }}" style="cursor:pointer;background:{{ c.bg }};color:{{ c.fg }};border:1px solid {{ c.border }};padding:8px 12px;font-family:'IBM Plex Mono',monospace;font-weight:700;font-size:11px;letter-spacing:.06em">{{ c.label }}</button></sc-for>
+    </div>
+
+    <div style="overflow-x:auto;border:1px solid #2A2A2A">
+      <table style="width:100%;min-width:1180px;border-collapse:collapse;font-size:14px;line-height:1.35">
+        <thead><tr style="text-align:left;font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.06em;color:#8C8C8C;background:#000000">
+          <th style="padding:12px 14px;font-weight:700">NAME</th><th style="padding:12px 14px;font-weight:700">COMPANY · TITLE</th><th style="padding:12px 14px;font-weight:700">RELATIONSHIP</th><th style="padding:12px 14px;font-weight:700">TIER</th><th style="padding:12px 14px;font-weight:700">PAGE</th><th style="padding:12px 14px;font-weight:700">STATUS</th><th style="padding:12px 14px;font-weight:700">REP</th><th style="padding:12px 14px;font-weight:700">REGISTERED</th><th style="padding:12px 14px;font-weight:700">ORDER</th>
+        </tr></thead>
+        <tbody>
+          <sc-for list="{{ custRows }}" as="r">
+            <tr style="border-top:1px solid #1F1F1F;vertical-align:top">
+              <td style="padding:12px 14px"><div style="font-weight:700">{{ r.name }}</div><div style="color:#8C8C8C;font-size:13px">{{ r.email }}</div></td>
+              <td style="padding:12px 14px;color:#E9E9E9">{{ r.company }}</td>
+              <td style="padding:12px 14px;color:{{ r.relColor }};font-weight:700;font-size:13px">{{ r.rel }}</td>
+              <td style="padding:12px 14px;font-family:'IBM Plex Mono',monospace;font-weight:700;font-size:12px;color:{{ r.tierColor }}">{{ r.tier }}</td>
+              <td style="padding:12px 14px;font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.06em;color:#BFBFBF">{{ r.page }}</td>
+              <td style="padding:12px 14px;font-family:'IBM Plex Mono',monospace;font-weight:700;font-size:11px;letter-spacing:.06em;color:{{ r.statusColor }}">{{ r.status }}</td>
+              <td style="padding:12px 14px;color:#BFBFBF">{{ r.rep }}</td>
+              <td style="padding:12px 14px;font-family:'IBM Plex Mono',monospace;font-size:12px;color:#BFBFBF;white-space:nowrap">{{ r.date }}</td>
+              <td style="padding:12px 14px;font-family:'IBM Plex Mono',monospace;font-size:12px;color:#8C8C8C">{{ r.order }}</td>
+            </tr>
+          </sc-for>
+        </tbody>
+      </table>
+    </div>
+    <sc-if value="{{ noCust }}"><span style="font-size:14px;color:#8C8C8C">No customers match yet.</span></sc-if>
   </section>
 
   <section style="display:flex;flex-direction:column;gap:14px">
@@ -119,15 +228,15 @@ input::placeholder{color:#595959}
     </div>
   </section>
 
-  <section style="display:flex;flex-direction:column;gap:14px">
+  <section id="attendees" style="display:flex;flex-direction:column;gap:14px">
     <div style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:12px 20px">
-      <h2 style="margin:0;font-weight:700;font-size:clamp(24px,2.4vw,34px);letter-spacing:-.03em">Attendees <span style="color:#8C8C8C">{{ attendeeCount }}</span></h2>
+      <h2 style="margin:0;font-weight:700;font-size:clamp(24px,2.4vw,34px);letter-spacing:-.03em">All attendees <span style="color:#8C8C8C">{{ attendeeCount }}</span></h2>
       <input value="{{ q }}" onChange="{{ setQ }}" placeholder="Search name, email, company, order…" style="flex:0 1 360px;min-width:0;background:#141414;border:1px solid #343434;border-radius:0;padding:12px 14px;color:#FFFFFF;font-family:'IBM Plex Mono',monospace;font-size:14px;outline:none" style-focus="border-color:#20FC8F">
     </div>
     <div style="overflow-x:auto;border:1px solid #2A2A2A">
       <table style="width:100%;min-width:1100px;border-collapse:collapse;font-size:14px;line-height:1.35">
         <thead><tr style="text-align:left;font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.06em;color:#8C8C8C;background:#000000">
-          <th style="padding:12px 14px;font-weight:700">NAME</th><th style="padding:12px 14px;font-weight:700">TIER</th><th style="padding:12px 14px;font-weight:700">COMPANY · TITLE</th><th style="padding:12px 14px;font-weight:700">WINTER</th><th style="padding:12px 14px;font-weight:700">WORKSHOPS</th><th style="padding:12px 14px;font-weight:700">SHIRT</th><th style="padding:12px 14px;font-weight:700">KNOWS US</th><th style="padding:12px 14px;font-weight:700">ORDER</th>
+          <th style="padding:12px 14px;font-weight:700">NAME</th><th style="padding:12px 14px;font-weight:700">TIER</th><th style="padding:12px 14px;font-weight:700">COMPANY · TITLE</th><th style="padding:12px 14px;font-weight:700">WINTER</th><th style="padding:12px 14px;font-weight:700">WORKSHOPS</th><th style="padding:12px 14px;font-weight:700">SHIRT</th><th style="padding:12px 14px;font-weight:700">KNOWS US</th><th style="padding:12px 14px;font-weight:700">REP</th><th style="padding:12px 14px;font-weight:700">ORDER</th>
         </tr></thead>
         <tbody>
           <sc-for list="{{ rows }}" as="r">
@@ -139,6 +248,7 @@ input::placeholder{color:#595959}
               <td style="padding:12px 14px;color:#E9E9E9">{{ r.workshops }}</td>
               <td style="padding:12px 14px;font-family:'IBM Plex Mono',monospace;font-size:12px">{{ r.shirt }}</td>
               <td style="padding:12px 14px;color:#BFBFBF">{{ r.know }}</td>
+              <td style="padding:12px 14px;color:#BFBFBF">{{ r.rep }}</td>
               <td style="padding:12px 14px;font-family:'IBM Plex Mono',monospace;font-size:12px;color:#BFBFBF">{{ r.order }}</td>
             </tr>
           </sc-for>
@@ -153,26 +263,50 @@ input::placeholder{color:#595959}
 </x-dc>
 <script type="text/x-dc" data-dc-script data-props="{&quot;apiUrl&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;https://paramijam-checkout.pages.dev&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Data&quot;},&quot;demo&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:false,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Data&quot;,&quot;description&quot;:&quot;Show sample data (preview only)&quot;},&quot;$preview&quot;:{&quot;width&quot;:1280}}">
 const KEY = 'pj-admin-key';
-const SDRS = [['mwall', 'McKay Wall'], ['bhancock', 'Britton Hancock'], ['cfrandsen', 'Caze Frandsen'], ['cdean', 'Colby Dean'], ['dturner', 'Dallin Turner'], ['mhammond', 'Meredith Hammond'], ['tporter', 'Tyler Porter'], ['abrady', 'Alex Brady']];
+/* Reps: [ref slug from their link, name, team]. Add new reps here (and in checkout's "Who invited you?" list). */
+const REPS = [
+  ['nwilkinson', 'Nate Wilkinson', 'AE'], ['xmartin', 'Xavier Martin', 'AE'], ['bbarber', 'Blake Barber', 'AE'], ['mking', 'Mackinnon King', 'AE'],
+  ['abrady', 'Alex Brady', 'AE'], ['kwoodbury', 'Kyle Woodbury', 'AE'], ['mpingel', 'McKay Pingel', 'AE'], ['sdean', 'Spencer Dean', 'AE'],
+  ['jmurray', 'Jay Murray', 'AE'], ['whadlock', 'Weston Hadlock', 'AE'], ['anaylor', 'Andy Naylor', 'AE'],
+  ['mwall', 'McKay Wall', 'SDR'], ['bhancock', 'Britton Hancock', 'SDR'], ['cfrandsen', 'Caze Frandsen', 'SDR'], ['cdean', 'Colby Dean', 'SDR'],
+  ['dturner', 'Dallin Turner', 'SDR'], ['mhammond', 'Meredith Hammond', 'SDR'], ['tporter', 'Tyler Porter', 'SDR']
+];
+const CUSTOMER_KNOW = ['Current Customer', 'Previous Customer', 'Partner (Club 7739 Member)'];
 const TIERS = [['ga', 'General Admission'], ['preferred', 'Preferred'], ['vip', 'VIP'], ['black', 'Black']];
 const WS = { 'class-a': 'Class A ready submission package', evidence: 'GRC evidence script automation', gap: 'Gap assessments', rev5: 'FedRAMP Rev5 to 20x advisory', automate: 'Automate up to 90% of a Paramify instance', na: 'N/A' };
 const money = n => '$' + Math.round(n || 0).toLocaleString('en-US');
 const hasPicks = a => !!a.wType && Array.isArray(a.ws) && a.ws.length > 0;
 const winterText = a => !a.wType ? 'Pending' : a.wType === 'none' ? 'None' : a.wType === 'ski' ? (a.sport === 'board' ? 'Snowboard' : 'Ski') + (a.lesson === 'yes' ? ' + lesson' : '') + (a.equip === 'yes' ? ' + gear' : '') : 'Tue ' + a.tue + ' / Wed ' + a.wed;
+const repOf = o => (o.attr && o.attr.ref) || '';
+const repName = id => id ? ((REPS.find(r => r[0] === id) || [, id])[1]) : 'No rep';
+const repTeam = id => id ? ((REPS.find(r => r[0] === id) || [, , 'Other'])[2]) : '—';
+const oDate = o => o.paidAt || o.invoicedAt || o.created || '';
+const fmtDate = d => d ? new Date(d).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) : '—';
+const oAmount = o => o.status === 'invoiced' ? (o.amountDue ?? o.total ?? 0) : (o.paidTotal ?? o.total ?? 0);
+const pname = a => ((a.first || '') + ' ' + (a.last || '')).trim();
+const isCustomer = (a, o) => CUSTOMER_KNOW.includes(a.know) || o.source === 'advisory';
+const relOf = (a, o) => a.know && CUSTOMER_KNOW.includes(a.know) ? a.know : o.source === 'advisory' ? 'Advisory page' + (a.know ? ' · ' + a.know : '') : (a.know || '—');
+function downloadCsv(name, rows) {
+  const csv = rows.map(r => r.map(v => '"' + String(v ?? '').replace(/"/g, '""') + '"').join(',')).join('\n');
+  const url = URL.createObjectURL(new Blob([csv], { type: 'text/csv' }));
+  const a = document.createElement('a'); a.href = url; a.download = name; document.body.appendChild(a); a.click(); a.remove(); setTimeout(() => URL.revokeObjectURL(url), 1000);
+}
 
 function demoData() {
-  const mk = (id, src, fill, total, at, ref) => ({ id, source: src, fill, attr: { ref: ref || '', refSource: ref ? 'link' : '' }, buyer: 0, total, paidTotal: total, paidAt: '2026-11-03T15:00:00Z', finishUrl: fill === 'later' ? 'https://www.paramijam.com/checkout?order=' + id + '&finish=1' : '', attendees: at });
-  const p = (first, last, tier, extra) => ({ first, last, tier, email: first.toLowerCase() + '@example.com', company: 'Acme Federal', title: 'ISSO', fit: 'mens', size: 'L', know: 'Current Customer', ws: ['rev5', 'gap'], wType: 'ski', sport: 'ski', lesson: 'no', equip: 'yes', ...extra });
-  return { sold: 71, cap: 120, left: 49, orders: [
-    mk('PJ-DEMO00001', 'drop1', 'all', 399, [p('Avery', 'Lin', 'ga', { wType: 'none', ws: ['na'] })], 'mwall'),
-    mk('PJ-DEMO00002', 'drop1', 'later', 1498, [p('Jordan', 'Lee', 'preferred', { fit: 'womens', size: 'M' }), p('Sam', 'Ortiz', 'preferred', { wType: '', ws: [], fit: '', size: '' }), p('Riley', 'Chen', 'vip', { wType: '', ws: [] })], 'bhancock'),
-    mk('PJ-DEMO00003', 'advisory', 'all', 0, [p('Morgan', 'Shaw', 'preferred', { know: 'Partner (Club 7739 Member)', wType: 'other', tue: 'Bobsled', wed: 'Lodge', ws: ['class-a', 'automate'] })]),
-    mk('PJ-DEMO00004', 'drop1', 'all', 1199, [p('Casey', 'Ford', 'black', { ws: ['evidence'], company: 'Northwind Gov' })], 'mwall')
+  const mk = (id, src, fill, total, at, ref, status, how) => ({ id, source: src, fill, status: status || 'paid', attr: { ref: ref || '', refSource: ref ? (how || 'link') : '' }, buyer: 0, total, paidTotal: total, amountDue: total, paidAt: '2026-11-1' + (id.slice(-1)) + 'T15:00:00Z', finishUrl: fill === 'later' ? 'https://www.paramijam.com/checkout?order=' + id + '&finish=1' : '', attendees: at });
+  const p = (first, last, tier, extra) => ({ first, last, tier, email: first.toLowerCase() + '@example.com', company: 'Acme Federal', title: 'ISSO', fit: 'mens', size: 'L', know: 'Evaluating Paramify', ws: ['rev5', 'gap'], wType: 'ski', sport: 'ski', lesson: 'no', equip: 'yes', ...extra });
+  return { drop: 'drop2', sold: 38, cap: 100, left: 62, orders: [
+    mk('PJ-DEMO00001', 'drop1', 'all', 199.5, [p('Avery', 'Lin', 'ga', { wType: 'none', ws: ['na'], know: 'Current Customer', company: 'Okta' })], 'nwilkinson'),
+    mk('PJ-DEMO00002', 'drop1', 'later', 898.5, [p('Jordan', 'Lee', 'preferred', { company: 'Northwind Gov' }), p('Sam', 'Ortiz', 'preferred', { wType: '', ws: [], company: 'Northwind Gov', know: '' }), p('Riley', 'Chen', 'vip', { wType: '', ws: [], company: 'Northwind Gov', know: '' })], 'xmartin', 'invoiced'),
+    mk('PJ-DEMO00003', 'advisory', 'all', 0, [p('Morgan', 'Shaw', 'preferred', { know: 'Partner (Club 7739 Member)', company: 'Coalfire', wType: 'other', tue: 'Bobsled', wed: 'Lodge', ws: ['class-a', 'automate'] })], 'abrady'),
+    mk('PJ-DEMO00004', 'drop1', 'all', 1199, [p('Casey', 'Ford', 'black', { ws: ['evidence'], company: 'Wiz', know: 'Previous Customer' })], 'mwall', 'paid', 'dropdown'),
+    mk('PJ-DEMO00005', 'advisory', 'all', 0, [p('Taylor', 'Kim', 'vip', { know: 'Current Customer', company: 'Axon' })], ''),
+    mk('PJ-DEMO00006', 'drop1', 'all', 299.5, [p('Drew', 'Park', 'preferred', { know: 'None. Paramify is new to me!', company: 'Second Front' })], '')
   ] };
 }
 
 class Component extends DCLogic {
-  state = { key: '', keyIn: '', data: null, err: '', q: '', updated: null };
+  state = { key: '', keyIn: '', data: null, err: '', q: '', cq: '', updated: null, team: 'all', rep: null, rel: 'all' };
   componentDidMount() {
     let k = ''; try { k = localStorage.getItem(KEY) || ''; } catch (e) {}
     if (this.props.demo) this.setState({ data: demoData(), updated: new Date() });
@@ -196,7 +330,8 @@ class Component extends DCLogic {
     const att = []; orders.forEach(o => o.attendees.forEach((a, i) => att.push({ ...a, o, i })));
     const counted = orders.filter(o => o.source !== 'advisory').reduce((s, o) => s + o.attendees.length, 0);
     const advTix = orders.filter(o => o.source === 'advisory').reduce((s, o) => s + o.attendees.length, 0);
-    const revenue = orders.reduce((s, o) => s + (o.paidTotal ?? o.total ?? 0), 0);
+    const revenue = orders.filter(o => o.status !== 'invoiced').reduce((s, o) => s + (o.paidTotal ?? o.total ?? 0), 0);
+    const invoicedAmt = orders.filter(o => o.status === 'invoiced').reduce((s, o) => s + oAmount(o), 0);
     const pendingAll = att.filter(a => !hasPicks(a));
     const bars = (pairs, color) => { const max = Math.max(1, ...pairs.map(p => p[1])); return pairs.map(([label, n]) => ({ label, n: String(n), pct: Math.round(n / max * 100) + '%', color: color || '#20FC8F' })); };
     const tierPairs = TIERS.map(([id, l]) => [l, att.filter(a => a.tier === id).length]);
@@ -207,8 +342,8 @@ class Component extends DCLogic {
     ['Bobsled', 'Snowmobile', 'Lodge'].forEach(x => { winterPairs.push(['Tue · ' + x, att.filter(a => a.tue === x).length]); winterPairs.push(['Wed · ' + x, att.filter(a => a.wed === x).length]); });
     winterPairs.push(['No winter activities', att.filter(a => a.wType === 'none').length], ['Not picked yet', att.filter(a => !a.wType).length]);
     const shirtMap = {}; att.forEach(a => { if (a.size) { const k = 'Unisex ' + a.size; shirtMap[k] = (shirtMap[k] || 0) + 1; } });
-    const order = ['XS', 'S', 'M', 'L', 'XL', '2XL', '3XL'];
-    const shirtPairs = Object.entries(shirtMap).sort((a, b) => a[0].localeCompare(b[0].split(' ')[0]) || order.indexOf(a[0].split(' ')[1]) - order.indexOf(b[0].split(' ')[1]));
+    const sizeOrder = ['XS', 'S', 'M', 'L', 'XL', '2XL', '3XL'];
+    const shirtPairs = Object.entries(shirtMap).sort((a, b) => sizeOrder.indexOf(a[0].split(' ')[1]) - sizeOrder.indexOf(b[0].split(' ')[1]));
     const knowMap = {}; att.forEach(a => { if (a.know) knowMap[a.know] = (knowMap[a.know] || 0) + 1; });
     const fwMap = {}; att.forEach(a => (a.fw || []).forEach(f => { fwMap[f] = (fwMap[f] || 0) + 1; }));
     const panels = [
@@ -219,28 +354,85 @@ class Component extends DCLogic {
       { title: 'HOW THEY KNOW PARAMIFY', note: '', rows: bars(Object.entries(knowMap).sort((a, b) => b[1] - a[1])) },
       { title: 'FRAMEWORKS OF INTEREST', note: '', rows: bars(Object.entries(fwMap).sort((a, b) => b[1] - a[1])) }
     ].map(p => ({ ...p, empty: !p.rows.length }));
-    const cap = d ? d.cap || 120 : 120, sold = d ? d.sold || 0 : 0, left = d ? (d.left ?? cap - sold) : cap;
+    const cap = d ? d.cap || 100 : 100, sold = d ? d.sold || 0 : 0, left = d ? (d.left ?? cap - sold) : cap;
+    const dropName = d && d.drop ? d.drop.replace(/^drop/i, 'DROP ') : 'DROP';
     const stats = [
-      { label: 'DROP 1 LEFT', value: String(left), sub: sold + ' of ' + cap + ' claimed (includes the starting count)', bg: left === 0 ? '#FF273B' : '#20FC8F', fg: '#000000', labelColor: '#000000', subColor: '#000000' },
-      { label: 'TICKETS SOLD HERE', value: String(counted), sub: 'Drop 1 tickets through this checkout', bg: '#0B0A0A', fg: '#FFFFFF', labelColor: '#BFBFBF', subColor: '#8C8C8C' },
-      { label: 'ADVISORY TICKETS', value: String(advTix), sub: "Don't count toward the 120", bg: '#0B0A0A', fg: '#FFFFFF', labelColor: '#BFBFBF', subColor: '#8C8C8C' },
-      { label: 'ORDERS', value: String(orders.length), sub: money(revenue) + ' collected', bg: '#0B0A0A', fg: '#FFFFFF', labelColor: '#BFBFBF', subColor: '#8C8C8C' },
+      { label: dropName + ' LEFT', value: String(left), sub: sold + ' of ' + cap + ' claimed in this drop', bg: left === 0 ? '#FF273B' : '#20FC8F', fg: '#000000', labelColor: '#000000', subColor: '#000000' },
+      { label: 'PUBLIC TICKETS', value: String(counted), sub: 'Bought through the public checkout', bg: '#0B0A0A', fg: '#FFFFFF', labelColor: '#BFBFBF', subColor: '#8C8C8C' },
+      { label: 'ADVISORY TICKETS', value: String(advTix), sub: "CAB + Club 7739. Don't count toward the drop", bg: '#0B0A0A', fg: '#FFFFFF', labelColor: '#BFBFBF', subColor: '#8C8C8C' },
+      { label: 'ORDERS', value: String(orders.length), sub: money(revenue) + ' paid · ' + money(invoicedAmt) + ' invoiced', bg: '#0B0A0A', fg: '#FFFFFF', labelColor: '#BFBFBF', subColor: '#8C8C8C' },
       { label: 'NEED DETAILS', value: String(pendingAll.length), sub: 'People without activity / workshop picks', bg: '#0B0A0A', fg: pendingAll.length ? '#FFFFFF' : '#20FC8F', labelColor: '#BFBFBF', subColor: '#8C8C8C' }
     ];
     const tn = id => (TIERS.find(t => t[0] === id) || [, id])[1];
-    const pending = pendingAll.map(a => { const b = a.o.attendees[a.o.buyer] || {}; return { name: ((a.first || '') + ' ' + (a.last || '')).trim() || 'Ticket ' + (a.i + 1), detail: [tn(a.tier), a.email, 'Order ' + a.o.id, 'Buyer: ' + ((b.first || '') + ' ' + (b.last || '')).trim() + ' ' + (b.email || '')].filter(Boolean).join(' · '), link: a.o.finishUrl || '', hasLink: !!a.o.finishUrl }; });
+
+    /* ---------- AE + SDR invites ---------- */
+    const chip = (on, label, onClick) => ({ label, onClick, bg: on ? '#20FC8F' : 'transparent', fg: on ? '#000000' : '#FFFFFF', border: on ? '#20FC8F' : '#343434' });
+    const teamChips = [['all', 'ALL REPS'], ['AE', 'AES'], ['SDR', 'SDRS']].map(([v, l]) => chip(st.team === v, l, () => this.setState({ team: v, rep: null })));
+    const credited = orders.filter(o => repOf(o));
+    const inTeam = o => st.team === 'all' || repTeam(repOf(o)) === st.team;
+    const teamOrders = credited.filter(inTeam);
+    const ids = REPS.filter(r => st.team === 'all' || r[2] === st.team).map(r => r[0]);
+    credited.forEach(o => { const r = repOf(o); if (!ids.includes(r) && inTeam(o)) ids.push(r); });
+    const repStat = (id, list) => {
+      const t = list.reduce((s, o) => s + o.attendees.length, 0);
+      return { id, n: t, name: repName(id), team: repTeam(id), tickets: String(t),
+        accounts: String(new Set(list.flatMap(o => o.attendees.map(a => (a.company || '').trim().toLowerCase()).filter(Boolean))).size),
+        orders: String(list.length), revenue: money(list.reduce((s, o) => s + oAmount(o), 0)),
+        paidInv: list.filter(o => o.status !== 'invoiced').length + ' · ' + list.filter(o => o.status === 'invoiced').length,
+        pubAdv: list.filter(o => o.source !== 'advisory').reduce((s, o) => s + o.attendees.length, 0) + ' · ' + list.filter(o => o.source === 'advisory').reduce((s, o) => s + o.attendees.length, 0),
+        linkDrop: list.filter(o => o.attr && o.attr.refSource === 'link').length + ' · ' + list.filter(o => o.attr && o.attr.refSource === 'dropdown').length };
+    };
+    let repRows = ids.map(id => repStat(id, credited.filter(o => repOf(o) === id))).sort((a, b) => b.n - a.n || a.name.localeCompare(b.name));
+    const repMax = Math.max(1, ...repRows.map(r => r.n));
+    repRows = repRows.map(r => ({ ...r, pct: Math.round(r.n / repMax * 100) + '%', nameColor: r.n ? '#FFFFFF' : '#8C8C8C', bg: st.rep === r.id ? '#13261C' : 'transparent', onClick: () => this.setState({ rep: st.rep === r.id ? null : r.id }) }));
+    const noRep = orders.filter(o => !repOf(o));
+    if (st.team === 'all') { const nr = repStat('', noRep); repRows.push({ ...nr, pct: Math.round(nr.n / repMax * 100) + '%', nameColor: '#8C8C8C', bg: 'transparent', onClick: () => {} }); }
+    const tTix = teamOrders.reduce((s, o) => s + o.attendees.length, 0);
+    const activeReps = new Set(teamOrders.map(repOf)).size;
+    const repStats = [
+      { label: 'TICKETS FROM REP INVITES', value: String(tTix), sub: att.length ? Math.round(tTix / att.length * 100) + '% of all tickets' : '—', color: '#20FC8F' },
+      { label: 'REP-CREDITED ORDERS', value: String(teamOrders.length), sub: money(teamOrders.reduce((s, o) => s + oAmount(o), 0)) + ' paid + invoiced', color: '#FFFFFF' },
+      { label: 'ACCOUNTS', value: String(new Set(teamOrders.flatMap(o => o.attendees.map(a => (a.company || '').trim().toLowerCase()).filter(Boolean))).size), sub: 'Unique companies', color: '#FFFFFF' },
+      { label: 'REPS WITH A SALE', value: activeReps + ' / ' + ids.length, sub: st.team === 'all' ? 'AEs + SDRs' : st.team + 's', color: '#FFFFFF' }
+    ];
+    const shownOrders = (st.rep ? credited.filter(o => repOf(o) === st.rep) : teamOrders).slice().sort((a, b) => String(oDate(b)).localeCompare(String(oDate(a))));
+    const tierSummary = o => { const m = {}; o.attendees.forEach(a => { const k = tn(a.tier); m[k] = (m[k] || 0) + 1; }); return Object.entries(m).map(([k, v]) => v + ' × ' + k).join(', '); };
+    const orderRow = o => { const b = o.attendees[o.buyer] || o.attendees[0] || {}; return {
+      date: fmtDate(oDate(o)), rep: repName(repOf(o)), buyer: pname(b) || '—', email: b.email || '', company: b.company || '—',
+      tickets: tierSummary(o), amount: money(oAmount(o)), status: o.status === 'invoiced' ? 'INVOICED' : 'PAID', statusColor: o.status === 'invoiced' ? '#FFD23F' : '#20FC8F',
+      page: o.source === 'advisory' ? 'ADVISORY' : 'PUBLIC', via: o.attr && o.attr.refSource === 'dropdown' ? 'DROPDOWN' : o.attr && o.attr.refSource === 'link' ? 'LINK' : '—', order: o.id }; };
+    const repOrders = shownOrders.map(orderRow);
+    const downloadReps = () => downloadCsv('paramijam-rep-orders.csv', [['date', 'rep', 'team', 'buyer', 'buyer_email', 'company', 'tickets', 'ticket_count', 'amount', 'status', 'page', 'credited_via', 'order']].concat(shownOrders.map(o => { const r = orderRow(o); return [r.date, r.rep, repTeam(repOf(o)), r.buyer, r.email, r.company, r.tickets, o.attendees.length, oAmount(o), r.status.toLowerCase(), r.page.toLowerCase(), r.via.toLowerCase(), r.order]; })));
+
+    /* ---------- Customers (CS) ---------- */
+    const custAll = att.filter(a => isCustomer(a, a.o));
+    const relKey = a => a.know === 'Current Customer' ? 'current' : a.know === 'Previous Customer' ? 'previous' : a.know === 'Partner (Club 7739 Member)' ? 'partner' : 'advisory';
+    const custChips = [['all', 'ALL'], ['current', 'CURRENT CUSTOMERS'], ['previous', 'PREVIOUS CUSTOMERS'], ['partner', 'PARTNERS (CLUB 7739)'], ['advisory', 'ADVISORY PAGE · OTHER']].map(([v, l]) => chip(st.rel === v, l + ' · ' + (v === 'all' ? custAll.length : custAll.filter(a => relKey(a) === v).length), () => this.setState({ rel: v })));
+    const cq = st.cq.trim().toLowerCase();
+    const custShown = custAll.filter(a => (st.rel === 'all' || relKey(a) === st.rel) && (!cq || [a.first, a.last, a.email, a.company, a.o.id].join(' ').toLowerCase().includes(cq)))
+      .sort((a, b) => (a.company || '').localeCompare(b.company || '') || pname(a).localeCompare(pname(b)));
+    const custRow = a => ({ name: pname(a) || '—', email: a.email || '', company: [a.company, a.title].filter(Boolean).join(' · ') || '—', rel: relOf(a, a.o),
+      relColor: a.know === 'Current Customer' ? '#20FC8F' : a.know === 'Partner (Club 7739 Member)' ? '#7FD8FF' : '#E9E9E9',
+      tier: tn(a.tier).toUpperCase(), tierColor: a.tier === 'ga' ? '#BFBFBF' : '#20FC8F', page: a.o.source === 'advisory' ? 'ADVISORY' : 'PUBLIC',
+      status: a.o.status === 'invoiced' ? 'INVOICED' : 'PAID', statusColor: a.o.status === 'invoiced' ? '#FFD23F' : '#20FC8F', rep: repName(repOf(a.o)), date: fmtDate(oDate(a.o)), order: a.o.id });
+    const custRows = custShown.map(custRow);
+    const custStats = [
+      { label: 'CUSTOMERS REGISTERED', value: String(custAll.length), sub: 'Tickets held by customers + partners', color: '#20FC8F' },
+      { label: 'CUSTOMER ACCOUNTS', value: String(new Set(custAll.map(a => (a.company || '').trim().toLowerCase()).filter(Boolean)).size), sub: 'Unique companies', color: '#FFFFFF' },
+      { label: 'CURRENT CUSTOMERS', value: String(custAll.filter(a => a.know === 'Current Customer').length), sub: custAll.filter(a => a.know === 'Previous Customer').length + ' previous customers', color: '#FFFFFF' },
+      { label: 'PARTNERS', value: String(custAll.filter(a => a.know === 'Partner (Club 7739 Member)').length), sub: 'Club 7739 members', color: '#FFFFFF' },
+      { label: 'VIA ADVISORY PAGE', value: String(custAll.filter(a => a.o.source === 'advisory').length), sub: 'CAB + Club 7739 invites', color: '#FFFFFF' }
+    ];
+    const downloadCustomers = () => downloadCsv('paramijam-customers.csv', [['first', 'last', 'email', 'company', 'title', 'phone', 'relationship', 'tier', 'page', 'status', 'rep', 'registered', 'order']].concat(custShown.map(a => { const r = custRow(a); return [a.first, a.last, a.email, a.company, a.title, a.phone, r.rel, tn(a.tier), r.page.toLowerCase(), r.status.toLowerCase(), r.rep, r.date, a.o.id]; })));
+
+    /* ---------- Pending + all attendees ---------- */
+    const pending = pendingAll.map(a => { const b = a.o.attendees[a.o.buyer] || {}; return { name: pname(a) || 'Ticket ' + (a.i + 1), detail: [tn(a.tier), a.email, 'Order ' + a.o.id, 'Buyer: ' + pname(b) + ' ' + (b.email || '')].filter(Boolean).join(' · '), link: a.o.finishUrl || '', hasLink: !!a.o.finishUrl }; });
     const q = st.q.trim().toLowerCase();
     const rows = att.filter(a => !q || [a.first, a.last, a.email, a.company, a.o.id].join(' ').toLowerCase().includes(q)).map(a => ({
-      name: ((a.first || '') + ' ' + (a.last || '')).trim() || '—', email: a.email || '', tier: tn(a.tier).toUpperCase() + (a.o.source === 'advisory' ? ' · ADV' : ''), tierColor: a.tier === 'ga' ? '#BFBFBF' : '#20FC8F',
+      name: pname(a) || '—', email: a.email || '', tier: tn(a.tier).toUpperCase() + (a.o.source === 'advisory' ? ' · ADV' : ''), tierColor: a.tier === 'ga' ? '#BFBFBF' : '#20FC8F',
       company: [a.company, a.title].filter(Boolean).join(' · ') || '—', winter: winterText(a), workshops: (a.ws || []).filter(x => x !== 'na').map(x => WS[x] || x).join(', ') || (a.ws && a.ws.includes('na') ? 'N/A' : 'Pending'),
-      shirt: a.size || '—', know: a.know || '—', order: a.o.id
+      shirt: a.size || '—', know: a.know || '—', rep: repOf(a.o) ? repName(repOf(a.o)) : '—', order: a.o.id
     }));
-    const sdrName = id => (SDRS.find(s => s[0] === id) || [, id])[1];
-    const refs = SDRS.map(s => s[0]); orders.forEach(o => { const r = o.attr && o.attr.ref; if (r && !refs.includes(r)) refs.push(r); });
-    const sdrStat = (list, name, color) => { const t = list.reduce((s, o) => s + o.attendees.length, 0); return { name, nameColor: color, n: t, tickets: String(t), accounts: String(new Set(list.flatMap(o => o.attendees.map(a => (a.company || '').trim().toLowerCase()).filter(Boolean))).size), orders: String(list.length), revenue: money(list.reduce((s, o) => s + (o.paidTotal ?? o.total ?? 0), 0)), link: String(list.filter(o => o.attr && o.attr.refSource === 'link').length), drop: String(list.filter(o => o.attr && o.attr.refSource === 'dropdown').length) }; };
-    let sdrRows = refs.map(id => sdrStat(orders.filter(o => o.attr && o.attr.ref === id), sdrName(id), '#FFFFFF')).sort((a, b) => b.n - a.n || a.name.localeCompare(b.name));
-    sdrRows.push(sdrStat(orders.filter(o => !(o.attr && o.attr.ref)), 'No SDR', '#8C8C8C'));
-    const sdrMax = Math.max(1, ...sdrRows.map(r => r.n)); sdrRows = sdrRows.map(r => ({ ...r, pct: Math.round(r.n / sdrMax * 100) + '%' }));
     const upd = st.updated ? st.updated.toLocaleTimeString([], { hour: 'numeric', minute: '2-digit', second: '2-digit' }) : '';
     return {
       authed, needKey: !authed, canSignOut: authed && !demo,
@@ -251,7 +443,10 @@ class Component extends DCLogic {
       refresh: () => demo ? null : this.load(),
       csvHref: this.api() + '/export.csv?key=' + encodeURIComponent(st.key),
       hasErr: !!st.err, err: st.err, stats, panels, pending, noPending: !pending.length, pendingLabel: pending.length + (pending.length === 1 ? ' PERSON' : ' PEOPLE'),
-      sdrRows, rows, attendeeCount: String(att.length), q: st.q, setQ: e => this.setState({ q: e.target.value })
+      teamChips, repStats, repRows, repOrders, noRepOrders: !repOrders.length, repOrdersCount: String(repOrders.length),
+      repOrdersTitle: st.rep ? repName(st.rep) + "'s orders" : 'Rep-credited orders', hasRepFilter: !!st.rep, clearRep: () => this.setState({ rep: null }), downloadReps,
+      custStats, custChips, custRows, noCust: !custRows.length, cq: st.cq, setCq: e => this.setState({ cq: e.target.value }), downloadCustomers,
+      rows, attendeeCount: String(att.length), q: st.q, setQ: e => this.setState({ q: e.target.value })
     };
   }
 }
